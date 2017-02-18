@@ -7,6 +7,7 @@ from api.StageManager import StageManager
 from api.StageState import StageState
 from game.stages.StageConsole import StageConsole
 from game.stages.StageHandleConsole import StageHandleConsole
+from game.utils.Grid import Grid
 from game.utils.Register import Register
 from game.utils.Vector import Vector
 
@@ -14,6 +15,7 @@ class EDIT_MODE(EnumAuto):
     PICK = ()
     MOVE = ()
     REMOVE = ()
+    NONE = ()
 
 class StageEditMode(StageHandleConsole):
     def __init__(self):
@@ -25,12 +27,16 @@ class StageEditMode(StageHandleConsole):
 
         self.is_paused = True
         self.mode = EDIT_MODE.PICK
+        self.grid = Grid()
 
     def draw(self):
         super().draw()
 
-        if self.object_pick != None:
-            self.screen.blit(self.object_pick.sprite, (self.mouse_pos.x, self.mouse_pos.y))
+        if self.mode == EDIT_MODE.PICK:
+            if self.object_pick != None:
+                self.screen.blit(self.object_pick.sprite, (self.mouse_pos.x, self.mouse_pos.y))
+
+        self.grid.draw(self.screen)
 
     def update(self):
         if self.is_paused == False:
@@ -78,6 +84,19 @@ class StageEditMode(StageHandleConsole):
             elif commands[0] == "print":
                 print(self.__getattribute__(commands[1]))
                 print(self.__getattribute__(commands[1]).__getattribute__(commands[2]))
+            elif commands[0] == "grid":
+                if commands[1] == "turn":
+                    if commands[2] == "on":
+                        self.grid.should_draw = True
+                    elif commands[2] == "off":
+                        self.grid.should_draw = False
+                    else:
+                        bug = True
+                elif commands[1] == "set":
+                    print(commands[2])
+                    self.grid.size = int(commands[2])
+                else:
+                    bug = False
             else:
                 bug = True
         except:
@@ -93,8 +112,26 @@ class StageEditMode(StageHandleConsole):
         return True
 
     def handle_mouse_button_down(self, pos, button):
-        if self.object_pick != None:
-            actor = Register().get_actor(self.object_pick_id)()
-            actor.rect.x = pos[0]
-            actor.rect.y = pos[1]
-            self.add_actor(actor)
+        if self.mode == EDIT_MODE.REMOVE:
+            actor = self.map.get_actor_at(pos[0], pos[1])
+            if actor != None:
+                self.map.remove_actor(actor)
+        elif self.mode == EDIT_MODE.PICK:
+            if self.object_pick != None:
+                actor = Register().get_actor(self.object_pick_id)()
+
+                if self.grid.should_draw:
+                    actor.rect.x = pos[0] - (pos[0] % self.grid.size)
+                    actor.rect.y = pos[1] - (pos[1] % self.grid.size)
+                else:
+                    actor.rect.x = pos[0]
+                    actor.rect.y = pos[1]
+                self.add_actor(actor)
+        elif self.mode == EDIT_MODE.MOVE:
+            actor = self.map.get_actor_at(pos[0], pos[1])
+            if actor != None:
+                self.map.remove_actor(actor)
+            self.mode = EDIT_MODE.PICK
+            self.object_pick_id = type(actor).ID
+            self.object_pick = type(actor)()
+
