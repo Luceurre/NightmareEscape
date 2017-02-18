@@ -1,0 +1,3 @@
+([('run_game',
+   '/Users/pglandon78/PycharmProjects/RunnableExe/game/dist/run_game',
+   'EXECUTABLE')],)
