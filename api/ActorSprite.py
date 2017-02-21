@@ -31,7 +31,10 @@ class ActorSprite(Actor):
         self.unload_sprite()
 
     def unload_sprite(self):
-        del self._sprite
+        try:
+            del self._sprite
+        except:
+            self.warning("Calling unload_sprite without calling load_sprite!")
 
     @property
     def rect(self):

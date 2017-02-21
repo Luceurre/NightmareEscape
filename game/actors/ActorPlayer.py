@@ -6,12 +6,14 @@ from api.Timer import Timer
 from game.actors.ActorArrow import ActorArrow
 from game.actors.ActorCollidable import ActorCollidable
 from game.utils.Direction import DIRECTION
+from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import Vector, VECTOR_NULL
 from game.utils.Constants import *
 
 
 class ActorPlayer(ActorAnimation):
     ID = 3
+    NAME = "PLAYER"
 
     def __init__(self):
         super().__init__()
@@ -24,8 +26,6 @@ class ActorPlayer(ActorAnimation):
 
         self.should_update = True
         self.handle_event = True
-        self.rect.w = 64
-        self.rect.h = 64
 
         self.direction = DIRECTION.BAS
 
@@ -85,37 +85,37 @@ class ActorPlayer(ActorAnimation):
         del self.direction
 
     def load_sprite(self):
-        sprites_sheet = pygame.image.load("assets/marinka.png")
+        sprites_sheet = load_image("assets/marinka.png", False)
         self.animations = {}
 
         self.animations[DIRECTION.HAUT] = Animation(sprites_sheet, pygame.Rect(PLAYER_MOVE_TOP.x * PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_MOVE_TOP.y * PLAYER_SPRITE_HEIGHT,
                                                                                PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_SPRITE_HEIGHT),
-                                                    PLAYER_MOVE_TILES_NUMBER, PLAYER_MOVE_TIME)
+                                                    PLAYER_MOVE_TILES_NUMBER, PLAYER_MOVE_TIME, auto_rect=True)
         self.animations[DIRECTION.GAUCHE] = Animation(sprites_sheet,
                                                       pygame.Rect(PLAYER_MOVE_LEFT.x * PLAYER_SPRITE_WIDTH,
                                                                   PLAYER_MOVE_LEFT.y * \
                                                                   PLAYER_SPRITE_HEIGHT, PLAYER_SPRITE_WIDTH,
                                                                   PLAYER_SPRITE_HEIGHT),
-                                                      PLAYER_MOVE_TILES_NUMBER, PLAYER_MOVE_TIME)
+                                                      PLAYER_MOVE_TILES_NUMBER, PLAYER_MOVE_TIME, True)
         self.animations[DIRECTION.DROITE] = Animation(sprites_sheet,
                                                       pygame.Rect(PLAYER_MOVE_RIGHT.x * PLAYER_SPRITE_WIDTH,
                                                                   PLAYER_MOVE_RIGHT.y * \
                                                                   PLAYER_SPRITE_HEIGHT, PLAYER_SPRITE_WIDTH,
                                                                   PLAYER_SPRITE_HEIGHT),
-                                                      PLAYER_MOVE_TILES_NUMBER, PLAYER_MOVE_TIME)
+                                                      PLAYER_MOVE_TILES_NUMBER, PLAYER_MOVE_TIME, True)
         self.animations[DIRECTION.BAS] = Animation(sprites_sheet,
                                                    pygame.Rect(PLAYER_MOVE_BOTTOM.x * PLAYER_SPRITE_WIDTH,
                                                                PLAYER_MOVE_BOTTOM.y * \
                                                                PLAYER_SPRITE_HEIGHT, PLAYER_SPRITE_WIDTH,
                                                                PLAYER_SPRITE_HEIGHT),
-                                                   PLAYER_MOVE_TILES_NUMBER, PLAYER_MOVE_TIME)
+                                                   PLAYER_MOVE_TILES_NUMBER, PLAYER_MOVE_TIME, True)
         self.animations[DIRECTION.NONE] = Animation(sprites_sheet, pygame.Rect(PLAYER_STANDBY.x * PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_STANDBY.y * \
                                                                                PLAYER_SPRITE_HEIGHT,
                                                                                PLAYER_SPRITE_WIDTH,
-                                                                               PLAYER_SPRITE_HEIGHT), 1, 1000)
+                                                                               PLAYER_SPRITE_HEIGHT), 1, 1000, True)
 
         self.animation = self.animations[DIRECTION.NONE]
 

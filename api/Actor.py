@@ -19,6 +19,7 @@ class Actor(EventHandler, Logger):
     ID = 0
     TYPE = "ACTOR"
     REGISTERED = False
+    NAME = ""
 
     @classmethod
     def register(cls):

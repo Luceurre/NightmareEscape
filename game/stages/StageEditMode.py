@@ -1,4 +1,5 @@
 import copy
+import types
 
 import pygame
 import sys
@@ -71,8 +72,15 @@ class StageEditMode(StageHandleConsole):
             else:
                 bug = True
         elif commands[0] == "pick":
-            id = int(commands[1])
-            class_name = Register().get_actor(id)
+            try:
+                id = int(commands[1])
+            except:
+                id = commands[1]
+
+            if isinstance(id, type("")):
+                class_name = Register().get_actor_by_name(id)
+            else:
+                class_name = Register().get_actor(id)
             if class_name != None:
                 self.object_pick = class_name()
             else:

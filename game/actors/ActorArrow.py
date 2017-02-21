@@ -2,6 +2,7 @@ import pygame
 
 from api.ActorSprite import ActorSprite
 from game.utils.Direction import DIRECTION
+from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import VECTOR_NULL, Vector
 
 
@@ -24,7 +25,7 @@ class ActorArrow(ActorSprite):
         self.should_update = True
 
     def load_sprite(self):
-        self.sprite = pygame.image.load("assets/bullet.png").convert_alpha()
+        self.sprite = load_image("assets/bullet.png")
 
     def update(self):
         super().update()

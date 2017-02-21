@@ -43,4 +43,9 @@ class Register:
         def get_actor(self, id):
             return self.get("ACTOR", id)
 
+        def get_actor_by_name(self, name):
+            for actor in self.__stack["ACTOR"].values():
+                if actor.NAME == name:
+                    return actor
+
 

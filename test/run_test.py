@@ -4,5 +4,9 @@ from test.GameTest import GameTest
 import pygame
 import copy
 
-print(Map.load("bonjour"))
+list = [21, 23, 13, 423, 123]
 
+for l in list:
+    l = 4
+
+print(list)

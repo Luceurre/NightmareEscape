@@ -1,55 +1,29 @@
 import pygame, math
+from game.utils.SurfaceHelper import get_real_rect
 
 
 class Animation:
-    def __init__(self, image, load_rect, tile_number, time, corr_rect=None, link_rect=False):
+    def __init__(self, image, load_rect, tile_number, time, auto_rect=False):
         self.tile = []
-        self.rect = None
+        self.rects = []
+        self.auto_rect = auto_rect
 
         for i in range(tile_number):
             self.tile.append(
                 image.subsurface(load_rect.x + load_rect.width * i, load_rect.y, load_rect.width, load_rect.height))
 
-        if corr_rect is not None:
-            for i in range(tile_number):
-                self.tile[i] = self.tile[i].subsurface(corr_rect.x, corr_rect.y, corr_rect.width, corr_rect.height)
-
-        if corr_rect is not None and link_rect:
-            for i in range(tile_number):
-                self.rect.append(pygame.Rect((0, 0), (corr_rect.width, corr_rect.height)))
-
-        elif link_rect and corr_rect is None:
-            min_x = self.tile[i].get_width()
-            min_y = self.tile[i].get_height()
-            max_x = max_y = 0
-
-            for i in range(tile_number):
-                for x in range(self.tile[i].get_width()):
-                    for y in range(self.tile[i].get_height()):
-                        if self.tile[i].get_at((x, y))[3] is not 0:
-                            if x < min_x:
-                                min_x = x
-                            elif x > max_x:
-                                max_x = x
-                            if y < min_y:
-                                min_y = y
-                            elif y > max_y:
-                                max_y = y
-
-            self.rect = pygame.Rect(min_x, min_y, max_x - min_x +1, max_y - min_y + 1)
-
-            for i in range(tile_number):
-                self.tile[i] = self.tile[i].subsurface(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
-
-        else:
-            for i in range(tile_number):
-                self.rect = pygame.Rect(0, 0, self.tile[0].get_width(), self.tile[0].get_height())
+        if auto_rect:
+            # Obtention des hitboxs réels des images -> utils.Image.get_real_rect :
+            rect = get_real_rect(self.tile[0])
+            for index, tile in enumerate(self.tile):
+                # On en profite pour redimensionner les images :
+                self.tile[index] = tile.subsurface(rect)
+                self.rects.append(rect)
 
         self.now = pygame.time.get_ticks()
         self.at = 0
         self.tile_number = tile_number
         self.time = time
-        self.linked_rect = link_rect
 
     def get_sprite(self):
         if self.tile_number == 1:
@@ -62,4 +36,5 @@ class Animation:
 
     def get_rect(self, rect):
 
+        rect.size = self.rects[self.at].size
         return rect

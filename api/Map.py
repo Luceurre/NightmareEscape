@@ -40,6 +40,13 @@ class Map(Logger):
 
         return None
 
+    def get_actor(self, class_name):
+        for actor in self.actors:
+            if type(actor) == class_name:
+                return actor
+
+        return None
+
     def add_actor(self, actor):
         if actor not in self.actors:
             actor.map = self
