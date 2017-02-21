@@ -4,5 +4,5 @@ from test.GameTest import GameTest
 import pygame
 import copy
 
-ad = {}
-print(ad[1])
+print(Map.load("bonjour"))
+

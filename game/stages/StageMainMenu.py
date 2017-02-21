@@ -14,10 +14,10 @@ class StageMainMenu(StageAutoManage):
         self.pressed_button = None
 
     def init(self):
-        self.add_actor(ActorButtonStart())
-        self.add_actor(ActorButtonQuit())
-        self.add_actor(ActorButtonEdit())
-        self.add_actor(ActorButton(files_prefix="button_setting", label="setting"))
+        self.map.add_actor(ActorButtonStart())
+        self.map.add_actor(ActorButtonQuit())
+        self.map.add_actor(ActorButtonEdit())
+        self.map.add_actor(ActorButton(files_prefix="button_setting", label="setting"))
 
         height = self.screen.get_height() / (len(self.map.actors) + 2)
 

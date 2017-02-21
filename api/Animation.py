@@ -61,13 +61,5 @@ class Animation:
         return self.tile[self.at]
 
     def get_rect(self, rect):
-        """
-        if rect.size == self.rect[self.at].size:
-            return rect
-        else:
-            rect.x += int((rect.w - self.rect[self.at].w) / 2) - (self.rect[self.at -1].x - self.rect[self.at].x) #((rect.w - self.rect[self.at].w) / 2)
-            rect.y += (rect.h - self.rect[self.at].h) / 2
-            rect.size = self.rect[self.at].size
-        """
 
         return rect

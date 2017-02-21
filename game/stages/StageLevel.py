@@ -3,9 +3,10 @@ from api.StageAutoManage import StageAutoManage
 from game.actors.ActorCollidable import ActorCollidable
 from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorWall import ActorWall
+from game.stages.StageHandleConsole import StageHandleConsole
 
 
-class StageLevel(StageAutoManage):
+class StageLevel(StageHandleConsole):
     def __init__(self, level = 0):
         super().__init__()
 
@@ -14,12 +15,12 @@ class StageLevel(StageAutoManage):
     def init(self):
         super().init()
 
-        self.add_actor(self.player)
+        self.map.add_actor(self.player)
         for i in range(2):
-            self.add_actor(ActorWall())
+            self.map.add_actor(ActorWall())
 
-        self.actors[1].rect.x = 200
-        self.actors[2].rect.y = 200
+        self.map.actors[1].rect.x = 200
+        self.map.actors[2].rect.y = 200
 
     def run(self):
         super().run()

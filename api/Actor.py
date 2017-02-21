@@ -36,7 +36,7 @@ class Actor(EventHandler, Logger):
         self.z = 0
         self.should_update = False
         self.timers = []
-        self.stage = None  # On bypass notre modèle de communication entre acteurs parce que c'est juste pas pratique.
+        self.map = None  # On bypass notre modèle de communication entre acteurs parce que c'est juste pas pratique. -> modèle vue/controller
 
     def draw(self, screen):
         # L'Actor doit être dessiné ici, si c'est un Actor avec une image, utilise ActorSprite
@@ -53,4 +53,13 @@ class Actor(EventHandler, Logger):
         for index, timer in enumerate(self.timers):
             if timer.update():
                 self.timers.pop(index)
+
+    # Quand la map se charge, ou l'acteur -> permet d'éviter la sauvegarde d'élèments inutile et les bugs pickle
+    def reload(self, map):
+        self.map = map
+
+    # Quand on sauvegarde...
+    def unload(self):
+        del self.map
+        pass
 

@@ -4,6 +4,7 @@ import pygame
 
 from game.actors.ActorArrow import ActorArrow
 from game.actors.ActorPlayer import ActorPlayer
+from game.actors.ActorRock import ActorRock
 from game.actors.ActorWall import ActorWall
 from game.utils.Register import Register
 
@@ -21,6 +22,7 @@ class Loader(Thread):
         ActorWall.register()
         ActorArrow.register()
         ActorPlayer.register()
+        ActorRock.register()
 
         self.finish = True
 

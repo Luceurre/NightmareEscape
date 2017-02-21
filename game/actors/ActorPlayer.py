@@ -44,6 +44,13 @@ class ActorPlayer(ActorAnimation):
         self.is_shooting = False  # Pour l'animation ?
         self.shoot = False
 
+
+        self.reload(None)
+
+
+    def reload(self, map):
+        super().reload(map)
+
         # Gestion des touches utilisés :
         # [key]: [activate?, direction(optional)] => toujours utilisé ce format
 
@@ -66,6 +73,16 @@ class ActorPlayer(ActorAnimation):
         }
 
         self.keys = [self.keys_shoot, self.keys_move, self.keys_other]
+        self.direction = DIRECTION.BAS
+
+    def unload(self):
+        super().unload()
+
+        del self.keys_shoot
+        del self.keys_move
+        del self.keys_other
+        del self.keys
+        del self.direction
 
     def load_sprite(self):
         sprites_sheet = pygame.image.load("assets/marinka.png")
@@ -101,6 +118,14 @@ class ActorPlayer(ActorAnimation):
                                                                                PLAYER_SPRITE_HEIGHT), 1, 1000)
 
         self.animation = self.animations[DIRECTION.NONE]
+
+    def unload_sprite(self):
+        super().unload_sprite()
+
+        del self.animation
+        del self.animations
+
+        self.info("Sprites unloaded succesfuldzy!")
 
     def update(self):
         super().update()
@@ -149,7 +174,7 @@ class ActorPlayer(ActorAnimation):
             arrow = ActorArrow(self.direction, self.velocity)
             arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
             arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
-            self.stage.add_actor(arrow)
+            self.map.add_actor(arrow)
 
         self.animation = self.animations[self.direction]
 
@@ -158,7 +183,7 @@ class ActorPlayer(ActorAnimation):
         rect.x += x
         rect.y += y
 
-        if self.stage.map.is_at(rect, ActorCollidable) == -1:
+        if self.map.is_at(rect, ActorCollidable) == -1:
             self.rect.x = rect.x
             self.rect.y = rect.y
 

@@ -20,10 +20,18 @@ class ActorSprite(Actor):
 
     def load_sprite(self):
         # Tous les chargements d'images, animations et autres trucs visuels doivent se faire ici !
-        return None
+        self._sprite = None
+
+    def reload(self, map):
+        super().reload(map)
+        self.load_sprite()
+
+    def unload(self):
+        super().unload()
+        self.unload_sprite()
 
     def unload_sprite(self):
-        del self.sprite
+        del self._sprite
 
     @property
     def rect(self):
@@ -53,7 +61,7 @@ class ActorSprite(Actor):
             except:
                 self.load_sprite()
                 self.info("Rechargement des images car Pickle.")
-                screen.blit(self.sprite, self.rect)
+                screen.blit(self.sprite, self._rect)
 
     def move(self, x, y):
         self.rect.x += x

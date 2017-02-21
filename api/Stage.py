@@ -16,12 +16,17 @@ class Stage(EventHandler, Logger):
 
         self.screen = pygame.display.get_surface()
         self.rect = pygame.Rect(0, 0, self.screen.get_width(), self.screen.get_height())
+        self.draw_hit_box = False
 
     def update(self):
         """Ici se passe toute la logique de la scène"""
 
     def draw(self):
         """Ici se passe tout ce qui est affiché à l'écran"""
+
+        if self.draw_hit_box:
+            for actor in self.map.actors:
+                pygame.gfxdraw.rectangle(self.screen, actor.rect, (0, 255, 0))
 
     # Callbacks functions (StateManager)
 
@@ -115,13 +120,6 @@ class Stage(EventHandler, Logger):
         for index, timer in enumerate(self.timers):
             if timer.update():
                 self.timers.pop(index)
-
-    def add_actor(self, actor):
-        if actor not in self.map.actors:
-            actor.stage = self
-            self.map.actors.append(actor)
-        else:
-            self.log("Tu as deux fois le même Actor! Check si tu as pas une erreur quelque part Renaud...", LOG_LEVEL.ERROR)
 
     def remove_actor(self, actor):
         if actor in self.map.actors:

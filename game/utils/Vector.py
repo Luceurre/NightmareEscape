@@ -7,7 +7,7 @@ class Vector:
         self.x = 0
         self.y = 0
 
-    def __cmp__(self, other):
+    def __eq__(self, other):
         return self.x == other.x and self.y == other.y
 
 VECTOR_NULL = Vector(0, 0)

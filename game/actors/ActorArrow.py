@@ -12,6 +12,8 @@ class ActorArrow(ActorSprite):
     def __init__(self, dir=DIRECTION.NONE, velocity=VECTOR_NULL):
         super().__init__()
 
+        self.map = None # ?
+
         self.dir = dir.value
         self.speed = 8
         self.velocity = Vector(0, 0)
@@ -32,5 +34,9 @@ class ActorArrow(ActorSprite):
     def move(self, x, y):
         super().move(x ,y)
 
-        if self.rect.colliderect(self.stage.rect) == False:
-            self.stage.remove_actor(self)
+        try:
+            if self.map is not None:
+                if not self.rect.colliderect(self.map.rect):
+                    self.map.remove_actor(self)
+        except:
+            pass

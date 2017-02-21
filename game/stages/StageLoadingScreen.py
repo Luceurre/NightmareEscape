@@ -11,7 +11,7 @@ from game.utils.Loader import Loader
 class StageLoadingScreen(StageAutoManage):
     def init(self):
         self.loading_screen = ActorLoadingScreen()
-        self.add_actor(self.loading_screen)
+        self.map.add_actor(self.loading_screen)
         self.loading_thread = Loader()
         self.loading_thread.start()
 
