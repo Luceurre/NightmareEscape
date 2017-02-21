@@ -17,4 +17,4 @@ class ActorSimpleLife(ActorSprite):
         try:
             self.sprite = pygame.image.load("assets/" + self.path)
         except:
-            self.info("C'est normal, mon programme est puant :)")
+            self.info("C'est normal, mon programme est puant !")
