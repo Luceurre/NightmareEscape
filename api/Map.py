@@ -2,6 +2,7 @@ import pickle
 import os
 #import api.ActorSprite
 import pygame
+import sys
 
 from api.Logger import *
 
@@ -16,12 +17,16 @@ class Map(Logger):
 
     def save(self):
         # Sauvegarde la Map dans le fichier 'name' + .map
-
         self.info("Saving...")
-
         file = open("ressources/" + self.name + ".map", 'wb')
-        self.unload()
+		
+        try:
+            self.unload()
+        except:
+            self.info("Erreur lors de la sauvegarde la carte!")
+            print("Unexpected error:", sys.exc_info()[0])
 
+        
         pickle.dump(self, file)
         self.reload()
 
