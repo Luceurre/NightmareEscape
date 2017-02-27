@@ -7,6 +7,6 @@ from game.utils.Constants import *
 
 class GameNightmareEscape(Game):
     def __init__(self):
-        super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT)
+        super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, framerate=60)
 
         StageManager().push(StageLoadingScreen())
