@@ -62,5 +62,4 @@ class Actor(EventHandler, Logger):
     # Quand on sauvegarde...
     def unload(self):
         del self.map
-        pass
 
