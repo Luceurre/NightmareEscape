@@ -7,7 +7,7 @@ from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorRock import ActorRock
 from game.actors.ActorWall import ActorWall
 from game.utils.Register import Register
-
+from game.actors.ActorWall_1 import ActorWall_1
 
 class Loader(Thread):
 
@@ -23,6 +23,7 @@ class Loader(Thread):
         ActorArrow.register()
         ActorPlayer.register()
         ActorRock.register()
+        ActorWall_1.register()
 
         self.finish = True
 
