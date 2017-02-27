@@ -146,6 +146,7 @@ class StageEditMode(StageHandleConsole):
             actor = self.map.get_actor_at(pos[0], pos[1])
             if actor != None:
                 self.map.remove_actor(actor)
-            self.mode = EDIT_MODE.PICK
-            self.object_pick = type(actor)()
+                self.mode = EDIT_MODE.PICK
+                self.object_pick = copy.deepcopy(actor)
+                self.object_pick.reload(self.object_pick.map)
 
