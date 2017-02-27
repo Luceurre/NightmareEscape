@@ -2,25 +2,12 @@ import pygame
 
 from game.actors.ActorCollidable import ActorCollidable
 
+
 class ActorWall(ActorCollidable):
-
-    ID = 1
-    NAME = "Wall"
-
-    def __init__(self):
-        super().__init__()
-
-        self.should_update = True
-        self.speed = 5
+    ID = 5
+    NAME = "WALL"
 
     def load_sprite(self):
-        self.sprite = pygame.image.load("assets/mario.jpg").convert_alpha()
+        super().load_sprite()
 
-    def update(self):
-        self.rect.y += self.speed
-        if self.rect.y + self.rect.height > pygame.display.get_surface().get_height():
-            self.rect.y = pygame.display.get_surface().get_height() - self.rect.height
-            self.speed *= -1
-        elif self.rect.y < 0:
-            self.rect.y = 0
-            self.speed *= -1
+        self.sprite = pygame.image.load("assets/Wall1.png").convert()
