@@ -28,7 +28,7 @@ def get_real_rect(surface):
                 elif y > y_max:
                     y_max = y
 
-    return pygame.Rect(x_min, y_min, x_max - x_min, y_max - y_min)
+    return pygame.Rect(x_min, y_min, x_max - x_min + 1, y_max - y_min + 1)
 
 
 def load_image(path, auto_rect=True):
@@ -41,3 +41,13 @@ def load_image(path, auto_rect=True):
             return image.subsurface(rect)
         else:
             return image
+
+
+def shadowizer(surface: pygame.Surface):
+    new_surface = pygame.transform.rotozoom(surface, -45, 1)
+    for x in range(new_surface.get_width()):
+        for y in range(new_surface.get_height()):
+            if new_surface.get_at((x, y))[3] != 0:
+                new_surface.set_at((x, y), (0, 0, 0, 95))
+
+    return new_surface

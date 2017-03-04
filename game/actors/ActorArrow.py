@@ -9,6 +9,7 @@ from game.utils.Vector import VECTOR_NULL, Vector
 class ActorArrow(ActorSprite):
 
     ID = 2
+    NAME = "ARROW"
 
     def __init__(self, dir=DIRECTION.NONE, velocity=VECTOR_NULL):
         super().__init__()
@@ -23,6 +24,15 @@ class ActorArrow(ActorSprite):
         if self.dir.y * velocity.y >= 0:
             self.velocity.y = velocity.y / 2
         self.should_update = True
+
+        self.draw_shadow = True
+        self.h = 20
+
+    def reload(self, map):
+        super().reload(map)
+
+        self.draw_shadow = True
+        self.h = 64
 
     def load_sprite(self):
         self.sprite = load_image("assets/bullet.png")

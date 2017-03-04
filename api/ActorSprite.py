@@ -1,19 +1,25 @@
+import copy
 import pygame
 from api.Actor import Actor
 from api.Logger import LOG_LEVEL
 from api.StageManager import StageManager
-from game.utils.Register import Register
+from game.utils.Constants import WINDOW_WIDTH, WINDOW_HEIGHT
+from game.utils.SurfaceHelper import shadowizer
 
 
 class ActorSprite(Actor):
 
-    def __init__(self):
+    def __init__(self, load_sprite=True):
         super().__init__()
 
         # Définition de nouveaux attributs
         self._rect = pygame.Rect(0, 0, 0, 0)
         self._sprite = None
-        self.load_sprite() # Chargement des images ici !!
+        self.draw_shadow = False
+        self.h = 0 # Hauteur pour les ombres
+
+        if load_sprite:
+            self.load_sprite() # Chargement des images ici !!
 
         # Modification d'attribut venant de la classe Actor
         self.should_draw = True
@@ -24,6 +30,9 @@ class ActorSprite(Actor):
 
     def reload(self, map):
         super().reload(map)
+
+        self.draw_shadow = False
+        self.h = 0
         self.load_sprite()
 
     def unload(self):
@@ -60,6 +69,10 @@ class ActorSprite(Actor):
             StageManager().exit()
         else:
             try:
+                if self.draw_shadow:
+                    rect = copy.copy(self.rect)
+                    rect.y += self.h
+                    screen.blit(shadowizer(self.sprite), rect)
                 screen.blit(self.sprite, self.rect)
             except:
                 self.load_sprite()
@@ -78,6 +91,6 @@ class ActorSprite(Actor):
     def set_centered_y(self, height):
         self.rect.y = (height - self.rect.height) / 2
 
-    def set_centered(self, width, height):
+    def set_centered(self, width=WINDOW_WIDTH, height=WINDOW_HEIGHT):
         self.rect.x = (width - self.rect.width) / 2
         self.rect.y = (height - self.rect.height) / 2

@@ -1,3 +1,4 @@
+import copy
 import pygame
 
 from api.ActorAnimation import ActorAnimation
@@ -6,7 +7,7 @@ from api.Timer import Timer
 from game.actors.ActorArrow import ActorArrow
 from game.actors.ActorCollidable import ActorCollidable
 from game.utils.Direction import DIRECTION
-from game.utils.SurfaceHelper import load_image
+from game.utils.SurfaceHelper import load_image, shadowizer
 from game.utils.Vector import Vector, VECTOR_NULL
 from game.utils.Constants import *
 
@@ -44,9 +45,10 @@ class ActorPlayer(ActorAnimation):
         self.is_shooting = False  # Pour l'animation ?
         self.shoot = False
 
+        # 3D ?
+        self.depth = PLAYER_DEPTH
 
         self.reload(None)
-
 
     def reload(self, map):
         super().reload(map)
@@ -74,6 +76,8 @@ class ActorPlayer(ActorAnimation):
 
         self.keys = [self.keys_shoot, self.keys_move, self.keys_other]
         self.direction = DIRECTION.BAS
+
+        self.draw_shadow = True
 
     def unload(self):
         super().unload()
@@ -179,13 +183,16 @@ class ActorPlayer(ActorAnimation):
         self.animation = self.animations[self.direction]
 
     def move(self, x=0, y=0):  # Return True if the Player moved, False otherwise
-        rect = pygame.Rect(self.rect)
+        rect = copy.copy(pygame.Rect(self.rect))
         rect.x += x
         rect.y += y
 
+        rect.y += rect.h - self.depth
+        rect.h = self.depth
+
         if self.map.is_at(rect, ActorCollidable) == -1:
-            self.rect.x = rect.x
-            self.rect.y = rect.y
+            self.rect.x += x
+            self.rect.y += y
 
             return True
         else:

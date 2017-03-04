@@ -16,6 +16,7 @@ from game.stages.StageHandleConsole import StageHandleConsole
 from game.utils.Grid import Grid
 from game.utils.Register import Register
 from game.utils.Vector import Vector
+from game.stages.StageTileSelector import StageTileSelector
 
 class EDIT_MODE(EnumAuto):
     PICK = ()
@@ -36,11 +37,20 @@ class StageEditMode(StageHandleConsole):
 
         self.draw_hit_box = False
 
+    def pause(self):
+        super().pause()
+
+        stage = StageManager().stack[-1]
+        if isinstance(stage, StageTileSelector):
+            self.object_pick = stage.tile_picked
+            if self.object_pick is not None:
+                self.state = StageState.RESUME
+
     def draw(self):
         super().draw()
 
         if self.mode == EDIT_MODE.PICK:
-            if self.object_pick != None:
+            if self.object_pick is not None:
                 self.screen.blit(self.object_pick.sprite, (self.mouse_pos.x, self.mouse_pos.y))
 
         self.grid.draw(self.screen)
@@ -81,13 +91,13 @@ class StageEditMode(StageHandleConsole):
                 class_name = Register().get_actor_by_name(id)
             else:
                 class_name = Register().get_actor(id)
-            if class_name != None:
+            if class_name is not None:
                 self.object_pick = class_name()
             else:
                 self.object_pick = None
         elif commands[0] == "pause":
             self.is_paused = True
-        elif commands[0] == "unpause":
+        elif commands[0] == "resume":
             self.is_paused = False
         elif commands[0] == "mode":
             if commands[1] == "get":
@@ -122,6 +132,9 @@ class StageEditMode(StageHandleConsole):
                 self.object_pick = ActorSimpleLife(commands[1])
             else:
                 bug = True
+        elif commands[0] == "tilesets":
+            self.state = StageState.PAUSE
+            StageManager().push(StageTileSelector())
         else:
             bug = True
 
