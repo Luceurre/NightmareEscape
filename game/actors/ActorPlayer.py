@@ -1,15 +1,15 @@
 import copy
+
 import pygame
 
 from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
 from api.Timer import Timer
 from game.actors.ActorArrow import ActorArrow
-from game.actors.ActorCollidable import ActorCollidable
-from game.utils.Direction import DIRECTION
-from game.utils.SurfaceHelper import load_image, shadowizer
-from game.utils.Vector import Vector, VECTOR_NULL
 from game.utils.Constants import *
+from game.utils.Direction import DIRECTION
+from game.utils.SurfaceHelper import load_image
+from game.utils.Vector import VECTOR_NULL
 
 
 class ActorPlayer(ActorAnimation):
@@ -48,10 +48,10 @@ class ActorPlayer(ActorAnimation):
         # 3D ?
         self.depth = PLAYER_DEPTH
 
-        self.reload(None)
+        self.reload()
 
-    def reload(self, map):
-        super().reload(map)
+    def reload(self):
+        super().reload()
 
         # Gestion des touches utilisés :
         # [key]: [activate?, direction(optional)] => toujours utilisé ce format
@@ -64,10 +64,10 @@ class ActorPlayer(ActorAnimation):
         }
 
         self.keys_move = {
-            122: [False, DIRECTION.HAUT],
-            113: [False, DIRECTION.GAUCHE],
-            115: [False, DIRECTION.BAS],
-            100: [False, DIRECTION.DROITE]
+            pygame.K_z: [False, DIRECTION.HAUT],
+            pygame.K_q: [False, DIRECTION.GAUCHE],
+            pygame.K_s: [False, DIRECTION.BAS],
+            pygame.K_d: [False, DIRECTION.DROITE]
         }
 
         self.keys_other = {
@@ -129,7 +129,7 @@ class ActorPlayer(ActorAnimation):
         del self.animation
         del self.animations
 
-        self.info("Sprites unloaded succesfuldzy!")
+        self.info("Sprites unloaded successfully!")
 
     def update(self):
         super().update()
@@ -140,14 +140,14 @@ class ActorPlayer(ActorAnimation):
         self.direction = DIRECTION.NONE
         self.direction_walk = []
         for value in self.keys_move.values():
-            if value[0] == True:
+            if value[0]:
                 self.direction = value[1]
                 self.direction_walk.append(value[1])
                 self.walk = True
 
         self.shoot = False
         for value in self.keys_shoot.values():
-            if value[0] == True:
+            if value[0]:
                 self.direction = value[1]
                 self.shoot = True
                 break
@@ -155,9 +155,9 @@ class ActorPlayer(ActorAnimation):
         if self.walk:
             speed_x = 0
             speed_y = 0
-            for dir in self.direction_walk:
-                speed_x += dir.value.x
-                speed_y += dir.value.y
+            for direction in self.direction_walk:
+                speed_x += direction.value.x
+                speed_y += direction.value.y
 
             self.velocity.x = self.velocity_max * speed_x
             self.velocity.y = self.velocity_max * speed_y
@@ -167,7 +167,7 @@ class ActorPlayer(ActorAnimation):
         if self.velocity != VECTOR_NULL:
             self.has_moved = self.move(x=self.velocity.x, y=self.velocity.y)
 
-        if self.has_moved == False:
+        if not self.has_moved:
             self.velocity.null()
 
         if self.shoot and self.can_shoot:
@@ -182,7 +182,12 @@ class ActorPlayer(ActorAnimation):
 
         self.animation = self.animations[self.direction]
 
-    def move(self, x=0, y=0):  # Return True if the Player moved, False otherwise
+    def move(self, x=0, y=0):
+        """Return True if the Player moved, False otherwise"""
+
+        if x == 0 and y == 0:
+            return False
+
         rect = copy.copy(pygame.Rect(self.rect))
         rect.x += x
         rect.y += y
@@ -190,7 +195,17 @@ class ActorPlayer(ActorAnimation):
         rect.y += rect.h - self.depth
         rect.h = self.depth
 
-        if self.map.is_at(rect, ActorCollidable) == -1:
+        actors = self.map.get_actors_collide(rect, self)
+        remove_indexes = []
+
+        for index, actor in enumerate(actors):
+            if not actor.collidable:
+                remove_indexes.append(index)
+
+        for i, index in enumerate(remove_indexes):
+            actors.pop(index - i)
+
+        if not actors:
             self.rect.x += x
             self.rect.y += y
 

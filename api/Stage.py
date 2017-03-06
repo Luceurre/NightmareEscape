@@ -1,11 +1,11 @@
 from operator import attrgetter
 
 import pygame
+
 from api.EventHandler import EventHandler
+from api.Logger import Logger
 from api.Map import Map
 from api.StageState import StageState
-from api.Logger import Logger, LOG_LEVEL
-from api.Timer import Timer
 
 
 class Stage(EventHandler, Logger):
@@ -50,13 +50,6 @@ class Stage(EventHandler, Logger):
         # Called each tick when StageState is PAUSE
         pass
 
-    """
-    def auto_events_loop(self, *args, **kwargs):
-        # Créée pour appeler 'events_loop' sans changer sa définition (Timer)
-
-        self.events_loop()
-    """
-
     def events_loop(self):
         actors_sorted = sorted(self.map.actors, key=attrgetter('handle_event', 'handle_event_priority'), reverse=True)
 
@@ -68,13 +61,6 @@ class Stage(EventHandler, Logger):
                     elif actor.handle(event):
                         break
 
-    """
-    def auto_draw_actors(self, *args, **kwargs):
-        # Créée pour appeler 'draw_actors' sans changer sa définition (Timer)
-
-        self.draw_actors()
-    """
-
     def draw_actors(self):
         for actor in sorted(self.map.actors, key=attrgetter('should_draw', 'z'), reverse=True):
             if not actor.should_draw:
@@ -82,36 +68,12 @@ class Stage(EventHandler, Logger):
             else:
                 actor.draw(self.screen)
 
-    """
-    def auto_update_actors(self, *args, **kwargs):
-        # Créée pour appeler 'update_actors' sans changer sa définition (Timer)
-
-        self.update_actors()
-    """
-
     def update_actors(self):
         for actor in sorted(self.map.actors, key=attrgetter('should_update'), reverse=True):
             if not actor.should_update:
                 break
             else:
                 actor.update()
-
-    """
-    def set_auto_call_events_loop(self, ms = 1000/500):
-        self.add_timer(Timer(ms, self.auto_events_loop, repeat=True, infinite=True))
-
-    def set_auto_call_draw_actors(self, ms = 1000/60):
-        self.add_timer(Timer(ms, self.auto_draw_actors, repeat=True, infinite=True))
-
-    def set_auto_call_update_actors(self, ms=1000/500):
-        self.add_timer(Timer(ms, self.auto_update_actors, repeat=True, infinite=True))
-
-    def set_auto_manage_scene(self, ms_au = 1000/120, ms_ad = 1000/60, ms_el=1000/60):
-        self.set_auto_call_update_actors(ms_au)
-        self.set_auto_call_draw_actors(ms_ad)
-        self.set_auto_call_events_loop(ms_el)
-        self.__auto = True
-    """
 
     def add_timer(self, timer):
         self.timers.append(timer)
