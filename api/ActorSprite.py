@@ -1,5 +1,7 @@
 import copy
+
 import pygame
+
 from api.Actor import Actor
 from api.Logger import LOG_LEVEL
 from api.StageManager import StageManager
@@ -16,6 +18,7 @@ class ActorSprite(Actor):
         self._rect = pygame.Rect(0, 0, 0, 0)
         self._sprite = None
         self.draw_shadow = False
+        self.collidable = False
         self.h = 0 # Hauteur pour les ombres
 
         if load_sprite:
@@ -28,10 +31,11 @@ class ActorSprite(Actor):
         # Tous les chargements d'images, animations et autres trucs visuels doivent se faire ici !
         self._sprite = None
 
-    def reload(self, map):
-        super().reload(map)
+    def reload(self):
+        super().reload()
 
         self.draw_shadow = False
+        self.collidable = False
         self.h = 0
         self.load_sprite()
 

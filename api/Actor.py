@@ -56,8 +56,8 @@ class Actor(EventHandler, Logger):
                 self.timers.pop(index)
 
     # Quand la map se charge, ou l'acteur -> permet d'éviter la sauvegarde d'élèments inutile et les bugs pickle
-    def reload(self, map):
-        self.map = map
+    def reload(self):
+        pass
 
     # Quand on sauvegarde...
     def unload(self):

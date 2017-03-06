@@ -1,28 +1,25 @@
 import copy
-import types
-
-import pygame
-import sys
 
 from api.EnumAuto import EnumAuto
 from api.Map import Map
-from api.StageAutoManage import StageAutoManage
 from api.StageManager import StageManager
 from api.StageState import StageState
-from game.actors.ActorBackground import ActorBackground
 from game.actors.ActorSimpleLife import ActorSimpleLife
-from game.stages.StageConsole import StageConsole
 from game.stages.StageHandleConsole import StageHandleConsole
+from game.stages.StageTileSelector import StageTileSelector
 from game.utils.Grid import Grid
 from game.utils.Register import Register
 from game.utils.Vector import Vector
-from game.stages.StageTileSelector import StageTileSelector
+
 
 class EDIT_MODE(EnumAuto):
     PICK = ()
     MOVE = ()
     REMOVE = ()
+    LAYER = ()
     NONE = ()
+    COPY = ()
+
 
 class StageEditMode(StageHandleConsole):
     def __init__(self):
@@ -109,6 +106,10 @@ class StageEditMode(StageHandleConsole):
                     self.mode = EDIT_MODE.MOVE
                 elif commands[2] == "remove":
                     self.mode = EDIT_MODE.REMOVE
+                elif commands[2] == "layer":
+                    self.mode = EDIT_MODE.LAYER
+                elif commands[2] == "copy":
+                    self.mode = EDIT_MODE.COPY
                 else:
                     bug = True
             else:
@@ -155,6 +156,7 @@ class StageEditMode(StageHandleConsole):
         elif self.mode == EDIT_MODE.PICK:
             if self.object_pick != None:
                 actor = copy.deepcopy(self.object_pick)
+                actor.reload()
 
                 if self.grid.should_draw:
                     actor.rect.x = pos[0] - (pos[0] % self.grid.size)
@@ -169,5 +171,17 @@ class StageEditMode(StageHandleConsole):
                 self.map.remove_actor(actor)
                 self.mode = EDIT_MODE.PICK
                 self.object_pick = copy.deepcopy(actor)
-                self.object_pick.reload(self.object_pick.map)
-
+                self.object_pick.reload()
+        elif self.mode == EDIT_MODE.LAYER:
+            actor = self.map.get_actor_at(pos[0], pos[1])
+            if actor is not None:
+                if button == 1:
+                    actor.z += 1
+                elif button == 3:
+                    actor.z -= 1
+        elif self.mode == EDIT_MODE.COPY:
+            actor = self.map.get_actor_at(pos[0], pos[1])
+            if actor != None:
+                self.object_pick = copy.deepcopy(actor)
+                self.object_pick.reload()
+                self.mode = EDIT_MODE.PICK

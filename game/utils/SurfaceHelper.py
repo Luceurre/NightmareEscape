@@ -38,16 +38,25 @@ def load_image(path, auto_rect=True):
         image = pygame.image.load(path).convert_alpha()
         if auto_rect:
             rect = get_real_rect(image)
-            return image.subsurface(rect)
-        else:
-            return image
+            image = image.subsurface(rect)
+
+        image_list[path] = image
+        return image
+
+
+prev_shadow = {}
 
 
 def shadowizer(surface: pygame.Surface):
-    new_surface = pygame.transform.rotozoom(surface, -45, 1)
-    for x in range(new_surface.get_width()):
-        for y in range(new_surface.get_height()):
-            if new_surface.get_at((x, y))[3] != 0:
-                new_surface.set_at((x, y), (0, 0, 0, 95))
+    if surface in prev_shadow.keys():
+        return prev_shadow[surface]
+    else:
+        new_surface = pygame.transform.rotozoom(surface, -45, 1)
+        for x in range(new_surface.get_width()):
+            for y in range(new_surface.get_height()):
+                if new_surface.get_at((x, y))[3] != 0:
+                    new_surface.set_at((x, y), (0, 0, 0, 95))
 
-    return new_surface
+        prev_shadow[surface] = new_surface
+
+        return new_surface
