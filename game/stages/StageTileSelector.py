@@ -8,7 +8,7 @@ from game.actors.ActorSimpleLife import ActorSimpleLife
 from game.actors.ActorTile import ActorTile
 from game.actors.ActorTileCollidable import ActorTileCollidable
 from game.stages.StageHandleConsole import StageHandleConsole
-from game.utils.Grid import Grid
+from game.utils.Grid2 import Grid2
 from game.utils.Vector import Vector
 
 TILE_PATH = "tilesets/"
@@ -25,9 +25,9 @@ class StageTileSelector(StageHandleConsole):
 
         self.tile_picked = None
         self.tile_collidable = False
-        self.grid = Grid()
+        self.grid = Grid2()
         self.grid.should_draw = True
-        self.grid.size = 48
+        self.grid.set_size(48, 48)
         self.tileset_no = 0
 
         if not self.tileset_files:
@@ -46,12 +46,14 @@ class StageTileSelector(StageHandleConsole):
             self.state = StageState.QUIT
             if self.tile_collidable:
                 self.tile_picked = ActorTileCollidable(self.tileset_files[self.tileset_no],
-                                                       Vector(pos[0] - pos[0] % self.grid.size,
-                                                              pos[1] - pos[1] % self.grid.size), self.grid.size)
+                                                       Vector(pos[0] - pos[0] % self.grid.width,
+                                                              pos[1] - pos[1] % self.grid.height), self.grid.width,
+                                                       self.grid.height)
             else:
                 self.tile_picked = ActorTile(self.tileset_files[self.tileset_no],
-                                             Vector(pos[0] - pos[0] % self.grid.size,
-                                                    pos[1] - pos[1] % self.grid.size), self.grid.size)
+                                             Vector(pos[0] - pos[0] % self.grid.width,
+                                                    pos[1] - pos[1] % self.grid.height), self.grid.width,
+                                             self.grid.height)
             return True
         except ValueError:
             self.info("Tu n'as pas cliqué sur une image!")
@@ -88,7 +90,8 @@ class StageTileSelector(StageHandleConsole):
         try:
             if commands[0] == "grid":
                 if commands[1] == "size":
-                    self.grid.size = int(commands[2])
+                    self.grid.width = int(commands[2])
+                    self.grid.height = int(commands[3])
             elif commands[0] == "collidable":
                 if commands[1] == "True" or commands[1] == "1":
                     self.tile_collidable = True
