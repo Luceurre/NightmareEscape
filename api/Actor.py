@@ -70,3 +70,14 @@ class Actor(EventHandler, Logger):
         # Je le remets ici en commentaire pour ne pas chercher trop longtemps si ça ne fonctionne plus.
         # del self.map
         pass
+
+    def interact(self, actor):
+        """Nouvelle fonction permettant le dialogue entre 2 Actors.
+        Exemple: L'ActorPlayer se déplace, il va demander à tous les Actors qu'ils croisent si ils intéragissent avec
+        lui. Dans le cas d'un mur, True est renvoyé et l'ActorPlayer ne se déplace pas, dans le cas d'une boite à pousser
+        True est également renvoyé mais la boite peut tout de même faire se déplacer l'ActorPlayer en overridant son
+        déplacement.
+
+        Prend une instance d'Actor en paramètre, renvoie True quand il y a une intéraction quelqueconque, False sinon."""
+
+        return False

@@ -64,7 +64,7 @@ class StageEditMode(StageHandleConsole):
 
         if commands[0] == "map":
             if commands[1] == "load":
-                self.map = Map.load(commands[2])
+                self.map = Map.load_editor(commands[2])
             elif commands[1] == "save":
                 self.map.save()
             elif commands[1] == "print":
