@@ -22,11 +22,11 @@ class Grid2(Actor):
             width = screen.get_width()
             height = screen.get_height()
 
-            nb_w = int(width / self.size) + 1
-            nb_h = int(height / self.size) + 1
+            nb_w = int(width / self.width) + 1
+            nb_h = int(height / self.height) + 1
 
             for x in range(nb_w):
-                pygame.gfxdraw.vline(screen, x * self.size, 0, height, (255, 255, 255))
+                pygame.gfxdraw.vline(screen, x * self.width, 0, height, (255, 255, 255))
 
             for y in range(nb_h):
-                pygame.gfxdraw.hline(screen, 0, width, y * self.size, (255, 255, 255))
+                pygame.gfxdraw.hline(screen, 0, width, y * self.height, (255, 255, 255))

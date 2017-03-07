@@ -3,12 +3,14 @@ import pickle
 from api.Actor import Actor
 from api.Logger import *
 
-
 class Map(Logger):
     """Classe permettant le dialogue entre les Actors et le Stage.
     Contient quelques méthodes permettant un dialogue précis et rapide.
     Permet également la sauvegarde grossière du jeu.
     Utiliser Map.load(name) pour l'instancier."""
+
+    RESSOURCES_PATH = "ressources/"
+    SAVES_PATH = "saves/"
 
     def __init__(self):
         self.name = ""
@@ -154,20 +156,40 @@ class Map(Logger):
             actor.unload()
 
     @classmethod
-    def load(cls, name):
+    def load(cls, path):
         """Charge la Map 'name' avec Pickle, renvoie une instance de Map, si le fichier ressources/'name'.map
         n'existe pas, une nouvelle Map est créée dont le nom est 'name'. Il faudrait modifier cette méthode pour
         pouvoir charger des sauvegardes également!
 
         Le paramètre 'name' est une chaine de caractères."""
 
+        file = open(path + ".map", mode='br')
+        map = pickle.Unpickler(file).load()
+        map.reload()
+
+        return map
+
+    @classmethod
+    def load_editor(cls, name):
+        """Charge la Map 'name' du dossier RESSOURCES_PATH. Renvoie une map vide portant le nom 'name' si le fichier
+        n'existe pas."""
+
         try:
-            file = open("ressources/" + name + ".map", mode='br')
-            map = pickle.Unpickler(file).load()
-        except:
+            map = cls.load(cls.RESSOURCES_PATH + name)
+        except FileNotFoundError:
             map = Map()
             map.name = name
 
-        map.reload()
+        return map
+
+    @classmethod
+    def load_save(cls, name):
+        """Charge la Map 'name' du dossier SAVES_PATH. Le fichier provenant du dossier RESSOURCES_PATH est renvoyer si
+        le premier n'est pas trouvé."""
+
+        try:
+            map = cls.load(cls.SAVES_PATH + name + ".map")
+        except FileNotFoundError:
+            map = cls.load_editor(name)
 
         return map
