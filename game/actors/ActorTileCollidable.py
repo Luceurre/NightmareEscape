@@ -6,3 +6,8 @@ class ActorTileCollidable(ActorTile):
         super().reload()
 
         self.collidable = True
+
+    
+    def interact(self, actor):    
+        return (actor.collidable and self.collidable)
+

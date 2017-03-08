@@ -78,6 +78,7 @@ class ActorPlayer(ActorAnimation):
         self.direction = DIRECTION.BAS
 
         self.draw_shadow = True
+        self.collidable = True
 
     def unload(self):
         super().unload()
@@ -196,6 +197,8 @@ class ActorPlayer(ActorAnimation):
         rect.h = self.depth
 
         actors = self.map.get_actors_collide(rect, self)
+
+        """
         remove_indexes = []
 
         for index, actor in enumerate(actors):
@@ -204,8 +207,15 @@ class ActorPlayer(ActorAnimation):
 
         for i, index in enumerate(remove_indexes):
             actors.pop(index - i)
+        """
 
-        if not actors:
+        a_interagi = False
+        for actor in actors:
+            b = actor.interact(self)
+            if not a_interagi and b:
+                a_interagi = True
+
+        if not a_interagi:
             self.rect.x += x
             self.rect.y += y
 

@@ -11,3 +11,6 @@ class ActorCollidable(ActorSprite):
         super().reload()
 
         self.collidable = True
+
+    def interact(self, actor):    
+        return (actor.collidable and self.collidable)

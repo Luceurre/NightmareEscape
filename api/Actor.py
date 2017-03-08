@@ -70,3 +70,6 @@ class Actor(EventHandler, Logger):
         # Je le remets ici en commentaire pour ne pas chercher trop longtemps si ça ne fonctionne plus.
         # del self.map
         pass
+
+    def interact(self, actor):
+        return False

@@ -5,6 +5,7 @@ from api.Map import Map
 from api.StageManager import StageManager
 from api.StageState import StageState
 from game.actors.ActorSimpleLife import ActorSimpleLife
+from game.actors.ActorDoor import ActorDoor
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.stages.StageTileSelector import StageTileSelector
 from game.utils.Grid import Grid
@@ -136,6 +137,9 @@ class StageEditMode(StageHandleConsole):
         elif commands[0] == "tilesets":
             self.state = StageState.PAUSE
             StageManager().push(StageTileSelector())
+        elif commands[0] == "door":
+            """Renvoie une porte vers commands[1] qui à pour position de spawn commands[2]et commands[3]"""
+            self.object_pick = ActorDoor(commands[1], Vector(int(commands[2]), int(commands[3])))
         else:
             bug = True
 
