@@ -8,6 +8,8 @@ from api.Logger import Logger, LOG_LEVEL
 class Game(Logger):
     """Les bases de la logique du jeu... Si on veut modifier quelque chose qui touche tout le jeu, on le fait ici"""
 
+    CURRENT_STAGE = None
+
     def __init__(self, width=640, height=480, log_level=LOG_LEVEL.INFO, framerate=120):
         pygame.init()
 
@@ -30,6 +32,7 @@ class Game(Logger):
             self.screen.fill((0, 0, 0))
 
             for index, stage in enumerate(self.stage_manager):
+                type(self).CURRENT_STAGE = stage
                 if stage.state == StageState.RUN:
                     stage.run()
                 elif stage.state == StageState.PAUSE:

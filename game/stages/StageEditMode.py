@@ -140,6 +140,9 @@ class StageEditMode(StageHandleConsole):
         elif commands[0] == "tilesets":
             self.state = StageState.PAUSE
             StageManager().push(StageTileSelector())
+        elif commands[0] == "door":
+            """Renvoie une porte vers commands[1] qui à pour position de spawn commands[2]et commands[3]"""
+            self.object_pick = ActorDoor(commands[1], Vector(int(commands[2]), int(commands[3])))
         elif commands[0] == "event":
             event = pygame.event.Event(pygame.USEREVENT, name=EVENT_TP, map_name="bonjour", spawn_pos=Vector(50, 50))
             pygame.event.post(event)
