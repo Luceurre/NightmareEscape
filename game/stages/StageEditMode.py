@@ -1,12 +1,16 @@
 import copy
 
+import pygame
+
 from api.EnumAuto import EnumAuto
 from api.Map import Map
 from api.StageManager import StageManager
 from api.StageState import StageState
+from game.actors import ActorPlayer
 from game.actors.ActorSimpleLife import ActorSimpleLife
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.stages.StageTileSelector import StageTileSelector
+from game.utils.Constants import EVENT_TP
 from game.utils.Grid import Grid
 from game.utils.Register import Register
 from game.utils.Vector import Vector
@@ -89,7 +93,7 @@ class StageEditMode(StageHandleConsole):
             else:
                 class_name = Register().get_actor(id)
             if class_name is not None:
-                self.object_pick = class_name()
+                self.object_pick = class_name(*commands[2:])
             else:
                 self.object_pick = None
         elif commands[0] == "pause":
@@ -136,6 +140,9 @@ class StageEditMode(StageHandleConsole):
         elif commands[0] == "tilesets":
             self.state = StageState.PAUSE
             StageManager().push(StageTileSelector())
+        elif commands[0] == "event":
+            event = pygame.event.Event(pygame.USEREVENT, name=EVENT_TP, map_name="bonjour", spawn_pos=Vector(50, 50))
+            pygame.event.post(event)
         else:
             bug = True
 
@@ -185,3 +192,11 @@ class StageEditMode(StageHandleConsole):
                 self.object_pick = copy.deepcopy(actor)
                 self.object_pick.reload()
                 self.mode = EDIT_MODE.PICK
+
+    def handle_userevent(self, event):
+        if event.name == EVENT_TP:
+            player = self.map.get_actor(ActorPlayer)
+            self.map = Map.load_editor(event.map_name)
+            # player.rect.x = event.spawn_pos.x
+            # player.rect.y = event.spawn_pos.y
+            # self.map.add_actor(player)

@@ -1,5 +1,7 @@
 import pygame
+
 import api.StageManager
+
 
 class EventHandler():
     def handle(self, event):
@@ -16,6 +18,8 @@ class EventHandler():
         elif event.type == pygame.QUIT:
             api.StageManager.StageManager().exit()
             return True
+        elif event.type == pygame.USEREVENT:
+            return self.handle_userevent(event)
         else:
             return False
 
@@ -32,4 +36,7 @@ class EventHandler():
         return False
 
     def handle_mouse_button_up(self, pos, button):
+        return False
+
+    def handle_userevent(self, event):
         return False

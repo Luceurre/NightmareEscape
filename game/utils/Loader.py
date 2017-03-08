@@ -1,13 +1,11 @@
 from threading import Thread
 
-import pygame
-
 from game.actors.ActorArrow import ActorArrow
+from game.actors.ActorDoor import ActorDoor
 from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorRock import ActorRock
 from game.actors.ActorSpawnpoint import ActorSpawnpoint
 from game.actors.ActorWall import ActorWall
-from game.utils.Register import Register
 
 
 class Loader(Thread):
@@ -25,6 +23,7 @@ class Loader(Thread):
         ActorPlayer.register()
         ActorRock.register()
         ActorSpawnpoint.register()
+        ActorDoor.register()
 
         self.finish = True
 
