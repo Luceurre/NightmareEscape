@@ -1,12 +1,9 @@
 import copy
 
-import pygame
-
 from api.EnumAuto import EnumAuto
 from api.Map import Map
 from api.StageManager import StageManager
 from api.StageState import StageState
-from game.actors import ActorPlayer
 from game.actors.ActorSimpleLife import ActorSimpleLife
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.stages.StageTileSelector import StageTileSelector
@@ -63,7 +60,7 @@ class StageEditMode(StageHandleConsole):
     def execute(self, command):
         super().execute(command)
 
-        commands = command.split(sep=" ")
+        commands = command.lower().split(sep=" ")
         bug = False
 
         if commands[0] == "map":
@@ -140,12 +137,6 @@ class StageEditMode(StageHandleConsole):
         elif commands[0] == "tilesets":
             self.state = StageState.PAUSE
             StageManager().push(StageTileSelector())
-        elif commands[0] == "door":
-            """Renvoie une porte vers commands[1] qui à pour position de spawn commands[2]et commands[3]"""
-            self.object_pick = ActorDoor(commands[1], Vector(int(commands[2]), int(commands[3])))
-        elif commands[0] == "event":
-            event = pygame.event.Event(pygame.USEREVENT, name=EVENT_TP, map_name="bonjour", spawn_pos=Vector(50, 50))
-            pygame.event.post(event)
         else:
             bug = True
 
@@ -198,8 +189,8 @@ class StageEditMode(StageHandleConsole):
 
     def handle_userevent(self, event):
         if event.name == EVENT_TP:
-            player = self.map.get_actor(ActorPlayer)
+            actor = event.actor
+            actor.rect.x = int(event.spawn_pos.x)
+            actor.rect.y = int(event.spawn_pos.y)
             self.map = Map.load_editor(event.map_name)
-            # player.rect.x = event.spawn_pos.x
-            # player.rect.y = event.spawn_pos.y
-            # self.map.add_actor(player)
+            self.map.add_actor(event.actor)

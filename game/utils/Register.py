@@ -45,7 +45,7 @@ class Register:
 
         def get_actor_by_name(self, name):
             for actor in self.__stack["ACTOR"].values():
-                if actor.NAME == name:
+                if actor.NAME.lower() == name.lower():
                     return actor
 
 
