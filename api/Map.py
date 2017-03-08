@@ -3,6 +3,7 @@ import pickle
 from api.Actor import Actor
 from api.Logger import *
 
+
 class Map(Logger):
     """Classe permettant le dialogue entre les Actors et le Stage.
     Contient quelques méthodes permettant un dialogue précis et rapide.
