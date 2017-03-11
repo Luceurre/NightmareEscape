@@ -3,9 +3,6 @@ import copy
 
 import pygame
 
-image_list = {}
-
-
 def get_real_rect(surface):
     width = surface.get_width()
     height = surface.get_height()
@@ -31,9 +28,12 @@ def get_real_rect(surface):
     return pygame.Rect(x_min, y_min, x_max - x_min + 1, y_max - y_min + 1)
 
 
+image_list = {}
+
+
 def load_image(path, auto_rect=True):
     if path in image_list.keys():
-        return copy.copy(image_list[path])
+        return copy.copy(image_list[path])  # Permet d'éviter de recharger 300 fois la même image...
     else:
         image = pygame.image.load(path).convert_alpha()
         if auto_rect:
@@ -42,6 +42,19 @@ def load_image(path, auto_rect=True):
 
         image_list[path] = image
         return image
+
+
+def load_image_tile(path, rect, auto_rect=True):
+    """Charge une partie d'image, vire les points bords si auto_rect=True"""
+
+    image = load_image(path, False)
+    image = image.subsurface(rect)
+
+    if auto_rect:
+        rect = get_real_rect(image)
+        image = image.subsurface(rect)
+
+    return image
 
 
 prev_shadow = {}

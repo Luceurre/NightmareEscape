@@ -71,7 +71,7 @@ class ActorPlayer(ActorAnimation):
         }
 
         self.keys_other = {
-
+            pygame.K_b: [False]
         }
 
         self.keys = [self.keys_shoot, self.keys_move, self.keys_other]
@@ -134,6 +134,13 @@ class ActorPlayer(ActorAnimation):
 
     def update(self):
         super().update()
+
+        if self.keys_other[pygame.K_b][0]:
+            for actor in self.map.actors:
+                try:
+                    actor.open()
+                except:
+                    pass
 
         self.update_timers()
 

@@ -1,7 +1,7 @@
 class Vector:
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        self.x = int(x)
+        self.y = int(y)
 
     def null(self):
         self.x = 0
