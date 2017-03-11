@@ -19,7 +19,7 @@ class Grid2(Actor):
     def get_size(self):
         return (self.width, self.height)
     
-    def set_origin(self, Ox, Oy): #"change l'origine de la grille selon les coordonnées Ox, Oy"
+    def set_origin(self, Ox, Oy): #change l'origine de la grille selon les coordonnées Ox, Oy
         self.Ox = Ox
         self.Oy = Oy
         
@@ -42,7 +42,7 @@ class Grid2(Actor):
         new_pos = [0,0]
         if self.should_draw:            
             new_pos[0] = pos[0] - (pos[0] % self.width) + self.Ox
-            new_pos[1] = pos[1] - (pos[1] % self.width) + self.Oy
+            new_pos[1] = pos[1] - (pos[1] % self.height) + self.Oy
         else:
             new_pos[0] = pos[0]
             new_pos[1] = pos[1]
