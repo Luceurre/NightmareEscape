@@ -8,7 +8,7 @@ from game.actors.ActorSimpleLife import ActorSimpleLife
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.stages.StageTileSelector import StageTileSelector
 from game.utils.Constants import EVENT_TP
-from game.utils.Grid import Grid
+from game.utils.Grid2 import Grid2
 from game.utils.Register import Register
 from game.utils.Vector import Vector
 
@@ -31,7 +31,7 @@ class StageEditMode(StageHandleConsole):
 
         self.is_paused = True
         self.mode = EDIT_MODE.PICK
-        self.grid = Grid()
+        self.grid = Grid2()
 
         self.draw_hit_box = False
 
@@ -124,8 +124,16 @@ class StageEditMode(StageHandleConsole):
                 else:
                     bug = True
             elif commands[1] == "set":
-                print(commands[2])
-                self.grid.size = int(commands[2])
+                try:   
+                    if commands[3] == "":
+                        self.grid.set_size(int(commands[2]),int(commands[2]))
+                    else:                                                                #Afin de donner largeur et hauteur des rectangles de la grille
+                        self.grid.set_size( int(commands[2]), int(commands[3]))
+                except:
+                    bug = True
+                    
+            elif commands[1] == "origin":                                       #On détermine l'origine de la grille
+                self.grid.set_origin(int(commands[2]),int(commands[3]))
             else:
                 bug = False
 
@@ -158,13 +166,12 @@ class StageEditMode(StageHandleConsole):
             if self.object_pick != None:
                 actor = copy.deepcopy(self.object_pick)
                 actor.reload()
-
-                if self.grid.should_draw:
-                    actor.rect.x = pos[0] - (pos[0] % self.grid.size)
-                    actor.rect.y = pos[1] - (pos[1] % self.grid.size)
-                else:
-                    actor.rect.x = pos[0]
-                    actor.rect.y = pos[1]
+                
+                NewPos = self.grid.new_position(pos)                         #On redefinit pos au niveau du coin sup gauche du rectangle de la grille
+                actor.rect.x = NewPos[0]                                    
+                actor.rect.y = NewPos[1]         
+                    
+                    
                 self.map.add_actor(actor)
         elif self.mode == EDIT_MODE.MOVE:
             actor = self.map.get_actor_at(pos[0], pos[1])
