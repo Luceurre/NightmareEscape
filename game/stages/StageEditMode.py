@@ -44,19 +44,19 @@ class StageEditMode(StageHandleConsole):
             if self.object_pick is not None:
                 self.state = StageState.RESUME
 
-    def draw(self): "Affiche l'acteur dans la main de l'utilisateur"
+    def draw(self): #"Affiche l'acteur dans la main de l'utilisateur"
         super().draw()
 
         if self.mode == EDIT_MODE.PICK:
-            if self.grid.should_draw == True:
-                self.fake_mouse_pos = self.grid.new_position(self.mouse_pos)                         
-            else:
-                self.fake_mouse_pos = self.mouse_pos
+            #if self.grid.should_draw == True:
+            #    self.fake_mouse_pos = self.grid.new_position(self.mouse_pos)                         
+            #else:
+            #    self.fake_mouse_pos = self.mouse_pos
                 
 
             if self.object_pick is not None:
-                # self.screen.blit(self.object_pick.sprite, (self.mouse_pos.x, self.mouse_pos.y))
-                self.screen.blit(self.object_pick.sprite, (self.fake_mouse_pos.x, self.fake_mouse_pos.y))
+                self.screen.blit(self.object_pick.sprite, (self.mouse_pos.x, self.mouse_pos.y))
+                #self.screen.blit(self.object_pick.sprite, (self.fake_mouse_pos.x, self.fake_mouse_pos.y))
 
         self.grid.draw(self.screen)
 

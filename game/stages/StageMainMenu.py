@@ -3,7 +3,7 @@ from game.actors.ActorButtonEdit import ActorButtonEdit
 from game.actors.ActorButtonQuit import ActorButtonQuit
 from game.actors.ActorButtonSetting import ActorButtonSetting
 from game.actors.ActorButtonStart import ActorButtonStart
-
+        
 
 class StageMainMenu(StageMenu):
     def __init__(self):
