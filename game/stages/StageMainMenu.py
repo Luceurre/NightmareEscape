@@ -3,13 +3,14 @@ from game.actors.ActorButtonEdit import ActorButtonEdit
 from game.actors.ActorButtonQuit import ActorButtonQuit
 from game.actors.ActorButtonSetting import ActorButtonSetting
 from game.actors.ActorButtonStart import ActorButtonStart
-        
+from game.actors.ActorBackground import ActorBackgroundMenu
 
 class StageMainMenu(StageMenu):
     def __init__(self):
         super().__init__()
 
     def init(self):
+        self.map.add_actor(ActorBackgroundMenu())
         
         self.map.add_actor(ActorButtonStart())
         self.map.add_actor(ActorButtonQuit())
