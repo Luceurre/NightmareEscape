@@ -1,6 +1,8 @@
 import pygame.gfxdraw
 
 from api.Actor import Actor
+from game.utils.Vector import Vector
+from _operator import pos
 
 
 class Grid2(Actor):
@@ -19,7 +21,7 @@ class Grid2(Actor):
     def get_size(self):
         return (self.width, self.height)
     
-    def set_origin(self, Ox, Oy): #change l'origine de la grille selon les coordonnées Ox, Oy
+    def set_origin(self, Ox = 0, Oy = 0): #change l'origine de la grille selon les coordonnées Ox, Oy
         self.Ox = Ox
         self.Oy = Oy
         
@@ -39,14 +41,24 @@ class Grid2(Actor):
                 pygame.gfxdraw.hline(screen, self.Ox, self.Ox + width, self.Oy + y * self.height, (255, 255, 255))
     
     def new_position(self, pos):
-        new_pos = [0,0]
-        if self.should_draw:            
-            new_pos[0] = pos[0] - (pos[0] % self.width) + self.Ox
-            new_pos[1] = pos[1] - (pos[1] % self.height) + self.Oy
+        pos_t = []
+        if isinstance(pos, Vector):                                #Au cas où pos serait un Vector
+            pos_t.append(pos.x)
+            pos_t.append(pos.y)
         else:
-            new_pos[0] = pos[0]
-            new_pos[1] = pos[1]
-        return new_pos
+            pos_t = pos
+            
+        new_pos = []
+        
+        if self.should_draw:            
+            new_pos.append( (pos_t[0] + self.Ox)  - ((pos_t[0])  % self.width) )
+            new_pos.append( (pos_t[1] + self.Oy)  - ((pos_t[1]) % self.height) )
+        else:
+            new_pos.append( pos_t[0] )
+            new_pos.append( pos_t[1] )
+        
+        
+        return Vector(new_pos[0], new_pos[1])
         
         
     

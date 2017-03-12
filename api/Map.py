@@ -76,16 +76,21 @@ class Map(Logger):
 
         return actors
 
-    def get_actors_collide(self, rect, actor_a_eviter=None):
+    def get_actors_collide(self, rect, actor_a_eviter=[]):
         """Renvoie la liste des Actors appartenant à Map dont le rect est en collision avec rect. Le paramètre
         actor_a_eviter permet d'éviter de renvoyer l'Actor à qui appartient le rect car en effet celui est forcément
-        en collision avec lui-même.
+        en collision avec lui-même. #up : actor_a_eviter sous forme d'une liste, car sinon n'a aucun sens ( car sinon on ne peut mettre que self)
 
         Renvoie [] si aucun Actor n'est trouvé."""
 
         actors = []
+        actor_a_eviter.append(self)
         for actor in self.actors:
-            if actor.rect.colliderect(rect) and actor_a_eviter != actor:
+            ajouter = True
+            for ActeurAEviter in actor_a_eviter:
+                if ActeurAEviter == actor:
+                    ajouter = False
+            if actor.rect.colliderect(rect) and ajouter:
                 actors.append(actor)
 
         return actors
