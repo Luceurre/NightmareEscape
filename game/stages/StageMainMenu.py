@@ -10,6 +10,7 @@ class StageMainMenu(StageMenu):
         super().__init__()
 
     def init(self):
+        
         self.map.add_actor(ActorButtonStart())
         self.map.add_actor(ActorButtonQuit())
         self.map.add_actor(ActorButtonEdit())
