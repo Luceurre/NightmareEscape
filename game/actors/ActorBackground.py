@@ -1,8 +1,7 @@
 import pygame
 
-from api.Actor import Actor
 from api.ActorSprite import ActorSprite
-from game.utils.Constants import WINDOW_WIDTH, WINDOW_HEIGHT
+#from game.utils.Constants import WINDOW_WIDTH, WINDOW_HEIGHT
 
 
 class ActorBackgroundMenu(ActorSprite):
@@ -15,7 +14,8 @@ class ActorBackgroundMenu(ActorSprite):
         super().load_sprite()
         
         
-        self.sprite = pygame.image.load("assets/backgrouds/MenuScreen.png").convert()
+        self.sprite = pygame.image.load("assets/backgrounds/MenuScreen.png").convert()
+        
         
 
 class ActorBackgroundSettings(ActorSprite):

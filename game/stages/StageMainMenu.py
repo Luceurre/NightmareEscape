@@ -4,6 +4,7 @@ from game.actors.ActorButtonQuit import ActorButtonQuit
 from game.actors.ActorButtonSetting import ActorButtonSetting
 from game.actors.ActorButtonStart import ActorButtonStart
 from game.actors.ActorBackground import ActorBackgroundMenu
+from api.ActorButton import ActorButton
 
 class StageMainMenu(StageMenu):
     def __init__(self):
@@ -20,6 +21,10 @@ class StageMainMenu(StageMenu):
         height = self.screen.get_height() / (len(self.map.actors) + 2)
 
         for index, button in enumerate(self.map.actors):
-            button.set_centered_x(self.screen.get_width())
-            button.rect.y = (index + 1) * height
+            if isinstance(button, ActorButton):
+                
+                button.set_centered_x(self.screen.get_width())
+                button.rect.y = (index + 1) * height
+            else:
+                pass
 
