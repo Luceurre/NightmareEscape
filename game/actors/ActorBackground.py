@@ -33,6 +33,8 @@ class ActorBackgroundGameOver(ActorSprite):
     
         
     def load_sprite(self):
+        super().load_sprite()
+        
         self.sprite = pygame.image.load("assets/backgounds/GameOver.png")
 
 
@@ -42,4 +44,6 @@ class ActorBackgroundPlay(ActorSprite):
     
     
     def load_sprite(self):
+        super().load_sprite()
+        
         self.sprite = pygame.image.load("assets/backgrounds/PlayScreen.png")
