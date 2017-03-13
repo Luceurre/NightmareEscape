@@ -5,7 +5,7 @@ from api.Animation import Animation
 from api.Timer import Timer
 from game.actors.ActorPlayer import ActorPlayer
 from game.utils.Constants import EVENT_TP
-from game.utils.Sounds import SON_PORTE
+#from game.utils.Sounds import SON_PORTE
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image, load_image_tile
 from game.utils.Vector import Vector
@@ -47,6 +47,8 @@ class ActorDoor(ActorSprite):
     def load_sprite(self):
         super().load_sprite()
 
+        #self.son_porte = pygame.mixer.Sound("sounds/door.ogg")
+        
         self.sprites = {}
 
         self.sprites[False] = pygame.transform.flip(
@@ -71,7 +73,7 @@ class ActorDoor(ActorSprite):
     def open(self):
         if not self.is_open and self.timers == []:
             
-            SON_PORTE.play()
+            #self.son_porte.play()
             
             timer = Timer(100, self.open_animation, True, 2)
 

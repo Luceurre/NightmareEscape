@@ -21,6 +21,6 @@ class StageMenu(StageAutoManage):
 
     def quit(self):
         super().quit()
-        pygame.mixer.music.fadeout(2000)
+
 
         self.pressed_button.execute()
