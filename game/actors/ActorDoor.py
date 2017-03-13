@@ -21,6 +21,7 @@ class ActorDoor(ActorSprite):
         self.map_name = map_name
         self.spawn_pos = Vector(spawn_pos_x, spawn_pos_y)
 
+        
         self.sprites = {}
         self.animation = None
         self.direction = direction
@@ -40,12 +41,14 @@ class ActorDoor(ActorSprite):
     def load_sprite(self):
         super().load_sprite()
 
+        self.son_porte = pygame.mixer.Sound("sounds/door.ogg")
+
         self.sprites = {}
 
         self.sprites[False] = pygame.transform.flip(
-            load_image_tile("assets/gates.png", pygame.Rect(0, 0, 96, 64), True), False, True)
+            load_image_tile("assets/gates.png", pygame.Rect(0, 0, 96, 64), True), False, False)
         self.sprites[True] = pygame.transform.flip(
-            load_image_tile("assets/gates.png", pygame.Rect(0, 192, 96, 64), True), False, True)
+            load_image_tile("assets/gates.png", pygame.Rect(0, 192, 96, 64), True), False, False)
         self.sprite = self.sprites[self.is_open]
 
         self.animation = Animation(load_image("assets/gates.png"), pygame.Rect(0, 64, 96, 64), 2, auto_rect=True,
@@ -53,7 +56,10 @@ class ActorDoor(ActorSprite):
 
     def open(self):
         if not self.is_open and self.timers == []:
-            timer = Timer(200, self.open_animation, True, 2)
+
+            self.son_porte.play()
+            
+            timer = Timer(100, self.open_animation, True, 2)
 
             self.add_timer(timer)
 

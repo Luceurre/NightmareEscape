@@ -1,3 +1,5 @@
+import pygame.mixer
+
 from api.StageMenu import StageMenu
 from game.actors.ActorButtonEdit import ActorButtonEdit
 from game.actors.ActorButtonQuit import ActorButtonQuit
@@ -12,13 +14,15 @@ class StageMainMenu(StageMenu):
 
     def init(self):
         self.map.add_actor(ActorBackgroundMenu())
+        pygame.mixer.music.load("music/Beginning.ogg")
+        pygame.mixer.music.play()
         
         self.map.add_actor(ActorButtonStart())
-        self.map.add_actor(ActorButtonQuit())
         self.map.add_actor(ActorButtonEdit())
         self.map.add_actor(ActorButtonSetting())
+        self.map.add_actor(ActorButtonQuit())
 
-        height = self.screen.get_height() / (len(self.map.actors) + 2)
+        height = self.screen.get_height() / (len(self.map.actors) + 2 + 2)      #-2 correspond au nombre d'acteurs qui ne sont pas des bouttons
 
         for index, button in enumerate(self.map.actors):
             if isinstance(button, ActorButton):

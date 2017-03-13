@@ -1,3 +1,5 @@
+import pygame.mixer
+
 from api.Map import Map
 from api.StageAutoManage import StageAutoManage
 from game.actors.ActorCollidable import ActorCollidable
@@ -10,6 +12,7 @@ from game.stages.StageHandleConsole import StageHandleConsole
 class StageLevel(StageHandleConsole):
     def __init__(self, level = 1):
         super().__init__()
+        pygame.mixer.music.load("music/OurPath.wav")
 
         self.map = Map.load("level_" + str(level))
         spawnpoint = self.map.get_actor(ActorSpawnpoint)
