@@ -12,8 +12,9 @@ from game.stages.StageHandleConsole import StageHandleConsole
 class StageLevel(StageHandleConsole):
     def __init__(self, level = 0):
         super().__init__()
-        pygame.mixer.music.load("music/OurPath.wav")
+        pygame.mixer.music.load("music/CityofIntrigues.wav")
         pygame.mixer.music.play()
+        pygame.mixer.music.queue("music/CommandingtheFury.wav")
 
         self.map = Map.load("ressources/level_" + str(level))
         spawnpoint = self.map.get_actor(ActorSpawnpoint)
