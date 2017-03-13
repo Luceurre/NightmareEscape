@@ -16,6 +16,7 @@ class Map(Logger):
     def __init__(self):
         self.name = ""
         self.actors = []
+        "self.sounds = []"
         self.stable = True  # Je voulais coder un système qui évite de re-trier les tableaux tant que map.actors n'est
         # pas modifié mais je ne pense pas que c'est pertinent. Renaud ton avis ?
 
