@@ -21,3 +21,7 @@ EVENT_TP = "EVENT_TELEPORT"
 # map_name: le nom de la Map à charger
 # actor: l'Actor à téléporter
 # spawn_pos: Un Vector représentant la position de l'Actor à téléporter.
+
+EVENT_PLAYER_INTERACT = "EVENT_PLAYER_INTERACT"
+# Evenement défini par :
+# actor: L'Actor qui demande l'intéraction

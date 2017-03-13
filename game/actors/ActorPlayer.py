@@ -138,7 +138,7 @@ class ActorPlayer(ActorAnimation):
         if self.keys_other[pygame.K_b][0]:
             for actor in self.map.actors:
                 try:
-                    actor.open()
+                    actor.close()
                 except:
                     pass
 
@@ -240,6 +240,9 @@ class ActorPlayer(ActorAnimation):
             if key in keys.keys():
                 self.keys[index][key][0] = True
                 return True
+        if key == pygame.K_e:
+            pygame.event.post(pygame.event.Event(pygame.USEREVENT, name=EVENT_PLAYER_INTERACT, actor=self))
+            return True
 
     def handle_keyup(self, key, mod):
         for index, keys in enumerate(self.keys):

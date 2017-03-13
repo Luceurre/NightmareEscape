@@ -4,7 +4,7 @@ from api.ActorSprite import ActorSprite
 from api.Animation import Animation
 from api.Timer import Timer
 from game.actors.ActorPlayer import ActorPlayer
-from game.utils.Constants import EVENT_TP
+from game.utils.Constants import EVENT_TP, EVENT_PLAYER_INTERACT
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image, load_image_tile
 from game.utils.Vector import Vector
@@ -31,6 +31,7 @@ class ActorDoor(ActorSprite):
 
         self.should_update = True
         self.collidable = True
+        self.handle_event = True
 
     def update(self):
         super().update()
@@ -43,9 +44,9 @@ class ActorDoor(ActorSprite):
         self.sprites = {}
 
         self.sprites[False] = pygame.transform.flip(
-            load_image_tile("assets/gates.png", pygame.Rect(0, 0, 96, 64), True), False, True)
+            load_image_tile("assets/gates.png", pygame.Rect(0, 0, 96, 64), True), False, False)
         self.sprites[True] = pygame.transform.flip(
-            load_image_tile("assets/gates.png", pygame.Rect(0, 192, 96, 64), True), False, True)
+            load_image_tile("assets/gates.png", pygame.Rect(0, 192, 96, 64), True), False, False)
         self.sprite = self.sprites[self.is_open]
 
         self.animation = Animation(load_image("assets/gates.png"), pygame.Rect(0, 64, 96, 64), 2, auto_rect=True,
@@ -57,6 +58,13 @@ class ActorDoor(ActorSprite):
 
             self.add_timer(timer)
 
+    def close(self):
+        if self.is_open and self.timers == []:
+            timer = Timer(200, self.close_animation, True, 2)
+
+            self.add_timer(timer)
+
+
     def open_animation(self, *args, **kwargs):
         sprite = self.animation.next_sprite()
         if sprite is None:
@@ -64,6 +72,15 @@ class ActorDoor(ActorSprite):
             self.is_open = True
         else:
             self.sprite = sprite
+
+    def close_animation(self, *args, **kwargs):
+        sprite = self.animation.previous_sprite()
+        if sprite is None:
+            self.sprite = self.sprites[False]
+            self.is_open = False
+        else:
+            self.sprite = sprite
+
 
     def unload_sprite(self):
         super().unload_sprite()
@@ -80,3 +97,7 @@ class ActorDoor(ActorSprite):
             return True
         else:
             return False
+
+    def handle_userevent(self, event):
+        if event.name == EVENT_PLAYER_INTERACT:
+            self.open()
