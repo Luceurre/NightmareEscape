@@ -17,6 +17,7 @@ class ActorSprite(Actor):
         # Définition de nouveaux attributs
         self._rect = pygame.Rect(0, 0, 0, 0)
         self._sprite = None
+        "self.sounds = None"
         self.draw_shadow = False
         self.collidable = False
         self.h = 0 # Hauteur pour les ombres
@@ -31,24 +32,41 @@ class ActorSprite(Actor):
     def load_sprite(self):
         # Tous les chargements d'images, animations et autres trucs visuels doivent se faire ici !
         self._sprite = None
-
+    
+    """  
+    def load_sounds(self):
+        #chargement des sons 
+        self.sounds = None
+    """
+    
     def reload(self):
         super().reload()
 
         self.draw_shadow = False
         self.collidable = False
         self.h = 0
+        
         self.load_sprite()
+        "self.load_sounds()"
 
     def unload(self):
         super().unload()
         self.unload_sprite()
+        "self.unload_sound()"
 
     def unload_sprite(self):
         try:
             del self._sprite
         except:
             self.warning("Calling unload_sprite without calling load_sprite!")
+            
+    """      
+    def unload_sound(self):
+        try:
+            del self.sounds
+        except:
+            self.warning("Calling unload_sounds without calling load_sounds!")
+    """
 
     @property
     def rect(self):

@@ -6,11 +6,13 @@ import pygame
 from api.ActorSprite import ActorSprite
 from game.utils.Direction import DIRECTION
 
+
 import game.utils.SurfaceHelper
 
-
 from game.actors.ActorPlayer import ActorPlayer
-from pygame.examples.scaletest import SpeedTest
+#from game.actors.ActorPuzzleSolution import ActorPuzzleSolution
+#from game.actors.ActorDoor import ActorDoor
+#from pygame.examples.scaletest import SpeedTest
 
 
 
@@ -26,6 +28,8 @@ class ActorMovable(ActorSprite):                # A passer probablement sur Acto
         
         #collision
         self.collidable = True
+        
+        self.map = None
         
     def reload(self):
         super().reload()
@@ -57,6 +61,13 @@ class ActorMovable(ActorSprite):                # A passer probablement sur Acto
             
             """"En soi renvoie True si self bouge, mais ce True n'est pas récupéré.... Je n'ai pas enlevé ce booléen, car si je ne me sert pas du has_moved, c'est parceque
             l'objet n'a pas vraiment de vitesse: il ne bouge que si ActorPlayer bouge vers lui"""
+            
+        #elif isinstance(actor, ActorPuzzleSolution):
+        #    for actor in self.map.actors:
+        #        if isinstance(actor, ActorDoor):
+        #            actor.open()
+        """Est appelé avec la fonction interact de PuzzleSolution"""
+            
 
         return (actor.collidable and self.collidable)
     

@@ -26,13 +26,14 @@ class Map(Logger):
     def save(self):
         # Sauvegarde la Map dans le fichier 'name' + .map
         # à modifier ! 2 cas : l'éditeur d'une part, la sauvegarde du joueur d'autre part!
-
+        
+        
         self.info("Saving...")
         file = open("ressources/" + self.name + ".map", 'wb')
-
+        
         # On enlève tout les attributs de Map qui ne peuvent pas être "Pickle"
         self.unload()
-
+        
         # Code enlevé parce que l'utilisation abusée des try/except ne permet pas la gestion des erreurs de façon propre
         """
         self.info("Erreur lors de la sauvegarde la carte!")

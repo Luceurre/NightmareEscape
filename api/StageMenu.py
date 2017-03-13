@@ -1,3 +1,5 @@
+import pygame.mixer
+
 from api.ActorButton import ActorButton, BUTTON_STATE
 from api.StageAutoManage import StageAutoManage
 from api.StageState import StageState
@@ -19,5 +21,6 @@ class StageMenu(StageAutoManage):
 
     def quit(self):
         super().quit()
+        pygame.mixer.music.fadeout(2000)
 
         self.pressed_button.execute()

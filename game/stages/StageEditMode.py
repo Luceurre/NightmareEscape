@@ -7,10 +7,12 @@ from api.StageState import StageState
 from game.actors.ActorSimpleLife import ActorSimpleLife
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.stages.StageTileSelector import StageTileSelector
+import game.stages.StageMainMenu
 from game.utils.Constants import EVENT_TP
 from game.utils.Grid2 import Grid2
 from game.utils.Register import Register
 from game.utils.Vector import Vector
+
 
 
 class EDIT_MODE(EnumAuto):
@@ -155,6 +157,11 @@ class StageEditMode(StageHandleConsole):
         elif commands[0] == "tilesets":
             self.state = StageState.PAUSE
             StageManager().push(StageTileSelector())
+            
+        elif commands[0] == "menu" or commands[0] == "quit":
+            self.state = StageState.QUIT
+            StageManager().push(game.stages.StageMainMenu.StageMainMenu())
+            
         else:
             bug = True
 
@@ -174,6 +181,7 @@ class StageEditMode(StageHandleConsole):
                 self.map.remove_actor(actor)
         elif self.mode == EDIT_MODE.PICK:
             if self.object_pick != None:
+
                 actor = copy.deepcopy(self.object_pick)
                 actor.reload()
                 

@@ -5,6 +5,7 @@ from api.Animation import Animation
 from api.Timer import Timer
 from game.actors.ActorPlayer import ActorPlayer
 from game.utils.Constants import EVENT_TP
+from game.utils.Sounds import SON_PORTE
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image, load_image_tile
 from game.utils.Vector import Vector
@@ -14,6 +15,7 @@ class ActorDoor(ActorSprite):
     NAME = "DOOR"
     ID = 7
 
+    
     def __init__(self, map_name = "level_0", spawn_pos_x=700, spawn_pos_y=700, direction=DIRECTION.BAS):
         super().__init__(False)
 
@@ -21,7 +23,7 @@ class ActorDoor(ActorSprite):
         self.map_name = map_name
         self.spawn_pos = Vector(spawn_pos_x, spawn_pos_y)
 
-        
+        "self.sounds = None"
         self.sprites = {}
         self.animation = None
         self.direction = direction
@@ -32,16 +34,18 @@ class ActorDoor(ActorSprite):
 
         self.should_update = True
         self.collidable = True
+        
+        
 
     def update(self):
         super().update()
 
         self.update_timers()
+        
+        
 
     def load_sprite(self):
         super().load_sprite()
-
-        self.son_porte = pygame.mixer.Sound("sounds/door.ogg")
 
         self.sprites = {}
 
@@ -54,10 +58,20 @@ class ActorDoor(ActorSprite):
         self.animation = Animation(load_image("assets/gates.png"), pygame.Rect(0, 64, 96, 64), 2, auto_rect=True,
                                    vertical=True)
 
+    
+        
+    """
+    def load_sounds(self):
+        super().__init__()
+        
+        
+        self.sounds = pygame.mixer.Sound("sounds/door.ogg")
+    """    
+        
     def open(self):
         if not self.is_open and self.timers == []:
-
-            self.son_porte.play()
+            
+            SON_PORTE.play()
             
             timer = Timer(100, self.open_animation, True, 2)
 
@@ -73,7 +87,18 @@ class ActorDoor(ActorSprite):
 
     def unload_sprite(self):
         super().unload_sprite()
+        
 
+    
+    """
+    def unload_sound(self):
+        super().unload_sound()
+        
+        self.sounds = None
+    """    
+        
+    
+    
     def interact(self, actor):
         if isinstance(actor, ActorPlayer) and self.is_open:
 
