@@ -1,6 +1,7 @@
 import pygame.mixer
 
 from api.Map import Map
+from game.actors.ActorGUIBar import ActorGUIBar
 from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorSpawnpoint import ActorSpawnpoint
 from game.stages.StageHandleConsole import StageHandleConsole
@@ -17,11 +18,22 @@ class StageLevel(StageHandleConsole):
         self.map = Map.load_save(map)
         spawnpoint = self.map.get_actor(ActorSpawnpoint)
         if spawnpoint is not None:
-            player = ActorPlayer()
-            player.rect.topleft = spawnpoint.rect.topleft
-            self.map.add_actor(player)
+            self.player = ActorPlayer()
+            self.player.rect.topleft = spawnpoint.rect.topleft
+            self.map.add_actor(self.player)
         else:
-            self.info("Erreur la map n'a pas de spawnpoint!")
+            raise NotImplementedError("Erreur la map n'a pas de spawnpoint!")
+
+        self.gui_lifebar = ActorGUIBar(ratio=self.player.hp_max / self.player.hp, color=(255, 0, 0, 255))
+        self.gui_lifebar.rect.x = 24
+        self.gui_lifebar.rect.y = 24
+        self.map.add_actor(self.gui_lifebar)
+
+    def update(self):
+        super().update()
+
+        self.gui_lifebar.ratio = self.player.hp / self.player.hp_max
+
 
     def init(self):
         super().init()

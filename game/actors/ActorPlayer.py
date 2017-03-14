@@ -45,6 +45,10 @@ class ActorPlayer(ActorAnimation):
         self.is_shooting = False  # Pour l'animation ?
         self.shoot = False
 
+        # Quelques caractèristiques :
+        self.hp_max = 100
+        self.hp = 100
+
         # 3D ?
         self.depth = PLAYER_DEPTH
 
