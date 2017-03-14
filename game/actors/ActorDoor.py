@@ -72,7 +72,7 @@ class ActorDoor(ActorSprite):
         
     def open(self):
         if not self.is_open and self.timers == []:
-            
+            print(self.is_open)
             SON_PORTE.play()
             
             timer = Timer(100, self.open_animation, True, 2)
