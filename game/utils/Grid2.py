@@ -42,6 +42,6 @@ class Grid2(Actor):
         x -= self.Ox
         return x - x % self.width + self.Ox
 
-    def get_pos_y(self, y):
+    def get_pos_y(self, y):  # Renvoie la coordonnée y de la droite de la grille se trouvant à gauche de cette droit
         y -= self.Oy
         return y - y % self.height + self.Oy
