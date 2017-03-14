@@ -53,8 +53,8 @@ class ActorPlayer(ActorAnimation):
     def reload(self):
         super().reload()
 
-        # Gestion des touches utilisés :
-        # [key]: [activate?, direction(optional)] => toujours utilisé ce format
+        # Gestion des touches utilisées :
+        # [key]: [activate?, direction(optional)] => toujours utiliser ce format
 
         self.keys_shoot = {
             273: [False, DIRECTION.HAUT],
@@ -203,7 +203,7 @@ class ActorPlayer(ActorAnimation):
         rect.y += rect.h - self.depth
         rect.h = self.depth
 
-        actors = self.map.get_actors_collide(rect, self)
+        actors = self.map.get_actors_collide(rect, [])
 
         """
         remove_indexes = []
@@ -218,7 +218,7 @@ class ActorPlayer(ActorAnimation):
 
         a_interagi = False
         for actor in actors:
-            b = actor.interact(self)
+            b = actor.interact(self)                    #PB: envoie son rect actuel, pas le rect qu'il aura après son déplacement
             if not a_interagi and b:
                 a_interagi = True
 

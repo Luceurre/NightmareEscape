@@ -1,8 +1,8 @@
-from game.actors.ActorCollidable import ActorCollidable
+from game.actors.ActorMovable import ActorMovable
 from game.utils.SurfaceHelper import load_image
 
 
-class ActorWall(ActorCollidable):
+class ActorWall(ActorMovable):
     ID = 5
     NAME = "WALL"
 

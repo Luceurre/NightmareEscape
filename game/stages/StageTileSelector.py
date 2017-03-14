@@ -46,13 +46,13 @@ class StageTileSelector(StageHandleConsole):
             self.state = StageState.QUIT
             if self.tile_collidable:
                 self.tile_picked = ActorTileCollidable(self.tileset_files[self.tileset_no],
-                                                       Vector(pos[0] - pos[0] % self.grid.width,
-                                                              pos[1] - pos[1] % self.grid.height), self.grid.width,
+                                                       Vector(pos[0] - pos[0] % self.grid.width + self.grid.Ox,
+                                                              pos[1] - pos[1] % self.grid.height + self.grid.Oy), self.grid.width,
                                                        self.grid.height)
             else:
                 self.tile_picked = ActorTile(self.tileset_files[self.tileset_no],
-                                             Vector(pos[0] - pos[0] % self.grid.width,
-                                                    pos[1] - pos[1] % self.grid.height), self.grid.width,
+                                             Vector(pos[0] - pos[0] % self.grid.width + self.grid.Ox,
+                                                    pos[1] - pos[1] % self.grid.height + self.grid.Oy), self.grid.width,
                                              self.grid.height)
             return True
         except ValueError:
@@ -90,8 +90,16 @@ class StageTileSelector(StageHandleConsole):
         try:
             if commands[0] == "grid":
                 if commands[1] == "size":
-                    self.grid.width = int(commands[2])
-                    self.grid.height = int(commands[3])
+                    if commands[3] == "":
+                        self.grid.set_size(int(commands[2]),int(commands[2]))
+                    else:
+                        self.grid.set_size(int(commands[2]),int(commands[3]))
+                    
+                elif commands[1] == "origin":
+                    if commands[2] == "" or commands [3] == "":
+                        self.grid.set_origin(0,0)                                       #On détermine l'origine de la grille
+                    else:
+                        self.grid.set_origin(int(commands[2]),int(commands[3]))
             elif commands[0] == "collidable":
                 if commands[1] == "True" or commands[1] == "1":
                     self.tile_collidable = True

@@ -12,6 +12,7 @@ class Game(Logger):
 
     def __init__(self, width=640, height=480, log_level=LOG_LEVEL.INFO, framerate=120):
         pygame.init()
+        pygame.mixer.init()
 
         self.stage_manager = StageManager()
         self.screen = pygame.display.set_mode((width, height))
@@ -48,5 +49,6 @@ class Game(Logger):
                     stage.quit()
             pygame.display.update()
 
+        pygame.mixer.quit()
         pygame.quit()
 

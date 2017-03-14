@@ -14,3 +14,7 @@ class ActorCollidable(ActorSprite):
 
     def interact(self, actor):    
         return (actor.collidable and self.collidable)
+    
+    
+    
+          

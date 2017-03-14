@@ -7,10 +7,12 @@ from api.StageState import StageState
 from game.actors.ActorSimpleLife import ActorSimpleLife
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.stages.StageTileSelector import StageTileSelector
+import game.stages.StageMainMenu
 from game.utils.Constants import EVENT_TP
-from game.utils.Grid import Grid
+from game.utils.Grid2 import Grid2
 from game.utils.Register import Register
 from game.utils.Vector import Vector
+
 
 
 class EDIT_MODE(EnumAuto):
@@ -31,7 +33,7 @@ class StageEditMode(StageHandleConsole):
 
         self.is_paused = True
         self.mode = EDIT_MODE.PICK
-        self.grid = Grid()
+        self.grid = Grid2()
 
         self.draw_hit_box = False
 
@@ -44,12 +46,19 @@ class StageEditMode(StageHandleConsole):
             if self.object_pick is not None:
                 self.state = StageState.RESUME
 
-    def draw(self):
+    def draw(self): #"Affiche l'acteur dans la main de l'utilisateur"
         super().draw()
 
         if self.mode == EDIT_MODE.PICK:
+            #if self.grid.should_draw == True:
+            #    self.fake_mouse_pos = self.grid.new_position(self.mouse_pos)                         
+            #else:
+            #    self.fake_mouse_pos = self.mouse_pos
+                
+
             if self.object_pick is not None:
                 self.screen.blit(self.object_pick.sprite, (self.mouse_pos.x, self.mouse_pos.y))
+                #self.screen.blit(self.object_pick.sprite, (self.fake_mouse_pos.x, self.fake_mouse_pos.y))
 
         self.grid.draw(self.screen)
 
@@ -124,8 +133,19 @@ class StageEditMode(StageHandleConsole):
                 else:
                     bug = True
             elif commands[1] == "set":
-                print(commands[2])
-                self.grid.size = int(commands[2])
+                try:   
+                    if commands[3] == "":
+                        self.grid.set_size(int(commands[2]),int(commands[2]))
+                    else:                                                                #Afin de donner largeur et hauteur des rectangles de la grille
+                        self.grid.set_size( int(commands[2]), int(commands[3]))
+                except:
+                    bug = True
+                    
+            elif commands[1] == "origin":
+                if commands[2] == "" or commands [3] == "":
+                    self.grid.set_origin(0,0)                                       #On détermine l'origine de la grille
+                else:
+                    self.grid.set_origin(int(commands[2]),int(commands[3]))
             else:
                 bug = False
 
@@ -137,6 +157,11 @@ class StageEditMode(StageHandleConsole):
         elif commands[0] == "tilesets":
             self.state = StageState.PAUSE
             StageManager().push(StageTileSelector())
+            
+        elif commands[0] == "menu" or commands[0] == "quit":
+            self.state = StageState.QUIT
+            StageManager().push(game.stages.StageMainMenu.StageMainMenu())
+            
         else:
             bug = True
 
@@ -156,15 +181,15 @@ class StageEditMode(StageHandleConsole):
                 self.map.remove_actor(actor)
         elif self.mode == EDIT_MODE.PICK:
             if self.object_pick != None:
+
                 actor = copy.deepcopy(self.object_pick)
                 actor.reload()
-
-                if self.grid.should_draw:
-                    actor.rect.x = pos[0] - (pos[0] % self.grid.size)
-                    actor.rect.y = pos[1] - (pos[1] % self.grid.size)
-                else:
-                    actor.rect.x = pos[0]
-                    actor.rect.y = pos[1]
+                
+                NewPos = self.grid.new_position(pos)                         #On redefinit pos au niveau du coin sup gauche du rectangle de la grille
+                actor.rect.x = NewPos.x
+                actor.rect.y = NewPos.y
+                    
+                    
                 self.map.add_actor(actor)
         elif self.mode == EDIT_MODE.MOVE:
             actor = self.map.get_actor_at(pos[0], pos[1])

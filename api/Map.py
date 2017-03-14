@@ -26,13 +26,14 @@ class Map(Logger):
     def save(self):
         # Sauvegarde la Map dans le fichier 'name' + .map
         # à modifier ! 2 cas : l'éditeur d'une part, la sauvegarde du joueur d'autre part!
-
+        
+        
         self.info("Saving...")
         file = open("ressources/" + self.name + ".map", 'wb')
-
+        
         # On enlève tout les attributs de Map qui ne peuvent pas être "Pickle"
         self.unload()
-
+        
         # Code enlevé parce que l'utilisation abusée des try/except ne permet pas la gestion des erreurs de façon propre
         """
         self.info("Erreur lors de la sauvegarde la carte!")
@@ -76,16 +77,21 @@ class Map(Logger):
 
         return actors
 
-    def get_actors_collide(self, rect, actor_a_eviter=None):
+    def get_actors_collide(self, rect, actors_a_eviter=[]):
         """Renvoie la liste des Actors appartenant à Map dont le rect est en collision avec rect. Le paramètre
         actor_a_eviter permet d'éviter de renvoyer l'Actor à qui appartient le rect car en effet celui est forcément
-        en collision avec lui-même.
+        en collision avec lui-même. #up : actor_a_eviter sous forme d'une liste, car sinon n'a aucun sens ( car sinon on ne peut mettre que self)
 
         Renvoie [] si aucun Actor n'est trouvé."""
 
         actors = []
+        actors_a_eviter.append(self)
         for actor in self.actors:
-            if actor.rect.colliderect(rect) and actor_a_eviter != actor:
+            ajouter = True
+            for ActeurAEviter in actors_a_eviter:
+                if ActeurAEviter == actor:
+                    ajouter = False
+            if actor.rect.colliderect(rect) and ajouter:
                 actors.append(actor)
 
         return actors

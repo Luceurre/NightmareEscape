@@ -1,3 +1,5 @@
+import pygame.mixer
+
 from api.ActorButton import ActorButton, BUTTON_STATE
 from api.StageAutoManage import StageAutoManage
 from api.StageState import StageState
@@ -19,5 +21,6 @@ class StageMenu(StageAutoManage):
 
     def quit(self):
         super().quit()
+
 
         self.pressed_button.execute()
