@@ -1,5 +1,3 @@
-import pygame
-
 from api.ActorSprite import ActorSprite
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image
@@ -26,13 +24,15 @@ class ActorArrow(ActorSprite):
         self.should_update = True
 
         self.draw_shadow = True
+        self.collidable = True
         self.h = 20
 
-    def reload(self, map):
-        super().reload(map)
+    def reload(self):
+        super().reload()
 
         self.draw_shadow = True
         self.h = 64
+        self.collidable = True
 
     def load_sprite(self):
         self.sprite = load_image("assets/bullet.png")
@@ -40,14 +40,7 @@ class ActorArrow(ActorSprite):
     def update(self):
         super().update()
 
-        self.move(self.speed * self.dir.x + self.velocity.x, self.speed * self.dir.y + self.velocity.y)
-
-    def move(self, x, y):
-        super().move(x ,y)
-
-        try:
-            if self.map is not None:
-                if not self.rect.colliderect(self.map.rect):
-                    self.map.remove_actor(self)
-        except:
-            pass
+        # On essaye de bouger, si False est retourné, le projectile a rencontré un monstre, un mur, etc... et dans ce cas
+        # on le détruit.
+        if not self.move(self.speed * self.dir.x + self.velocity.x, self.speed * self.dir.y + self.velocity.y):
+            self.map.remove_actor(self)

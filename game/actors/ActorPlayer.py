@@ -197,24 +197,16 @@ class ActorPlayer(ActorAnimation):
             return False
 
         rect = copy.copy(pygame.Rect(self.rect))
-        rect.x += x
-        rect.y += y
+        rect.x += x - 2
+        rect.y += y - 2
 
         rect.y += rect.h - self.depth
         rect.h = self.depth
 
-        actors = self.map.get_actors_collide(rect, [])
+        rect.w += 1
+        rect.h += 1
 
-        """
-        remove_indexes = []
-
-        for index, actor in enumerate(actors):
-            if not actor.collidable:
-                remove_indexes.append(index)
-
-        for i, index in enumerate(remove_indexes):
-            actors.pop(index - i)
-        """
+        actors = self.map.get_actors_collide(rect, [self])
 
         a_interagi = False
         for actor in actors:
@@ -229,6 +221,13 @@ class ActorPlayer(ActorAnimation):
             return True
         else:
             return False
+
+    def interact(self, actor):
+        # Pour éviter que le Joueur prenne des dégâts de ses propres projectiles :)
+        if isinstance(actor, ActorArrow):
+            return False
+        else:
+            return super().interact(actor)
 
     def turn_on_shoot(self, *args, **kwargs):
         self.can_shoot = True

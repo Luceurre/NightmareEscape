@@ -124,10 +124,7 @@ class ActorSprite(Actor):
         rect.x += x
         rect.y += y
 
-        rect.y += rect.h - self.depth
-        rect.h = self.depth
-
-        actors = self.map.get_actors_collide(rect, [])
+        actors = self.map.get_actors_collide(rect, [self])
 
         """
         remove_indexes = []

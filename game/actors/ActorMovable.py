@@ -33,4 +33,4 @@ class ActorMovable(ActorSprite):                # A passer probablement sur Acto
                     actor.rect.y += actor.direction_walk[0].value.y * self.speed
             return True
         else:
-            return False
+            return actor.collidable and self.collidable
