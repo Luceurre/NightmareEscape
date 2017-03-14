@@ -5,7 +5,7 @@ from api.Animation import Animation
 from api.Timer import Timer
 from game.actors.ActorPlayer import ActorPlayer
 from game.utils.Constants import EVENT_TP
-#from game.utils.Sounds import SON_PORTE
+from game.utils.Sounds import SON_PORTE
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image, load_image_tile
 from game.utils.Vector import Vector
@@ -73,7 +73,7 @@ class ActorDoor(ActorSprite):
     def open(self):
         if not self.is_open and self.timers == []:
             
-            #self.son_porte.play()
+            SON_PORTE.play()
             
             timer = Timer(100, self.open_animation, True, 2)
 
