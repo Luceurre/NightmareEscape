@@ -46,13 +46,13 @@ class StageTileSelector(StageHandleConsole):
             self.state = StageState.QUIT
             if self.tile_collidable:
                 self.tile_picked = ActorTileCollidable(self.tileset_files[self.tileset_no],
-                                                       Vector(pos[0] - pos[0] % self.grid.width + self.grid.Ox,
-                                                              pos[1] - pos[1] % self.grid.height + self.grid.Oy), self.grid.width,
+                                                       Vector(self.grid.get_pos_x(pos[0]),
+                                                              self.grid.get_pos_y(pos[1])), self.grid.width,
                                                        self.grid.height)
             else:
                 self.tile_picked = ActorTile(self.tileset_files[self.tileset_no],
-                                             Vector(pos[0] - pos[0] % self.grid.width + self.grid.Ox,
-                                                    pos[1] - pos[1] % self.grid.height + self.grid.Oy), self.grid.width,
+                                             Vector(self.grid.get_pos_x(pos[0]),
+                                                    self.grid.get_pos_y(pos[1])), self.grid.width,
                                              self.grid.height)
             return True
         except ValueError:

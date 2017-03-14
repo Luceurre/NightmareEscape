@@ -7,6 +7,14 @@ class Vector:
         self.x = 0
         self.y = 0
 
+    def __getitem__(self, item):
+        if item == 0:
+            return self.x
+        elif item == 1:
+            return self.y
+        else:
+            raise KeyError
+
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
 
