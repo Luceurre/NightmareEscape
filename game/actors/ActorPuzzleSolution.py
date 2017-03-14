@@ -1,5 +1,6 @@
 from api.ActorEvent import ActorEvent
 import game.actors.ActorMovable
+from game.utils.Sounds import SON_ACHIEVMENT
 
 
 class ActorPuzzleSolution(ActorEvent):
@@ -14,6 +15,7 @@ class ActorPuzzleSolution(ActorEvent):
             for actor in self.map.actors:
                 try:
                     actor.open()
+                    SON_ACHIEVMENT.play()
                 except:
                     pass
         return False

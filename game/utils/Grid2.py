@@ -39,7 +39,9 @@ class Grid2(Actor):
                 pygame.gfxdraw.hline(screen, 0, self.Ox + width, self.Oy + y * self.height, (255, 255, 255))
 
     def get_pos_x(self, x):  # Renvoie la coordonnée x de la droite de la grille se trouvant à gauche de cette droite.
+        x -= self.Ox
         return x - x % self.width + self.Ox
 
     def get_pos_y(self, y):
+        y -= self.Oy
         return y - y % self.height + self.Oy

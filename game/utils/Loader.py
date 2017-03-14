@@ -7,6 +7,7 @@ from game.actors.ActorRock import ActorRock
 from game.actors.ActorSpawnpoint import ActorSpawnpoint
 from game.actors.ActorWall import ActorWall
 from game.actors.ActorPuzzleSolution import ActorPuzzleSolution
+from game.actors.ActorBlock import ActorBlock
 
 
 class Loader(Thread):
@@ -26,6 +27,7 @@ class Loader(Thread):
         ActorSpawnpoint.register()
         ActorDoor.register()
         ActorPuzzleSolution.register()
+        ActorBlock.register()
 
         self.finish = True
 
