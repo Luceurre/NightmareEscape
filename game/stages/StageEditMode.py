@@ -1,5 +1,6 @@
 import copy
 
+import game.stages.StageMainMenu
 from api.EnumAuto import EnumAuto
 from api.Map import Map
 from api.StageManager import StageManager
@@ -7,7 +8,6 @@ from api.StageState import StageState
 from game.actors.ActorSimpleLife import ActorSimpleLife
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.stages.StageTileSelector import StageTileSelector
-import game.stages.StageMainMenu
 from game.utils.Constants import EVENT_TP
 from game.utils.Grid2 import Grid2
 from game.utils.Register import Register
@@ -177,17 +177,19 @@ class StageEditMode(StageHandleConsole):
     def handle_mouse_button_down(self, pos, button):
         if self.mode == EDIT_MODE.REMOVE:
             actor = self.map.get_actor_at(pos[0], pos[1])
-            if actor != None:
+            if actor is not None:
                 self.map.remove_actor(actor)
         elif self.mode == EDIT_MODE.PICK:
-            if self.object_pick != None:
+            if self.object_pick is not None:
 
                 actor = copy.deepcopy(self.object_pick)
                 actor.reload()
-                
-                NewPos = self.grid.new_position(pos)                         #On redefinit pos au niveau du coin sup gauche du rectangle de la grille
-                actor.rect.x = NewPos.x
-                actor.rect.y = NewPos.y
+
+                if self.grid.should_draw:
+                    actor.rect.x = self.grid.get_pos_x(pos[0])
+                    actor.rect.y = self.grid.get_pos_y(pos[1])
+                else:
+                    actor.rect.topleft = pos
                     
                     
                 self.map.add_actor(actor)

@@ -1,12 +1,14 @@
 from threading import Thread
 
 from game.actors.ActorArrow import ActorArrow
+from game.actors.ActorBlock import ActorBlock
 from game.actors.ActorDoor import ActorDoor
+from game.actors.ActorGUIBar import ActorGUIBar
 from game.actors.ActorPlayer import ActorPlayer
+from game.actors.ActorPuzzleSolution import ActorPuzzleSolution
 from game.actors.ActorRock import ActorRock
 from game.actors.ActorSpawnpoint import ActorSpawnpoint
 from game.actors.ActorWall import ActorWall
-from game.actors.ActorPuzzleSolution import ActorPuzzleSolution
 
 
 class Loader(Thread):
@@ -26,6 +28,8 @@ class Loader(Thread):
         ActorSpawnpoint.register()
         ActorDoor.register()
         ActorPuzzleSolution.register()
+        ActorBlock.register()
+        ActorGUIBar.register()
 
         self.finish = True
 

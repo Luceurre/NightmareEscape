@@ -16,6 +16,7 @@ class Map(Logger):
     def __init__(self):
         self.name = ""
         self.actors = []
+        "self.sounds = []"
         self.stable = True  # Je voulais coder un système qui évite de re-trier les tableaux tant que map.actors n'est
         # pas modifié mais je ne pense pas que c'est pertinent. Renaud ton avis ?
 
@@ -80,12 +81,11 @@ class Map(Logger):
     def get_actors_collide(self, rect, actors_a_eviter=[]):
         """Renvoie la liste des Actors appartenant à Map dont le rect est en collision avec rect. Le paramètre
         actor_a_eviter permet d'éviter de renvoyer l'Actor à qui appartient le rect car en effet celui est forcément
-        en collision avec lui-même. #up : actor_a_eviter sous forme d'une liste, car sinon n'a aucun sens ( car sinon on ne peut mettre que self)
+        en collision avec lui-même. #up : actor_a_eviter sous forme d'une liste, car sinon n'a aucun sens (car sinon on ne peut mettre que self)
 
         Renvoie [] si aucun Actor n'est trouvé."""
 
         actors = []
-        actors_a_eviter.append(self)
         for actor in self.actors:
             ajouter = True
             for ActeurAEviter in actors_a_eviter:

@@ -102,10 +102,6 @@ class ActorSprite(Actor):
                 self.info("Rechargement des images car Pickle.")
                 screen.blit(self.sprite, self._rect)
 
-    def move(self, x, y):
-        self.rect.x += x
-        self.rect.y += y
-
     # Quelques methodes pour aider :
 
     def set_centered_x(self, width):
@@ -117,3 +113,40 @@ class ActorSprite(Actor):
     def set_centered(self, width=WINDOW_WIDTH, height=WINDOW_HEIGHT):
         self.rect.x = (width - self.rect.width) / 2
         self.rect.y = (height - self.rect.height) / 2
+
+    def move(self, x=0, y=0):
+        """Return True if the Player moved, False otherwise"""
+
+        if x == 0 and y == 0:
+            return False
+
+        rect = copy.copy(pygame.Rect(self.rect))
+        rect.x += x
+        rect.y += y
+
+        actors = self.map.get_actors_collide(rect, [self])
+
+        """
+        remove_indexes = []
+
+        for index, actor in enumerate(actors):
+            if not actor.collidable:
+                remove_indexes.append(index)
+
+        for i, index in enumerate(remove_indexes):
+            actors.pop(index - i)
+        """
+
+        a_interagi = False
+        for actor in actors:
+            b = actor.interact(self)  # PB: envoie son rect actuel, pas le rect qu'il aura après son déplacement
+            if not a_interagi and b:
+                a_interagi = True
+
+        if not a_interagi:
+            self.rect.x += x
+            self.rect.y += y
+
+            return True
+        else:
+            return False

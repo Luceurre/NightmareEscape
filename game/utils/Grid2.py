@@ -1,8 +1,6 @@
 import pygame.gfxdraw
 
 from api.Actor import Actor
-from game.utils.Vector import Vector
-from _operator import pos
 
 
 class Grid2(Actor):
@@ -22,8 +20,8 @@ class Grid2(Actor):
         return (self.width, self.height)
     
     def set_origin(self, Ox = 0, Oy = 0): #change l'origine de la grille selon les coordonnées Ox, Oy
-        self.Ox = Ox
-        self.Oy = Oy
+        self.Ox = Ox % self.width
+        self.Oy = Oy % self.height
         
 
     def draw(self, screen):
@@ -35,30 +33,16 @@ class Grid2(Actor):
             nb_h = int(height / self.height) + 1
 
             for x in range(nb_w):
-                pygame.gfxdraw.vline(screen, self.Ox + x * self.width, self.Oy, self.Oy + height, (255, 255, 255))
+                pygame.gfxdraw.vline(screen, self.Ox + x * self.width, 0, self.Oy + height, (255, 255, 255))
 
             for y in range(nb_h):
-                pygame.gfxdraw.hline(screen, self.Ox, self.Ox + width, self.Oy + y * self.height, (255, 255, 255))
-    
-    def new_position(self, pos):
-        pos_t = []
-        if isinstance(pos, Vector):                                #Au cas où pos serait un Vector
-            pos_t.append(pos.x)
-            pos_t.append(pos.y)
-        else:
-            pos_t = pos
-            
-        new_pos = []
-        
-        if self.should_draw:            
-            new_pos.append( (pos_t[0] + self.Ox)  - ((pos_t[0])  % self.width) )
-            new_pos.append( (pos_t[1] + self.Oy)  - ((pos_t[1]) % self.height) )
-        else:
-            new_pos.append( pos_t[0] )
-            new_pos.append( pos_t[1] )
-        
-        
-        return Vector(new_pos[0], new_pos[1])
-        
-        
-    
+                pygame.gfxdraw.hline(screen, 0, self.Ox + width, self.Oy + y * self.height, (255, 255, 255))
+
+    def get_pos_x(self, x):  # Renvoie la coordonnée x de la droite de la grille se trouvant à gauche de cette droite.
+        x -= self.Ox
+        return x - x % self.width + self.Ox
+
+
+    def get_pos_y(self, y):  # Renvoie la coordonnée y de la droite de la grille se trouvant à gauche de cette droit
+        y -= self.Oy
+        return y - y % self.height + self.Oy
