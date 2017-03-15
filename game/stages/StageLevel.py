@@ -37,15 +37,11 @@ class StageLevel(StageHandleConsole):
         self.gui_lifebar.ratio = self.player.hp / self.player.hp_max
         
     def music_init(self):
-        if not pygame.mixer.music.get_busy():
-        
+        if pygame.mixer.music.get_busy():
+            pygame.mixer.music.queue("music/CityofIntrigues.wav")
+
+        else:
             pygame.mixer.music.load("music/CommandingtheFury.wav")
-            pygame.mixer.music.play()
-        
-        
-        pygame.mixer.music.queue("music/CityofIntrigues.wav")
-        pygame.mixer.music.queue("music/OurPath.wav")
-            
 
 
     def init(self):
@@ -59,13 +55,24 @@ class StageLevel(StageHandleConsole):
             actor = event.actor
             actor.rect.x = int(event.spawn_pos.x)
             actor.rect.y = int(event.spawn_pos.y)
-            self.map.remove_actor(actor)
+
+            self.unload_gui_and_player()
             self.map.save_in_game()
+
             self.map = Map.load_save(event.map_name)
-            try :
+            if event.map_name in MUSIC_MAP.keys():
                 pygame.mixer.music.load(MUSIC_MAP[event.map_name])
                 pygame.mixer.music.play()
-            except:
-                pass
             self.music_init()
-            self.map.add_actor(event.actor)
+
+            self.load_gui_and_player()
+
+    def load_gui_and_player(self):
+        """Lalala la fonction est dans le titre..."""
+        self.map.add_actor(self.player)
+        self.map.add_actor(self.gui_lifebar)
+
+    def unload_gui_and_player(self):
+        """Pour éviter d'avoir 12.000.000.000 de GUI :)"""
+        self.map.remove_actor(self.player)
+        self.map.remove_actor(self.gui_lifebar)

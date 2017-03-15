@@ -4,6 +4,7 @@ import pygame
 
 from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
+from api.EnumTeam import EnumTeam
 from api.Timer import Timer
 from game.actors.ActorArrow import ActorArrow
 from game.utils.Constants import *
@@ -24,6 +25,7 @@ class ActorPlayer(ActorAnimation):
         # => ça a changé cf load_sprite()
 
         self.z = -50
+        self.team = EnumTeam.PLAYER_TEAM
 
         self.should_update = True
         self.handle_event = True
