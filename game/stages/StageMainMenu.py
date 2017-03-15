@@ -32,3 +32,8 @@ class StageMainMenu(StageMenu):
             else:
                 pass
 
+    def quit(self):
+        pygame.mixer.music.fadeout(1000)
+        
+        super().quit()
+                

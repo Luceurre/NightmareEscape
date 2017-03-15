@@ -26,7 +26,6 @@ class Map(Logger):
 
     def save(self):
         # Sauvegarde la Map dans le fichier 'name' + .map
-        # à modifier ! 2 cas : l'éditeur d'une part, la sauvegarde du joueur d'autre part!
         
         
         self.info("Saving...")
@@ -45,6 +44,29 @@ class Map(Logger):
         # Puis on les recharges parce que le jeu ne peut pas fonctionner sans eux!
         self.reload()
 
+    def save_in_game(self):
+        # Sauvegarde la Map dans le fichier 'name' + .map
+        
+        
+        self.info("Saving...")
+        file = open("saves/" + self.name + ".map", 'wb')
+        
+        # On enlève tout les attributs de Map qui ne peuvent pas être "Pickle"
+        self.unload()
+        
+        # Code enlevé parce que l'utilisation abusée des try/except ne permet pas la gestion des erreurs de façon propre
+        """
+        self.info("Erreur lors de la sauvegarde la carte!")
+        print("Unexpected error:", sys.exc_info()[0])
+        """
+
+        pickle.dump(self, file)
+        # Puis on les recharges parce que le jeu ne peut pas fonctionner sans eux!
+        self.reload()
+        
+        
+        
+        
     def unload_sprites(self):
         """Appelle la méthode unload_sprite() de tous les Actors de la map
 

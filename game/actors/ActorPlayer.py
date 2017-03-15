@@ -214,7 +214,7 @@ class ActorPlayer(ActorAnimation):
 
         a_interagi = False
         for actor in actors:
-            b = actor.interact(self)                    #PB: envoie son rect actuel, pas le rect qu'il aura après son déplacement
+            b = actor.interact(self)
             if not a_interagi and b:
                 a_interagi = True
 
