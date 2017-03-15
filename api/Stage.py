@@ -36,7 +36,7 @@ class Stage(EventHandler, Logger):
 
     def quit(self):
         # Called when StageState is QUIT (should be called once per instance)
-        pygame.mixer.music.fadeout(1000)
+        pass
 
 
     def init(self):

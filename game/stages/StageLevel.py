@@ -6,14 +6,16 @@ from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorSpawnpoint import ActorSpawnpoint
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.utils.Constants import EVENT_TP
+from game.utils.Sounds import MUSIC_MAP
 
 
 class StageLevel(StageHandleConsole):
     def __init__(self, map="level_0"):
         super().__init__()
-        pygame.mixer.music.load("music/CityofIntrigues.wav")
+        pygame.mixer.music.load("music/CommandingtheFury.wav")
         pygame.mixer.music.play()
-        pygame.mixer.music.queue("music/CommandingtheFury.wav")
+        self.music_init()
+
 
         self.map = Map.load_save(map)
         spawnpoint = self.map.get_actor(ActorSpawnpoint)
@@ -33,6 +35,13 @@ class StageLevel(StageHandleConsole):
         super().update()
 
         self.gui_lifebar.ratio = self.player.hp / self.player.hp_max
+        
+    def music_init(self):
+        if pygame.mixer.music.get_busy():
+            pygame.mixer.music.queue("music/CityofIntrigues.wav")
+            
+        else:
+            pygame.mixer.music.load("music/CommandingtheFury.wav")
 
 
     def init(self):
@@ -41,12 +50,14 @@ class StageLevel(StageHandleConsole):
     def run(self):
         super().run()
 
-    def handle_userevent(self, event):
+    def handle_userevent(self, event):      #Gère l'usage de porte -> charge nouvelle map et déplace personnage
         if event.name == EVENT_TP:
             actor = event.actor
             actor.rect.x = int(event.spawn_pos.x)
             actor.rect.y = int(event.spawn_pos.y)
             self.map.remove_actor(actor)
-            self.map.save()  # devrait appeler save_in_game mais bon en attendant...
+            self.map.save_in_game()
             self.map = Map.load_save(event.map_name)
+            pygame.mixer.music.load(MUSIC_MAP[event.map_name])
+            self.music_init()
             self.map.add_actor(event.actor)
