@@ -14,6 +14,8 @@ class BUTTON_STATE(EnumAuto):
 class ActorButton(ActorSprite):
     def __init__(self, sprites=None, files_prefix="", label=""):
         super().__init__()
+        
+        self.button_job_leave = True
 
 
         self.button_state = BUTTON_STATE.NORMAL

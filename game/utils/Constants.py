@@ -16,6 +16,8 @@ PLAYER_DEPTH = 20
 WINDOW_WIDTH = 1408
 WINDOW_HEIGHT = 832
 
+
+
 EVENT_TP = "EVENT_TELEPORT"
 # Evenement défini par :
 # map_name: le nom de la Map à charger

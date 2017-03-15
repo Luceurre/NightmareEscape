@@ -24,7 +24,9 @@ class ActorBackgroundSettings(ActorSprite):
         
         
     def load_sprite(self):
-        self.sprite = pygame.image.load("assets/backgrounds/SettingsScreen.png")
+        super().load_sprite()
+        
+        self.sprite = pygame.image.load("assets/backgrounds/OptionScreen.png").convert()
 
         
 class ActorBackgroundGameOver(ActorSprite):

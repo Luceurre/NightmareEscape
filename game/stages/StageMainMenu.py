@@ -1,5 +1,6 @@
 import pygame.mixer
 
+from api.StageManager import StageManager
 from api.StageMenu import StageMenu
 from game.actors.ActorButtonEdit import ActorButtonEdit
 from game.actors.ActorButtonQuit import ActorButtonQuit
@@ -8,14 +9,16 @@ from game.actors.ActorButtonStart import ActorButtonStart
 from game.actors.ActorBackground import ActorBackgroundMenu
 from api.ActorButton import ActorButton
 
+
 class StageMainMenu(StageMenu):
     def __init__(self):
         super().__init__()
 
     def init(self):
         self.map.add_actor(ActorBackgroundMenu())
-        pygame.mixer.music.load("music/Beginning.ogg")
-        pygame.mixer.music.play()
+        if StageManager().music_state and not pygame.mixer.music.get_busy():
+            pygame.mixer.music.load("music/Beginning.ogg")
+            pygame.mixer.music.play()
         
         self.map.add_actor(ActorButtonStart())
         self.map.add_actor(ActorButtonEdit())
@@ -33,7 +36,7 @@ class StageMainMenu(StageMenu):
                 pass
 
     def quit(self):
-        pygame.mixer.music.fadeout(1000)
+        
         
         super().quit()
                 

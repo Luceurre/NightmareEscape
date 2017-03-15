@@ -19,6 +19,7 @@ class Game(Logger):
         self.framerate = framerate
         self.clock = pygame.time.Clock()
         Logger.set_log_level(log_level)
+        
 
     def start(self):
         """Called when you want the game to start -> unless you're using multi-threading, you won't be able to do

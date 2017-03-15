@@ -1,6 +1,7 @@
 import pygame.mixer
 
 from api.Map import Map
+from api.StageManager import StageManager
 from game.actors.ActorGUIBar import ActorGUIBar
 from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorSpawnpoint import ActorSpawnpoint
@@ -12,9 +13,12 @@ from game.utils.Sounds import MUSIC_MAP
 class StageLevel(StageHandleConsole):
     def __init__(self, map="level_0"):
         super().__init__()
-        pygame.mixer.music.load("music/CommandingtheFury.wav")
-        pygame.mixer.music.play()
-        self.music_init()
+        
+        if StageManager().music_state:
+            
+            pygame.mixer.music.load("music/CommandingtheFury.wav")
+            pygame.mixer.music.play()
+            self.music_init()
 
 
         self.map = Map.load_save(map)
@@ -37,6 +41,9 @@ class StageLevel(StageHandleConsole):
         self.gui_lifebar.ratio = self.player.hp / self.player.hp_max
         
     def music_init(self):
+        if not StageManager().music_state:
+            return None
+        
         if not pygame.mixer.music.get_busy():
         
             pygame.mixer.music.load("music/CommandingtheFury.wav")
@@ -62,10 +69,11 @@ class StageLevel(StageHandleConsole):
             self.map.remove_actor(actor)
             self.map.save_in_game()
             self.map = Map.load_save(event.map_name)
-            try :
-                pygame.mixer.music.load(MUSIC_MAP[event.map_name])
-                pygame.mixer.music.play()
-            except:
-                pass
-            self.music_init()
+            
+            if StageManager().music_state:
+                if event.map_name in MUSIC_MAP.keys():            
+                    pygame.mixer.music.load(MUSIC_MAP[event.map_name])
+                    pygame.mixer.music.play()
+                self.music_init()
+            
             self.map.add_actor(event.actor)

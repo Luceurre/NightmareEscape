@@ -10,6 +10,7 @@ class StageManager():
     class __StageManager():
         def __init__(self):
             self.stack = []
+            self.music_state = True
 
         def update(self):
             for object in self.stack:
