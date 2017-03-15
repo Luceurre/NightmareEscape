@@ -37,11 +37,15 @@ class StageLevel(StageHandleConsole):
         self.gui_lifebar.ratio = self.player.hp / self.player.hp_max
         
     def music_init(self):
-        if pygame.mixer.music.get_busy():
-            pygame.mixer.music.queue("music/CityofIntrigues.wav")
-            
-        else:
+        if not pygame.mixer.music.get_busy():
+        
             pygame.mixer.music.load("music/CommandingtheFury.wav")
+            pygame.mixer.music.play()
+        
+        
+        pygame.mixer.music.queue("music/CityofIntrigues.wav")
+        pygame.mixer.music.queue("music/OurPath.wav")
+            
 
 
     def init(self):
@@ -58,6 +62,10 @@ class StageLevel(StageHandleConsole):
             self.map.remove_actor(actor)
             self.map.save_in_game()
             self.map = Map.load_save(event.map_name)
-            pygame.mixer.music.load(MUSIC_MAP[event.map_name])
+            try :
+                pygame.mixer.music.load(MUSIC_MAP[event.map_name])
+                pygame.mixer.music.play()
+            except:
+                pass
             self.music_init()
             self.map.add_actor(event.actor)
