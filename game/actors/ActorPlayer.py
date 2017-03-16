@@ -85,6 +85,7 @@ class ActorPlayer(ActorAnimation):
 
         self.draw_shadow = True
         self.collidable = True
+        self.team = EnumTeam.PLAYER_TEAM
 
     def unload(self):
         super().unload()
@@ -190,6 +191,7 @@ class ActorPlayer(ActorAnimation):
             self.add_timer(Timer(self.shoot_rate, self.turn_on_shoot))
 
             arrow = ActorArrow(self.direction, self.velocity)
+            arrow.team = self.team
             arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
             arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
             self.map.add_actor(arrow)

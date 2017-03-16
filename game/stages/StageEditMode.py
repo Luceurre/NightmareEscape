@@ -100,6 +100,7 @@ class StageEditMode(StageHandleConsole):
                 class_name = Register().get_actor(id)
             if class_name is not None:
                 self.object_pick = class_name(*commands[2:])
+                self.object_pick.should_update = False
             else:
                 self.object_pick = None
         elif commands[0] == "pause":

@@ -4,7 +4,7 @@ from game.utils.SurfaceHelper import get_real_rect
 
 
 class Animation:
-    def __init__(self, image, load_rect, tile_number, time=0, auto_rect=False, vertical=False):
+    def __init__(self, image, load_rect, tile_number, time=0, auto_rect=False, vertical=False, callback_fun=None):
         """Créer une animation à partir de 'image'. Chaque partie de l'Animation devra être contenu dans la zone 'load_rect'.
         Le nombre d'images dans l'animation est défini par 'tile_number' et le temps entre chaque image est 'time'.
         Finalement si les images doivent être automatiquement recadré 'auto_rect' doit être True et pour charger les images
@@ -35,6 +35,7 @@ class Animation:
         self.at = 0
         self.tile_number = tile_number
         self.time = time
+        self.callback_fun = callback_fun
 
     def next_sprite(self):
         """Renvoie l'image suivante dans l'Animation, si c'est la dernière image, renvoie None"""
@@ -58,6 +59,8 @@ class Animation:
         elif pygame.time.get_ticks() - self.now >= self.time:
             self.at = (self.at + 1) % (self.tile_number - 1)
             self.now = pygame.time.get_ticks()
+            if self.at == 0 and self.callback_fun is not None:
+                self.callback_fun()
 
         return self.tile[self.at]
 

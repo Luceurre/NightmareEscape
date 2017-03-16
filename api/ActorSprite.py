@@ -41,10 +41,6 @@ class ActorSprite(Actor):
     
     def reload(self):
         super().reload()
-
-        self.draw_shadow = False
-        self.collidable = False
-        self.h = 0
         
         self.load_sprite()
         "self.load_sounds()"

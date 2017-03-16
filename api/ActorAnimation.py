@@ -1,5 +1,3 @@
-import pygame
-
 from api.ActorSprite import ActorSprite
 
 
@@ -12,7 +10,10 @@ class ActorAnimation(ActorSprite):
 
     @property
     def sprite(self):
-        return self.animation.get_sprite()
+        if self.should_update:
+            return self.animation.get_sprite()
+        else:
+            return self.animation.tile[0]
 
     @property
     def rect(self):

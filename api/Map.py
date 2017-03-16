@@ -133,10 +133,10 @@ class Map(Logger):
 
         return None
 
-    def get_closest_ennemi(self, rect, ennemi_team=EnumTeam.PLAYER_TEAM):
+    def get_closest_ennemi(self, rect, range=10 ** 8, ennemi_team=EnumTeam.PLAYER_TEAM):
         """Renvoie l'Actor de team opposé à team le plus proche de la position."""
 
-        min_distance = 10 ** 8
+        min_distance = range ** 2
         closest_ennemi = None
 
         (x, y) = rect.center
