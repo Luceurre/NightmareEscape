@@ -16,9 +16,12 @@ class StageMenu(StageAutoManage):
         for actor in self.map.actors:
             if isinstance(actor, ActorButton):
                 if actor.button_state == BUTTON_STATE.PRESSED:
-                    self.state = StageState.QUIT
-                    self.pressed_button = actor
-
+                    if actor.button_job_leave:
+                        self.state = StageState.QUIT
+                        self.pressed_button = actor
+                    else:
+                        actor.execute()
+                    
     def quit(self):
         super().quit()
 

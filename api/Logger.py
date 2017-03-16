@@ -9,6 +9,8 @@ class LOG_LEVEL(EnumAuto):
 
 
 class Logger:
+    """ système de messages d'erreurs"""
+    
     LOG_LEVEL = LOG_LEVEL.INFO
     LOG_PRINT = {
         LOG_LEVEL.ERROR: "ERROR",
