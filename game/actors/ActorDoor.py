@@ -4,8 +4,7 @@ from api.ActorSprite import ActorSprite
 from api.Animation import Animation
 from api.Timer import Timer
 from game.actors.ActorPlayer import ActorPlayer
-from game.utils.Constants import EVENT_TP
-from game.utils.Sounds import SON_PORTE
+from game.utils.Constants import EVENT_TP, EVENT_PLAYER_INTERACT
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image, load_image_tile
 from game.utils.Vector import Vector
@@ -15,15 +14,13 @@ class ActorDoor(ActorSprite):
     NAME = "DOOR"
     ID = 7
 
-    
-    def __init__(self, map_name = "level_0", spawn_pos_x=700, spawn_pos_y=700, direction=DIRECTION.BAS):
+    def __init__(self, map_name, spawn_pos_x=0, spawn_pos_y=0, direction=DIRECTION.BAS):
         super().__init__(False)
 
         self.is_open = False
         self.map_name = map_name
         self.spawn_pos = Vector(spawn_pos_x, spawn_pos_y)
 
-        "self.sounds = None"
         self.sprites = {}
         self.animation = None
         self.direction = direction
@@ -34,21 +31,16 @@ class ActorDoor(ActorSprite):
 
         self.should_update = True
         self.collidable = True
-        
-        
+        self.handle_event = True
 
     def update(self):
         super().update()
 
         self.update_timers()
-        
-        
 
     def load_sprite(self):
         super().load_sprite()
 
-        #self.son_porte = pygame.mixer.Sound("sounds/door.ogg")
-        
         self.sprites = {}
 
         self.sprites[False] = pygame.transform.flip(
@@ -60,24 +52,18 @@ class ActorDoor(ActorSprite):
         self.animation = Animation(load_image("assets/gates.png"), pygame.Rect(0, 64, 96, 64), 2, auto_rect=True,
                                    vertical=True)
 
-    
-        
-    """
-    def load_sounds(self):
-        super().__init__()
-        
-        
-        self.sounds = pygame.mixer.Sound("sounds/door.ogg")
-    """    
-        
     def open(self):
         if not self.is_open and self.timers == []:
-            print(self.is_open)
-            SON_PORTE.play()
-            
-            timer = Timer(100, self.open_animation, True, 2)
+            timer = Timer(200, self.open_animation, True, 2)
 
             self.add_timer(timer)
+
+    def close(self):
+        if self.is_open and self.timers == []:
+            timer = Timer(200, self.close_animation, True, 2)
+
+            self.add_timer(timer)
+
 
     def open_animation(self, *args, **kwargs):
         sprite = self.animation.next_sprite()
@@ -87,20 +73,18 @@ class ActorDoor(ActorSprite):
         else:
             self.sprite = sprite
 
+    def close_animation(self, *args, **kwargs):
+        sprite = self.animation.previous_sprite()
+        if sprite is None:
+            self.sprite = self.sprites[False]
+            self.is_open = False
+        else:
+            self.sprite = sprite
+
+
     def unload_sprite(self):
         super().unload_sprite()
-        
 
-    
-    """
-    def unload_sound(self):
-        super().unload_sound()
-        
-        self.sounds = None
-    """    
-        
-    
-    
     def interact(self, actor):
         if isinstance(actor, ActorPlayer) and self.is_open:
 
@@ -113,3 +97,7 @@ class ActorDoor(ActorSprite):
             return True
         else:
             return False
+
+    def handle_userevent(self, event):
+        if event.name == EVENT_PLAYER_INTERACT:
+            self.open()

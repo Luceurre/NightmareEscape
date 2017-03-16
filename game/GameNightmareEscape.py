@@ -7,6 +7,6 @@ from game.utils.Constants import *
 
 class GameNightmareEscape(Game):
     def __init__(self):
-        super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, framerate=60)
+        super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, framerate=60) # Appel de l'initialisation de Game -> du jeu
 
-        StageManager().push(StageLoadingScreen())
+        StageManager().push(StageLoadingScreen())                   # on lance la scène de chargement - > première scène, sinon le jeu se fermerait (tout simplement ))

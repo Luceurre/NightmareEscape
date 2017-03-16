@@ -44,6 +44,14 @@ class Animation:
         else:
             return self.tile[self.at]
 
+    def previous_sprite(self):
+        """Renvoie l'image précèdente dans l'Animation, si c'est la première image, renvoie None"""
+        self.at -= 1
+        if self.at < 0:
+            return None
+        else:
+            return self.tile[self.at]
+
     def get_sprite(self):
         if self.tile_number == 1 or self.time <= 0:
             return self.tile[0]

@@ -1,6 +1,7 @@
 import pickle
 
 from api.Actor import Actor
+from api.EnumTeam import EnumTeam
 from api.Logger import *
 
 
@@ -131,6 +132,23 @@ class Map(Logger):
                 return actor
 
         return None
+
+    def get_closest_ennemi(self, rect, ennemi_team=EnumTeam.PLAYER_TEAM):
+        """Renvoie l'Actor de team opposé à team le plus proche de la position."""
+
+        min_distance = 10 ** 8
+        closest_ennemi = None
+
+        (x, y) = rect.center
+
+        for actor in self.actors:
+            distance = (x - actor.rect.centerx) ** 2 + (y - actor.rect.centery) ** 2
+            if distance < min_distance and actor.team == ennemi_team:
+                min_distance = distance
+                closest_ennemi = actor
+
+        return closest_ennemi
+
 
     def add_actor(self, actor):
         """Ajoute une instance d'Actor à la Map, l'Actor devient alors recensé et est disponible dans toutes les

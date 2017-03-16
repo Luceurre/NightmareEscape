@@ -1,4 +1,5 @@
 from api.EnumAuto import EnumAuto
+from api.EnumTeam import EnumTeam
 from api.EventHandler import EventHandler
 from api.Logger import Logger
 from game.utils.Register import Register
@@ -13,7 +14,6 @@ class HANDLE_EVENT_PRIORITY(EnumAuto):
 
     def __lt__(self, other):
         return self.value < other.value
-
 
 class Actor(EventHandler, Logger):
     """Le couteau suisse des classes. Permet la réunion entre l'image et la logique. Possède également quelques
@@ -43,6 +43,7 @@ class Actor(EventHandler, Logger):
         self.should_update = False
         self.timers = []
         self.map = None  # C'est le lien entre les Actors et le Stage.
+        self.team = EnumTeam.NEUTRAL_TEAM  # Permet de savoir si deux Actors sont ennemies
 
     def draw(self, screen):
         """L'Actor doit être dessiné ici, si c'est un Actor avec une image, utilise ActorSprite"""

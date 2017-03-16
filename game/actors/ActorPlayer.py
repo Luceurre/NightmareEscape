@@ -4,6 +4,7 @@ import pygame
 
 from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
+from api.EnumTeam import EnumTeam
 from api.Timer import Timer
 from game.actors.ActorArrow import ActorArrow
 from game.utils.Constants import *
@@ -24,6 +25,7 @@ class ActorPlayer(ActorAnimation):
         # => ça a changé cf load_sprite()
 
         self.z = -50
+        self.team = EnumTeam.PLAYER_TEAM
 
         self.should_update = True
         self.handle_event = True
@@ -142,7 +144,7 @@ class ActorPlayer(ActorAnimation):
         if self.keys_other[pygame.K_b][0]:
             for actor in self.map.actors:
                 try:
-                    actor.open()
+                    actor.close()
                 except:
                     pass
 
@@ -243,6 +245,9 @@ class ActorPlayer(ActorAnimation):
             if key in keys.keys():
                 self.keys[index][key][0] = True
                 return True
+        if key == pygame.K_e:
+            pygame.event.post(pygame.event.Event(pygame.USEREVENT, name=EVENT_PLAYER_INTERACT, actor=self))
+            return True
 
     def handle_keyup(self, key, mod):
         for index, keys in enumerate(self.keys):

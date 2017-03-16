@@ -9,6 +9,14 @@ from api.StageState import StageState
 
 
 class Stage(EventHandler, Logger):
+    
+    """ Class correspondant à une scène ( ou plutôt un acte )  de théâtre ( scène du menu, scène de l'éditeur, scène de chargement un peu une entre-scène, etc
+    Ici sont appelées les boucles visant à actualiser touts les évènements, les acteurs ( oui encore du théâtre , correspond soit à un acteur ethymologique, comme le joueur
+    , soit peut être à un décor , un meuble, un objet qui s'affiche à l'écran ou avec lequel on peut interragir)
+    
+    Donc en fait est le cadre permettant la transmission des évènements à une map, ou plus précisément à tout les acteurs de la map qui réagissent delon ces évènements
+    
+     """
     def __init__(self):
         self.state = StageState.INIT
         self.map = Map()
@@ -52,6 +60,7 @@ class Stage(EventHandler, Logger):
         pass
 
     def events_loop(self):
+        """ double boucle: pour chaque evènement, cherche si un acteur ( ou le stage ) le "gère" """
         actors_sorted = sorted(self.map.actors, key=attrgetter('handle_event', 'handle_event_priority'), reverse=True)
 
         for event in pygame.event.get():
