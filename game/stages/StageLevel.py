@@ -50,8 +50,8 @@ class StageLevel(StageHandleConsole):
             pygame.mixer.music.play()
         
         
-        pygame.mixer.music.queue("music/CityofIntrigues.wav")
-        pygame.mixer.music.queue("music/OurPath.wav")
+        #pygame.mixer.music.queue("music/CityofIntrigues.wav")
+        #pygame.mixer.music.queue("music/OurPath.wav")                    #queue() ne marche pas, ni avec les .wav, ni avec les .ogg (pourtant recommandés sur pygame.org....)
             
 
 
