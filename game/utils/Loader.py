@@ -12,6 +12,7 @@ from game.actors.ActorWall import ActorWall
 
 
 class Loader(Thread):
+    """ On enregistre dans run tout les acteurs dont on veut pouvoir les sélectionner via l'invite de commande de l'éditeur"""
 
     def __init__(self):
         super().__init__()

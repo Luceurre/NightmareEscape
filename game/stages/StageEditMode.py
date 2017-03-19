@@ -1,6 +1,5 @@
 import copy
 
-import game.stages.StageMainMenu
 from api.EnumAuto import EnumAuto
 from api.Map import Map
 from api.StageManager import StageManager
@@ -25,6 +24,9 @@ class EDIT_MODE(EnumAuto):
 
 
 class StageEditMode(StageHandleConsole):
+    """ 
+    Stage de l'éditeur de maps
+    """
     def __init__(self):
         super().__init__()
 
@@ -158,10 +160,6 @@ class StageEditMode(StageHandleConsole):
         elif commands[0] == "tilesets":
             self.state = StageState.PAUSE
             StageManager().push(StageTileSelector())
-            
-        elif commands[0] == "menu" or commands[0] == "quit":
-            self.state = StageState.QUIT
-            StageManager().push(game.stages.StageMainMenu.StageMainMenu())
             
         else:
             bug = True

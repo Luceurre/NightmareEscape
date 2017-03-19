@@ -6,6 +6,7 @@ from api.EventHandler import EventHandler
 from api.Logger import Logger
 from api.Map import Map
 from api.StageState import StageState
+import api.StageManager
 
 
 class Stage(EventHandler, Logger):
@@ -44,7 +45,7 @@ class Stage(EventHandler, Logger):
         pass
 
     def quit(self):
-        # Called when StageState is QUIT (should be called once per instance)
+        # Called when StageState is QUIT (should be called once per instance du jeu)
         pass
 
 

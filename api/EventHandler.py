@@ -4,6 +4,8 @@ import api.StageManager
 
 
 class EventHandler():
+    
+    """  répartit les évènements python en des fonctions appartenant aux acteurs, renvoyant True ou False si l'acteur en question gère l'évènement ou non"""
     def handle(self, event):
         if event.type == pygame.KEYDOWN:
             return self.handle_keydown(event.unicode, event.key, event.mod)

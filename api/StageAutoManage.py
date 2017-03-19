@@ -20,7 +20,7 @@ class StageAutoManage(Stage):
             self.update()
             self.draw()
 
-    def update(self):
+    def update(self):  #donc lance la loop des events et des acteurs
         super().update()
 
         if self.auto_manage:
@@ -28,7 +28,7 @@ class StageAutoManage(Stage):
             self.events_loop()
             self.update_actors()
 
-    def draw(self):
+    def draw(self):     # lance le dessin des acteurs
         super().draw()
 
         if self.auto_manage:

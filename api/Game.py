@@ -36,7 +36,7 @@ class Game(Logger):
             self.clock.tick(self.framerate)
             self.screen.fill((0, 0, 0))         #écran est noir, on colle ensuite le stage et les images des acteurs par dessus
 
-            for index, stage in enumerate(self.stage_manager):
+            for index, stage in enumerate(self.stage_manager): # Appelle fct correspondant à ce que le Stage doit faire selon son état ( quit() par exemple ne fait généralement rien)
                 type(self).CURRENT_STAGE = stage
                 if stage.state == StageState.RUN:
                     stage.run()

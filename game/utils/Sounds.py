@@ -2,6 +2,9 @@ import pygame.mixer
 
 pygame.mixer.init()
 
+""" On enregistre ici les sons/musique dont on pourrait avoir besoin, pas possible de le faire dans les acteurs car sinon bug de pickle ( question de facilité )"""
+
+
 SON_PORTE = pygame.mixer.Sound("sounds/door.ogg")
 SON_ACHIEVMENT = pygame.mixer.Sound("sounds/gem.ogg")
 
