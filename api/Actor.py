@@ -28,6 +28,7 @@ class Actor(EventHandler, Logger):
     def register(cls):
         """Utiliser cette méthode pour rendre votre Actor visible dans l'éditeur.
         Tips: à utiliser dans game.utils.Loader, cette classe est là pour ça!"""
+        
         if cls.REGISTERED:
             return False
         else:
@@ -36,11 +37,11 @@ class Actor(EventHandler, Logger):
             return True
 
     def __init__(self):
-        self.handle_event = False
+        self.handle_event = False   # coule de source
         self.handle_event_priority = HANDLE_EVENT_PRIORITY.NORMAL
-        self.should_draw = False
-        self.z = 0
-        self.should_update = False
+        self.should_draw = False    # Savoir si l'actuer doit être dessiné sur l'écran durant la boucle draw
+        self.z = 0                  # Pour savoir l'ordre dans lequel sont dessiné les acteurs (ex : pour pas que le sol se retrouve au dessus du joueur )
+        self.should_update = False  # Variable: est changée durant la boucle event, pour ensuite que l'acteur soit maj durant la boucle update
         self.timers = []
         self.map = None  # C'est le lien entre les Actors et le Stage.
         self.team = EnumTeam.NEUTRAL_TEAM  # Permet de savoir si deux Actors sont ennemies

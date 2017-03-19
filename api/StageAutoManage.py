@@ -2,6 +2,9 @@ from api.Stage import Stage
 
 
 class StageAutoManage(Stage):
+    """
+    Une surcouche de Stage, 
+    """
     def __init__(self):
         super().__init__()
 
@@ -11,6 +14,7 @@ class StageAutoManage(Stage):
         super().run()
 
         if self.auto_manage:
+            # En gros, Les trois loop gérant les acteurs et les évènements, cf Stage
             self.events_loop()
 
             self.update()

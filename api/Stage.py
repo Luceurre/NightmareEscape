@@ -16,6 +16,7 @@ class Stage(EventHandler, Logger):
     
     Donc en fait est le cadre permettant la transmission des évènements à une map, ou plus précisément à tout les acteurs de la map qui réagissent delon ces évènements
     
+    PS : En pratique tout les Stages héritent de StagAutoManage, qui hérite de Stage
      """
     def __init__(self):
         self.state = StageState.INIT
@@ -59,8 +60,13 @@ class Stage(EventHandler, Logger):
         # Called each tick when StageState is PAUSE
         pass
 
+    """ Les 3 boucles qui suivent ne sont appelées que lorsque la fonction run() du stage est appelée et si elle hérite de celle de StageAutoManage ( donc pas dans Stage sans surcouche )"""
+
     def events_loop(self):
-        """ double boucle: pour chaque evènement, cherche si un acteur ( ou le stage ) le "gère" """
+        """ double boucle: pour chaque evènement, cherche si un acteur ( ou le stage ) le gère (renvoie alors True, brise la loop de l'évènement
+        en question, appelle la fonction handel() de chaque acteur en réalité hérité de EventHandler. handle détermine le type d'event,
+        et renvoie à la fonction correspondante de l'acteur ( ex : handle_mouse_button_down() """
+        
         actors_sorted = sorted(self.map.actors, key=attrgetter('handle_event', 'handle_event_priority'), reverse=True)
 
         for event in pygame.event.get():
@@ -72,6 +78,8 @@ class Stage(EventHandler, Logger):
                         break
 
     def draw_actors(self):
+        
+        """ Permet de dessiner les acteurs sur l'écran """
         for actor in sorted(self.map.actors, key=attrgetter('should_draw', 'z'), reverse=True):
             if not actor.should_draw:
                 break
@@ -79,8 +87,12 @@ class Stage(EventHandler, Logger):
                 actor.draw(self.screen)
 
     def update_actors(self):
+        
+        """ Appèle la fonction update() de chaque acteur, permet en fait de mettre à jour les acteurs, définir leur action selon les évènements
+        enregistrés de la boucle des évènements ( pour un exemple concret, voir ActorPlayer )"""
+        
         for actor in sorted(self.map.actors, key=attrgetter('should_update'), reverse=True):
-            if not actor.should_update:
+            if not actor.should_update:                 # Pour meilleure gestion du CPU
                 break
             else:
                 actor.update()
@@ -98,4 +110,4 @@ class Stage(EventHandler, Logger):
             self.map.actors.remove(actor)
             del actor
         else:
-            self.warning("Tu essayes de détruire un Actor qui n'existe pas Renaud...")
+            self.warning("Tu essayes de détruire un Actor qui n'existe pas, Renaud...") #Je proteste !

@@ -53,6 +53,6 @@ class Game(Logger):
                     stage.quit()
             pygame.display.update()
 
-        pygame.mixer.quit()
+        pygame.mixer.quit()                             # Plus de 'zic
         pygame.quit()                                   # le jeu est fini :)
 
