@@ -7,16 +7,19 @@ from api.ActorButton import ActorButton
 
 
 class StageMenuSetting(StageMenu): 
-                                    # Menu permettant à changer des options ( En fait c'est assez ouvert : ici seule possibilité est la musique )
+    
+    """ Menu permettant à changer des options ( En fait c'est assez ouvert : ici seule possibilité est la musique )"""
+    
     def __init__(self):
         super().__init__()
         
         
     def init(self):
+        """ copie conforme de StageMainMenu, donc pour plus de commentaires..."""
         
         self.map.add_actor(ActorBackgroundSettings())
         
-        #self.map.add_actor(ActorButtonSettingKeys())
+        #self.map.add_actor(ActorButtonSettingKeys()) # enlevé par révision à la baisse des ambitions
         
         self.map.add_actor(ActorButtonReturn())
         self.map.add_actor(ActorButtonMusic())

@@ -11,13 +11,15 @@ from game.utils.Sounds import MUSIC_MAP
 
 
 class StageLevel(StageHandleConsole):
+    
+    """ Stage du jeu"""
+    
     def __init__(self, map="level_0"):
+        """la base : initialise les trucs classiques de StageHandleConsole, ajoute une map, cherche le spwanpoint et crée le player dessus"""
         super().__init__()
         
         if StageManager().music_state:
             
-            pygame.mixer.music.load("music/CommandingtheFury.wav")
-            pygame.mixer.music.play()
             self.music_init()
 
 
@@ -40,21 +42,15 @@ class StageLevel(StageHandleConsole):
 
         self.gui_lifebar.ratio = self.player.hp / self.player.hp_max
         
-    def music_init(self):
-#<<<<<<< HEAD
+    def music_init(self, map_name = "default"):
         if not StageManager().music_state:
             return None
         
-        if not pygame.mixer.music.get_busy():
-            pass
-        
-#=======
-        if pygame.mixer.music.get_busy():
-            pygame.mixer.music.queue("music/CityofIntrigues.wav")
 
-        else:
-#>>>>>>> origin/master
-            pygame.mixer.music.load("music/CommandingtheFury.wav")
+        if map_name in MUSIC_MAP.keys():            
+            pygame.mixer.music.load(MUSIC_MAP[map_name])
+            pygame.mixer.music.play()
+
 
 
     def init(self):
@@ -73,26 +69,17 @@ class StageLevel(StageHandleConsole):
             self.map.save_in_game()
 
             self.map = Map.load_save(event.map_name)
-#<<<<<<< HEAD
             
-            if StageManager().music_state:
-                if event.map_name in MUSIC_MAP.keys():            
-                    pygame.mixer.music.load(MUSIC_MAP[event.map_name])
-                    pygame.mixer.music.play()
-                self.music_init()
+            self.music_init(event.map_name)
             
             self.map.add_actor(event.actor)
-#=======
-            if event.map_name in MUSIC_MAP.keys():
-                pygame.mixer.music.load(MUSIC_MAP[event.map_name])
-                pygame.mixer.music.play()
-            self.music_init()
+            
 
             self.load_gui_and_player()
 
-    def load_gui_and_player(self):
+    def load_gui_and_player(self): # gui = graphical user interface
         """Lalala la fonction est dans le titre..."""
-        self.map.add_actor(self.player)
+        #self.map.add_actor(self.player)
         self.map.add_actor(self.gui_lifebar)
 
     def unload_gui_and_player(self):

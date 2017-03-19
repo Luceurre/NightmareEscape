@@ -8,6 +8,9 @@ from game.utils.SurfaceHelper import load_image
 
 
 class ActorGUIBar(ActorSprite):
+    
+    """ Barre de vie """
+    
     ID = 105
     NAME = "GUI_BAR"
 
@@ -27,8 +30,7 @@ class ActorGUIBar(ActorSprite):
         self.update_timers()
 
     def animation(self, *args, **kwargs):
-        self.ratio *= 0.9
-        print(self.ratio)
+        pass
 
     def load_sprite(self):
         super().load_sprite()

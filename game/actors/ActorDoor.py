@@ -14,7 +14,7 @@ class ActorDoor(ActorSprite):
     NAME = "DOOR"
     ID = 7
 
-    def __init__(self, map_name, spawn_pos_x=0, spawn_pos_y=0, direction=DIRECTION.BAS):
+    def __init__(self, map_name= "level_0", spawn_pos_x=700, spawn_pos_y=650, direction=DIRECTION.BAS):
         super().__init__(False)
 
         self.is_open = False

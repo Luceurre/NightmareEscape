@@ -40,8 +40,3 @@ class StageMainMenu(StageMenu):
                 button.rect.y = (index + 1) * height                    #et on répartit en y
             else:
                 pass
-
-    def quit(self):
-        
-        super().quit()
-                
