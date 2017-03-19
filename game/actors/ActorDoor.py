@@ -11,6 +11,9 @@ from game.utils.Vector import Vector
 
 
 class ActorDoor(ActorSprite):
+
+    """Et oui, une porte, tout simplement, qui peut s'ouvrir, téléporter le player sur une autre map via l'event EVENT_TP """
+    
     NAME = "DOOR"
     ID = 7
 
@@ -27,6 +30,7 @@ class ActorDoor(ActorSprite):
         self.reload()
 
     def reload(self):
+        """ lorsqu'on recharge l'image """
         super().reload()
 
         self.should_update = True
@@ -38,7 +42,7 @@ class ActorDoor(ActorSprite):
 
         self.update_timers()
 
-    def load_sprite(self):
+    def load_sprite(self): # Chargement des images de la porte
         super().load_sprite()
 
         self.sprites = {}
@@ -86,6 +90,8 @@ class ActorDoor(ActorSprite):
         super().unload_sprite()
 
     def interact(self, actor):
+        # gère la collision d'un Acteur avec la porte: si c'est le player, et qu'elle est ouverte : poste un event du type EVENT_TP avec pour attribut le nom de la map, la position
+        #du spawn et l'acteur en question ( même si est en théorie tjrs le player )
         if isinstance(actor, ActorPlayer) and self.is_open:
 
             event = pygame.event.Event(pygame.USEREVENT, name=EVENT_TP, map_name=self.map_name,
@@ -98,6 +104,6 @@ class ActorDoor(ActorSprite):
         else:
             return False
 
-    def handle_userevent(self, event):
+    def handle_userevent(self, event): # gère l'ouverture de porte via event EVENT_PLAYER_INTERACT ( à utiliser avec une plaque de pression, ou la suppression de tout les monstre, etc)
         if event.name == EVENT_PLAYER_INTERACT:
             self.open()

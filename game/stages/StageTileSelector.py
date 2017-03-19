@@ -15,6 +15,12 @@ TILE_PATH = "tilesets/"
 
 
 class StageTileSelector(StageHandleConsole):
+    
+    """
+    Stage servant à sélectionner une image découpée de celle disponnible dans le dossier tilesets et à associer l'image à un acteur ( ou l'inverse peut être ), on peut également
+    choisir la nature de l'acteur ( en fait uniquement si il est collidable ou non )
+    """
+    
     def __init__(self):
         super().__init__()
 

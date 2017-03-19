@@ -23,14 +23,16 @@ class StageLevel(StageHandleConsole):
             self.music_init()
 
 
-        self.map = Map.load_save(map)
-        spawnpoint = self.map.get_actor(ActorSpawnpoint)
-        if spawnpoint is not None:
+        self.map = Map.load_save(map)                   #chargement de la map
+        spawnpoint = self.map.get_actor(ActorSpawnpoint) #et de l'acteur
+        if spawnpoint is not None:                      # gère l'existance de spawnpoint
             self.player = ActorPlayer()
             self.player.rect.topleft = spawnpoint.rect.topleft
             self.map.add_actor(self.player)
         else:
             raise NotImplementedError("Erreur la map n'a pas de spawnpoint!")
+
+        # Ensuite ajout de la barre de vie
 
         self.gui_lifebar = ActorGUIBar(ratio=self.player.hp_max / self.player.hp, color=(255, 0, 0, 255))
         self.gui_lifebar.rect.x = 24
@@ -47,7 +49,7 @@ class StageLevel(StageHandleConsole):
             return None
         
 
-        if map_name in MUSIC_MAP.keys():            
+        if map_name in MUSIC_MAP.keys():
             pygame.mixer.music.load(MUSIC_MAP[map_name])
             pygame.mixer.music.play()
 
@@ -60,7 +62,7 @@ class StageLevel(StageHandleConsole):
         super().run()
 
     def handle_userevent(self, event):      #Gère l'usage de porte -> charge nouvelle map et déplace personnage
-        if event.name == EVENT_TP:
+        if event.name == EVENT_TP: # un nouveau rect pour le perso, une nouvelle map pour le Stage
             actor = event.actor
             actor.rect.x = int(event.spawn_pos.x)
             actor.rect.y = int(event.spawn_pos.y)
@@ -75,7 +77,7 @@ class StageLevel(StageHandleConsole):
             self.map.add_actor(event.actor)
             
 
-            self.load_gui_and_player()
+            self.load_gui_and_player()  #soit on enlève celui-ci, soit celui du load_gui_and_player()
 
     def load_gui_and_player(self): # gui = graphical user interface
         """Lalala la fonction est dans le titre..."""
@@ -86,4 +88,3 @@ class StageLevel(StageHandleConsole):
         """Pour éviter d'avoir 12.000.000.000 de GUI :)"""
         self.map.remove_actor(self.player)
         self.map.remove_actor(self.gui_lifebar)
-#>>>>>>> origin/master

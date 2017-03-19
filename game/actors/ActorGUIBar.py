@@ -35,9 +35,12 @@ class ActorGUIBar(ActorSprite):
     def load_sprite(self):
         super().load_sprite()
 
-        self.sprite = load_image("assets/gui_bar.png")
+        self.sprite = load_image("assets/gui_bar.png") #Pour faire un contour rÔse bien moche
 
     def draw(self, screen):
+        
+        """dessine rectangle noir, et dessus un rectangle rouge dont la largeur est proportionnelle au ratio vie(t)/vie(MAX)"""
+        
         self.sprite.fill((0, 0, 0), self.bar_rect)
         rect = copy.copy(self.bar_rect)
         rect.w *= self.ratio

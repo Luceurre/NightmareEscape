@@ -10,7 +10,10 @@ from game.utils.SurfaceHelper import shadowizer
 
 
 class ActorSprite(Actor):
-
+    
+    """ Acteurs qui seront affichés à l'écran ( en pratique tout les acteurs héritent de ça je croit )
+    """
+    
     def __init__(self, load_sprite=True):
         super().__init__()
 
@@ -73,7 +76,7 @@ class ActorSprite(Actor):
         return self._sprite
 
     @sprite.setter
-    def sprite(self, sprite):
+    def sprite(self, sprite): # pour lier l'acteur et l'image
         if not isinstance(sprite, pygame.Surface):
             self.log("Le Sprite n'est pas valide!", LOG_LEVEL.ERROR)
             StageManager().exit()
@@ -82,7 +85,7 @@ class ActorSprite(Actor):
             self.rect.height = sprite.get_height()
             self._sprite = sprite
 
-    def draw(self, screen):
+    def draw(self, screen): # Dessine l'image
         if not isinstance(self.sprite, pygame.Surface):
             self.log("Le Sprite n'est pas valide!", LOG_LEVEL.ERROR)
             StageManager().exit()
@@ -98,7 +101,7 @@ class ActorSprite(Actor):
                 self.info("Rechargement des images car Pickle.")
                 screen.blit(self.sprite, self._rect)
 
-    # Quelques methodes pour aider :
+    # Quelques methodes pour aider : (noms assez explicites)
 
     def set_centered_x(self, width):
         self.rect.x = (width - self.rect.width) / 2
@@ -111,7 +114,7 @@ class ActorSprite(Actor):
         self.rect.y = (height - self.rect.height) / 2
 
     def move(self, x=0, y=0):
-        """Return True if the Player moved, False otherwise"""
+        """Return True if the Actor moved , False otherwise + make the Actor move"""
 
         if x == 0 and y == 0:
             return False

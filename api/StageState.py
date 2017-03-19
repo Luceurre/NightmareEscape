@@ -1,7 +1,7 @@
 import enum
 
 
-class StageState(enum.Enum):
+class StageState(enum.Enum): #Pour gérer l'état des stage de façon propre
     RUN = 0,
     PAUSE = 1,
     QUIT = 2,

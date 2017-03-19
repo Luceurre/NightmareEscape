@@ -17,7 +17,9 @@ class HANDLE_EVENT_PRIORITY(EnumAuto):
 
 class Actor(EventHandler, Logger):
     """Le couteau suisse des classes. Permet la réunion entre l'image et la logique. Possède également quelques
-    méthodes pratiques pour la sauvegarde, la communication, l'édition, etc..."""
+    méthodes pratiques pour la sauvegarde, la communication, l'édition, etc...
+    
+    PS: sinon on peut se référé à la description du but d'un acteur dans le Stage"""
 
     ID = 0  # à supprimer ! le système de NAME est bien plus cohérent.
     TYPE = "ACTOR"

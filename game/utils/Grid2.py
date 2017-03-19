@@ -7,8 +7,8 @@ class Grid2(Actor):
     def __init__(self):
         super().__init__()
 
-        self.width = 64
-        self.height = 64
+        self.width = 48
+        self.height = 48
         self.Ox = 0
         self.Oy = 0
 

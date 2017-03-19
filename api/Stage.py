@@ -112,3 +112,4 @@ class Stage(EventHandler, Logger):
             del actor
         else:
             self.warning("Tu essayes de détruire un Actor qui n'existe pas, Renaud...") #Je proteste !
+            
