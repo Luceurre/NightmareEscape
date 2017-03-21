@@ -55,4 +55,4 @@ class Game(Logger):
 
         pygame.mixer.quit()                             # Plus de 'zic
         pygame.quit()                                   # le jeu est fini :)
-
+        print("Done")

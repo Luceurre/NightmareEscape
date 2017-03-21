@@ -1,6 +1,7 @@
 from operator import attrgetter
 
 import pygame
+import pygame.locals
 
 from api.EventHandler import EventHandler
 from api.Logger import Logger
@@ -112,4 +113,12 @@ class Stage(EventHandler, Logger):
             del actor
         else:
             self.warning("Tu essayes de détruire un Actor qui n'existe pas, Renaud...") #Je proteste !
+            
+            
+    # ajout possibilité de quiter le jeu à tout moment en appuyant sur ESCAPE
+    
+    def handle_keydown(self, unicode, key, mod):
+        
+        if key == pygame.locals.K_ESCAPE:
+            api.StageManager.StageManager().exit()
             

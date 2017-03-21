@@ -1,6 +1,8 @@
 import copy
 
 import pygame
+import pygame.locals
+import platform
 
 from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
@@ -61,24 +63,48 @@ class ActorPlayer(ActorAnimation):
 
         # Gestion des touches utilisées :
         # [key]: [activate?, direction(optional)] => toujours utiliser ce format
-
-        self.keys_shoot = {
-            273: [False, DIRECTION.HAUT],
-            276: [False, DIRECTION.GAUCHE],
-            274: [False, DIRECTION.BAS],
-            275: [False, DIRECTION.DROITE]
-        }
-
-        self.keys_move = {
-            pygame.K_z: [False, DIRECTION.HAUT],
-            pygame.K_q: [False, DIRECTION.GAUCHE],
-            pygame.K_s: [False, DIRECTION.BAS],
-            pygame.K_d: [False, DIRECTION.DROITE]
-        }
-
-        self.keys_other = {
-            pygame.K_b: [False]
-        }
+        # Test pour voir OS utilisé car pygame considère que windows est tjrs en qwerty
+        
+        if platform.system() == 'Windows':
+            
+            self.keys_shoot = {
+                273: [False, DIRECTION.HAUT],
+                276: [False, DIRECTION.GAUCHE],
+                274: [False, DIRECTION.BAS],
+                275: [False, DIRECTION.DROITE]
+            }
+    
+            self.keys_move = {
+                pygame.locals.K_w: [False, DIRECTION.HAUT],
+                pygame.locals.K_a: [False, DIRECTION.GAUCHE],
+                pygame.locals.K_s: [False, DIRECTION.BAS],
+                pygame.locals.K_d: [False, DIRECTION.DROITE]
+            }
+    
+            self.keys_other = {
+                pygame.locals.K_b: [False]
+            }
+        else:
+            
+            self.keys_shoot = {
+                273: [False, DIRECTION.HAUT],
+                276: [False, DIRECTION.GAUCHE],
+                274: [False, DIRECTION.BAS],
+                275: [False, DIRECTION.DROITE]
+            }
+    
+            self.keys_move = {
+                pygame.locals.K_z: [False, DIRECTION.HAUT],
+                pygame.locals.K_q: [False, DIRECTION.GAUCHE],
+                pygame.locals.K_s: [False, DIRECTION.BAS],
+                pygame.locals.K_d: [False, DIRECTION.DROITE]
+            }
+    
+            self.keys_other = {
+                pygame.locals.K_b: [False]
+            }
+            
+            
 
         self.keys = [self.keys_shoot, self.keys_move, self.keys_other]
         self.direction = DIRECTION.BAS
@@ -242,7 +268,7 @@ class ActorPlayer(ActorAnimation):
 
     # Override methods
 
-    def handle_keydown(self, unicode, key, mod):
+    def handle_keydown(self, unicode, key, mod): # indique quel déplacement, quel tir a été activé par l'évènement
         for index, keys in enumerate(self.keys):
             if key in keys.keys():
                 self.keys[index][key][0] = True

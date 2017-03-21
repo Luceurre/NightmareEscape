@@ -34,6 +34,8 @@ class StageHandleConsole(StageAutoManage):
         self.draw()
 
     def handle_keydown(self, unicode, key, mod):  #gère l'évènement 'c' : lance la console
+        super().handle_keydown(unicode,key,mod)
+        
         if unicode == 'c':
             self.state = StageState.PAUSE
             StageManager().push(StageConsole(self))
