@@ -2,6 +2,10 @@ import pygame
 
 
 class Timer:
+    """
+    Permet de créer un timer appelant #how_many fois la fonction #callback_fonction toutes les #time millisecondes ( update par la boucle des updates du stage),
+    posibilité de rendre Timer infini, ou bien de le répéter tant que #repeat n'est pas False
+    """
     def __init__(self, time, callback_function, repeat=False, how_many=0, infinite=False, *args, **kwargs):
         self.now = pygame.time.get_ticks()
         self.time = time

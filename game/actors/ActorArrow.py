@@ -1,6 +1,5 @@
 from api.ActorSprite import ActorSprite
 from game.utils.Direction import DIRECTION
-from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import VECTOR_NULL, Vector
 
 
@@ -13,6 +12,8 @@ class ActorArrow(ActorSprite):
         super().__init__()
 
         self.map = None # ?
+        
+        self.damage = 5
 
         self.dir = dir.value
         self.speed = 8
@@ -34,8 +35,6 @@ class ActorArrow(ActorSprite):
         self.h = 64
         self.collidable = True
 
-    def load_sprite(self):
-        self.sprite = load_image("assets/bullet.png")
 
     def update(self):
         super().update()

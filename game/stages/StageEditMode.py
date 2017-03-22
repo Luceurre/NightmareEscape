@@ -24,8 +24,8 @@ class EDIT_MODE(EnumAuto):
 
 
 class StageEditMode(StageHandleConsole):
-    """ 
-    Stage de l'éditeur de maps
+    """
+    Stage de l'Ã©diteur de maps
     """
     def __init__(self):
         super().__init__()
@@ -37,7 +37,7 @@ class StageEditMode(StageHandleConsole):
         self.mode = EDIT_MODE.PICK
         self.grid = Grid2()             #grille pour mieux positionner acteurs
 
-        self.draw_hit_box = Fals
+        self.draw_hit_box = False
 
     def pause(self):
         super().pause()
@@ -53,10 +53,10 @@ class StageEditMode(StageHandleConsole):
 
         if self.mode == EDIT_MODE.PICK:
             #if self.grid.should_draw == True:
-            #    self.fake_mouse_pos = self.grid.new_position(self.mouse_pos)                         
-            #else:
+            #    self.fake_mouse_pos = self.grid.new_position(self.mouse_pos)              # Cette partie du code permet d'afficher les actuers, non pas à côté de la souris, mais dans les cases
+            #else:                                                                          # correspondantes ( selon la grid)
             #    self.fake_mouse_pos = self.mouse_pos
-                
+
 
             if self.object_pick is not None:
                 self.screen.blit(self.object_pick.sprite, (self.mouse_pos.x, self.mouse_pos.y))
@@ -68,7 +68,7 @@ class StageEditMode(StageHandleConsole):
         if self.is_paused == False:
             super().update()
 
-    def execute(self, command): # récupère la commande fournie par StageCommand, agit selon celle-ci
+    def execute(self, command): # rÃ©cupÃ¨re la commande fournie par StageCommand, agit selon celle-ci
         super().execute(command)
 
         commands = command.lower().split(sep=" ")
@@ -102,12 +102,12 @@ class StageEditMode(StageHandleConsole):
                 class_name = Register().get_actor(id)
             if class_name is not None:
                 self.object_pick = class_name(*commands[2:])
-                self.object_pick.should_update = False
+                #self.object_pick.should_update = False            #Ne sais pas l'utilité : mais est cause bug : empêche player de bouger dans editeur
             else:
                 self.object_pick = None
         elif commands[0] == "pause":                        #pour mettre en pause
             self.is_paused = True
-        elif commands[0] == "resume":                       #voilà...
+        elif commands[0] == "resume":                       #voilÃ ...
             self.is_paused = False
         elif commands[0] == "mode":                         #changer le mode actuel
             if commands[1] == "get":
@@ -115,11 +115,11 @@ class StageEditMode(StageHandleConsole):
             elif commands[1] == "set":
                 if commands[2] == "pick":                   #permet de poser acteurs
                     self.mode = EDIT_MODE.PICK
-                elif commands[2] == "move":                 #permet de déplacer un acteur
+                elif commands[2] == "move":                 #permet de dÃ©placer un acteur
                     self.mode = EDIT_MODE.MOVE
-                elif commands[2] == "remove":               #__________enlever___________ 
+                elif commands[2] == "remove":               #__________enlever___________
                     self.mode = EDIT_MODE.REMOVE
-                elif commands[2] == "layer":                #changer la hauteur d'un acteur ( + ou - selon le côté où l'on clic )
+                elif commands[2] == "layer":                #changer la hauteur d'un acteur ( + ou - selon le cÃ´tÃ© oÃ¹ l'on clic )
                     self.mode = EDIT_MODE.LAYER
                 elif commands[2] == "copy":                 # de copier l'acteur en question ( avec la hauteur et tt)
                     self.mode = EDIT_MODE.COPY
@@ -127,26 +127,26 @@ class StageEditMode(StageHandleConsole):
                     bug = True
             else:
                 bug = True
-        elif commands[0] == "grid":                         # pour créer une grille -> Posage d'acteur plus précis
+        elif commands[0] == "grid":                         # pour crÃ©er une grille -> Posage d'acteur plus prÃ©cis
             if commands[1] == "turn":
-                if commands[2] == "on":                     # voili voulou, allumer, éteindre, rien de nouveau sous le soleil
+                if commands[2] == "on":                     # voili voulou, allumer, Ã©teindre, rien de nouveau sous le soleil
                     self.grid.should_draw = True
                 elif commands[2] == "off":
                     self.grid.should_draw = False
                 else:
                     bug = True
             elif commands[1] == "set":
-                try:   
+                try:
                     if commands[3] == "":
                         self.grid.set_size(int(commands[2]),int(commands[2]))
                     else:                                                                #Afin de donner largeur et hauteur des rectangles de la grille
                         self.grid.set_size( int(commands[2]), int(commands[3]))
                 except:
                     bug = True
-                    
+
             elif commands[1] == "origin":
                 if commands[2] == "" or commands [3] == "":
-                    self.grid.set_origin(0,0)                                       #On détermine l'origine de la grille
+                    self.grid.set_origin(0,0)                                       #On dÃ©termine l'origine de la grille
                 else:
                     self.grid.set_origin(int(commands[2]),int(commands[3]))
             else:
@@ -160,7 +160,7 @@ class StageEditMode(StageHandleConsole):
         elif commands[0] == "tilesets":                                 #lance le stage tilesets, pour avoir une image/acteur
             self.state = StageState.PAUSE
             StageManager().push(StageTileSelector())
-            
+
         else:
             bug = True
 
@@ -173,12 +173,12 @@ class StageEditMode(StageHandleConsole):
 
         return True
 
-    def handle_mouse_button_down(self, pos, button): # gère ce qu'il se passe quand on clic selon le stage en cours
-        if self.mode == EDIT_MODE.REMOVE:           # enlève l'acteur en collision avec la souris
+    def handle_mouse_button_down(self, pos, button): # gÃ¨re ce qu'il se passe quand on clic selon le stage en cours
+        if self.mode == EDIT_MODE.REMOVE:           # enlÃ¨ve l'acteur en collision avec la souris
             actor = self.map.get_actor_at(pos[0], pos[1])
             if actor is not None:
                 self.map.remove_actor(actor)
-        elif self.mode == EDIT_MODE.PICK:           #enregistre l'acteur à la position
+        elif self.mode == EDIT_MODE.PICK:           #enregistre l'acteur Ã  la position
             if self.object_pick is not None:
 
                 actor = copy.deepcopy(self.object_pick)
@@ -189,25 +189,25 @@ class StageEditMode(StageHandleConsole):
                     actor.rect.y = self.grid.get_pos_y(pos[1])
                 else:
                     actor.rect.topleft = pos
-                       
+
                 self.map.add_actor(actor)
-                
-        elif self.mode == EDIT_MODE.MOVE:                   # prend l'acteur (l'enlève de la map), et le prend dans la main/souris
+
+        elif self.mode == EDIT_MODE.MOVE:                   # prend l'acteur (l'enlÃ¨ve de la map), et le prend dans la main/souris
             actor = self.map.get_actor_at(pos[0], pos[1])
             if actor != None:
                 self.map.remove_actor(actor)
                 self.mode = EDIT_MODE.PICK
                 self.object_pick = copy.deepcopy(actor)
                 self.object_pick.reload()
-                
-        elif self.mode == EDIT_MODE.LAYER:                  # incrémente + ou - l'acteur selon que ce soit clic droit ou gauche
+
+        elif self.mode == EDIT_MODE.LAYER:                  # incrÃ©mente + ou - l'acteur selon que ce soit clic droit ou gauche
             actor = self.map.get_actor_at(pos[0], pos[1])
             if actor is not None:
                 if button == 1:
                     actor.z += 1
                 elif button == 3:
                     actor.z -= 1
-                    
+
         elif self.mode == EDIT_MODE.COPY:                   # meme chose que move sans supprimer l'acteur de la map
             actor = self.map.get_actor_at(pos[0], pos[1])
             if actor != None:
@@ -215,7 +215,7 @@ class StageEditMode(StageHandleConsole):
                 self.object_pick.reload()
                 self.mode = EDIT_MODE.PICK
 
-    def handle_userevent(self, event):                      # gère les téléportations dans l'éditeur ( un peu comme le StageLevel en plus ascétique)
+    def handle_userevent(self, event):                      # gÃ¨re les tÃ©lÃ©portations dans l'Ã©diteur ( un peu comme le StageLevel en plus ascÃ©tique)
         if event.name == EVENT_TP:
             actor = event.actor
             actor.rect.x = int(event.spawn_pos.x)

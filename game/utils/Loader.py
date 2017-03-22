@@ -1,6 +1,7 @@
 from threading import Thread
 
-from game.actors.ActorArrow import ActorArrow
+from game.actors.ActorArrowPlayer import ActorArrowPlayer
+from game.actors.ActorArrowSlime import ActorArrowSlime
 from game.actors.ActorBlock import ActorBlock
 from game.actors.ActorDoor import ActorDoor
 from game.actors.ActorPlayer import ActorPlayer
@@ -23,7 +24,8 @@ class Loader(Thread):
         # Loading stuff here
 
         ActorWall.register()
-        ActorArrow.register()
+        ActorArrowPlayer.register()
+        ActorArrowSlime.register()
         ActorPlayer.register()
         ActorRock.register()
         ActorSpawnpoint.register()

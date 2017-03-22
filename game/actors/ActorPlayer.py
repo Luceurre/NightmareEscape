@@ -8,7 +8,8 @@ from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
 from api.EnumTeam import EnumTeam
 from api.Timer import Timer
-from game.actors.ActorArrow import ActorArrow
+from game.actors.ActorArrowPlayer import ActorArrowPlayer
+from game.actors.ActorArrowSlime import ActorArrowSlime
 from game.utils.Constants import *
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image
@@ -46,7 +47,7 @@ class ActorPlayer(ActorAnimation):
         # Tirs
         self.shoot_rate = 200.0  # Nombre de tirs par second
         self.can_shoot = True
-        self.is_shooting = False  # Pour l'animation ?
+        #self.is_shooting = False  # Pour l'animation ? #inutile: pas de projet de faire animation de tirs en cours
         self.shoot = False
 
         # Quelques caractèristiques :
@@ -212,11 +213,11 @@ class ActorPlayer(ActorAnimation):
             self.velocity.null()
 
         if self.shoot and self.can_shoot:
-            self.is_shooting = True
+            #self.is_shooting = True     #inutile: pas de projet de faire animation de tirs en cours
             self.can_shoot = False
             self.add_timer(Timer(self.shoot_rate, self.turn_on_shoot))
 
-            arrow = ActorArrow(self.direction, self.velocity)
+            arrow = ActorArrowPlayer(self.direction, self.velocity)
             arrow.team = self.team
             arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
             arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
@@ -258,8 +259,10 @@ class ActorPlayer(ActorAnimation):
 
     def interact(self, actor):
         # Pour éviter que le Joueur prenne des dégâts de ses propres projectiles :)
-        if isinstance(actor, ActorArrow):
+        if isinstance(actor, ActorArrowPlayer):
             return False
+        if isinstance(actor, ActorArrowSlime):
+            self.hp -= actor.damage
         else:
             return super().interact(actor)
 

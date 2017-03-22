@@ -25,6 +25,7 @@ class StageConsole(StageAutoManage):
         self.previous_stage.execute(self.console)           # appelle la fonction execute su stage précédent avec pour argument la strg de la console
 
     def handle_keydown(self, unicode, key, mod):
+        super().handle_keydown(unicode, key, mod)
         if key == pygame.K_RETURN:                          # permet de valider l'entrée
             self.state = StageState.QUIT
         elif key == pygame.K_BACKSPACE:                     # permet d'utiliser la touche  <----
