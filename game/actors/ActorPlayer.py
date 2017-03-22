@@ -45,7 +45,7 @@ class ActorPlayer(ActorAnimation):
         self.velocity_max = 4
 
         # Tirs
-        self.shoot_rate = 200.0  # Nombre de tirs par second
+        self.shoot_rate = 200.0  # Période des tirs : en ms
         self.can_shoot = True
         #self.is_shooting = False  # Pour l'animation ? #inutile: pas de projet de faire animation de tirs en cours
         self.shoot = False
@@ -261,8 +261,9 @@ class ActorPlayer(ActorAnimation):
         # Pour éviter que le Joueur prenne des dégâts de ses propres projectiles :)
         if isinstance(actor, ActorArrowPlayer):
             return False
-        if isinstance(actor, ActorArrowSlime):
+        if isinstance(actor, ActorArrowSlime) and actor.team == self.team.get_ennemi():
             self.hp -= actor.damage
+            return True
         else:
             return super().interact(actor)
 

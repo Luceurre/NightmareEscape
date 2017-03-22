@@ -35,11 +35,14 @@ class ActorSlime(ActorAnimation):
         self.team = EnumTeam.MONSTER_TEAM
 
         self.attack_shoot = True
-        self.shoot_range = 350
-        self.shoot_rate = 1 / 3  # Nombre de tirs par seconde
+        self.shoot_range = 500
+        self.shoot_rate = 1000  # Période des tirs : en ms
         self.hp = 3
 
+        self.can_shoot = True
+        
         self.collidable = True
+        self.should_update = True
         
         self.velocity = Vector(0,0)
 
@@ -47,13 +50,14 @@ class ActorSlime(ActorAnimation):
         super().reload()
 
         self.handle_event = True
+        self.should_update = True
 
     def update(self):
         super().update()
         
         self.now = pygame.time.get_ticks()
 
-        target = self.map.get_closest_ennemi(self.rect, range=200, ennemi_team=self.team.get_ennemi())
+        target = self.map.get_closest_ennemi(self.rect, range=self.shoot_range, ennemi_team=self.team.get_ennemi())
         if self.can_attack() and target is not None:
             self.attack(target)
 
@@ -62,15 +66,13 @@ class ActorSlime(ActorAnimation):
 
     def attack(self, target):
         self.state = ActorSlime.State.ATTACK
-        print("le slime attaque")
-        if self.attack_shoot: # création d'une attaque lancé de boulles verts vers la player
-            print("le slime tire")
-            if self.shoot and self.can_shoot:
+        if self.attack_shoot: # création d'une attaque lancé de boulles vertes vers la player
+            if self.can_shoot:
                 self.is_shooting = True
-                self.can_shoot = False
+                #self.can_shoot = False
                 self.add_timer(Timer(self.shoot_rate, self.turn_on_shoot))
     
-                arrow = ActorArrowSlime(self.detect_target_position(target), self.velocity)
+                arrow = ActorArrowSlime(self.detect_target_position(target))
                 arrow.team = self.team
                 arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
                 arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
@@ -96,20 +98,19 @@ class ActorSlime(ActorAnimation):
 
 
     def turn_on_shoot(self):
+        print("turn on shoor appellé")
         self.can_shoot = True
         
     def detect_target_position(self, target):
         x = target.rect.x - self.rect.x
         y = target.rect.y - self.rect.y
         d = (x*x + y*y)**0.5
-        x = int( 2*  x/d )  #si cos < 0.5 ( angle > 60°), on considère que x doit valoir 0
+        x = int( 2*  x/d )  #si cos < 0.5 ( angle > 60°), on considère que x doit valoir 0 ( on utilise cos 45+15² = 0.5 ) -> obtient tirs à 45² entre 60 et 30 ² -> parfait!
         y = int( 2 * y/d ) # same here
         
-        #pour gérer pb du int() dans le cas ou x et y sont négatifs
-        if x < 0:
-            x -= 1
-        if y <0:
-            y -=1
+        
+        # Pourrait : faire un x,y *= 0.5 si x,y is not 0,0 , mais ne marche pas car vector int() x et y 
+        
         return Vector(x, y)             # on renvoie bien une direction : le slime ne peut tirer que dans 8 directions
 
     def load_sprite(self):

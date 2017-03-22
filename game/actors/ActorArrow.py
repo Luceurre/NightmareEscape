@@ -14,8 +14,12 @@ class ActorArrow(ActorSprite):
         self.map = None # ?
         
         self.damage = 5
-
-        self.dir = dir.value
+        
+        try:
+            self.dir = dir.value
+        except:
+            self.dir = dir
+        
         self.speed = 8
         self.velocity = Vector(0, 0)
         if self.dir.x * velocity.x >= 0:
