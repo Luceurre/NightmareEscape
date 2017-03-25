@@ -40,7 +40,7 @@ class ActorSlime(ActorAnimation):
         self.shoot_range = 500
         self.shoot_rate = 1000  # Période des tirs : en ms
         self.detection_range = 1000 # Distance à laquelle il perçoit un ennemi
-        self.jump_range = 700
+        self.jump_range = 700       # Distance de saut
         self.jump_cd = 0
         self.jump_cd_max = 200
         self.jump_vect_in = None
@@ -69,6 +69,7 @@ class ActorSlime(ActorAnimation):
     def update(self):
         super().update()
 
+        # c'est bizzard ça pierre, ça va changer en fonction de si l'ordi ramme ou pas
         self.update_timers()
         if self.jump_cd > 0:
             self.jump_cd -= 1
@@ -91,6 +92,8 @@ class ActorSlime(ActorAnimation):
 
 
         target = self.map.get_closest_ennemi(self.rect, range=self.detection_range, ennemi_team=self.team.get_ennemi())
+        
+        # Attaque
         if self.can_attack() and target is not None:
             if self.can_shoot(target):
                 self.shoot(target)
@@ -109,7 +112,8 @@ class ActorSlime(ActorAnimation):
     def can_jump(self, target):
         return  self.get_distance(target) <= self.jump_range ** 2 and self.jump_cd == 0
 
-    def jump(self, target):
+    def jump(self, target): # Saute, se déplace, dans une position wtf ( cf le brain de pierro )
+        
         self.state = ActorSlime.State.JUMP
         self.jump_initial_pos = copy.copy(self.rect)
         self.jump_return_pos = copy.copy(target.rect)
@@ -120,7 +124,9 @@ class ActorSlime(ActorAnimation):
         self.jump_vect_in = Vector(target.rect.center[0] - self.rect.center[0],
                                    target.rect.center[1] - self.rect.center[1])
         self.jump_vect_in.normalize()
-    def shoot(self, target):
+        
+    
+    def shoot(self, target): #Tire sur le player
         self.state = ActorSlime.State.ATTACK
 
         arrow = ActorArrowSlime(self.detect_target_position(target))
@@ -134,37 +140,37 @@ class ActorSlime(ActorAnimation):
         if self.ammo == 0:
             self.reload_ammo()
 
-    def reload_ammo(self):
+    def reload_ammo(self): # remplit les munitions après 2,5 secondes
         self.add_timer(Timer(2500, self.reload_ammo_callback))
 
-    def reload_ammo_callback(self):
+    def reload_ammo_callback(self): # remplit les  munitions
         self.ammo = self.ammo_max
 
-    def idle(self):
+    def idle(self): # appelé lorsque le slime est IDLE
         if not self.is_dead:
             self.state = ActorSlime.State.IDLE
 
-    def die(self):
+    def die(self):  # appelé lorsque le slime est DIE
         self.collidable = False
         self.state = ActorSlime.State.DIE
 
-    def dead(self):
+    def dead(self): # appelé lorsque le slime est DEAD
         self.map.remove_actor(self)
         del self
 
 
-    def turn_on_shoot(self):
-        print("turn on shoor appellé")
+    def turn_on_shoot(self):    # On autorise le slime à tirer
+        print("turn on shoot appellé")
         self.can_shoot = True
         
-    def detect_target_position(self, target):
+    def detect_target_position(self, target): # on renvoie un vecteur correspondant à position relative du player par rapport au slime
         """Renvoie le vecteur (target.rect.center - self.rect.center) pour donner la direction où aller/tirer"""
 
         pos = Vector(target.rect.center[0] - self.rect.center[0],  target.rect.center[1] - self.rect.center[1])
 
         return pos
 
-    def load_sprite(self):
+    def load_sprite(self): # charge les animations, donc images, du slime selon ses états
         super().load_sprite()
 
         self.animations = {}
