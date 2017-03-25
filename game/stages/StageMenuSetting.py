@@ -1,6 +1,6 @@
 
 from api.StageMenu import StageMenu
-from game.actors.ActorButtonReturn import ActorButtonReturn
+import game.actors.ActorButtonReturn
 from game.actors.ActorButtonMusic import ActorButtonMusic
 from game.actors.ActorBackground import ActorBackgroundSettings
 from api.ActorButton import ActorButton
@@ -21,7 +21,7 @@ class StageMenuSetting(StageMenu):
         
         #self.map.add_actor(ActorButtonSettingKeys()) # enlevé par révision à la baisse des ambitions
         
-        self.map.add_actor(ActorButtonReturn())
+        self.map.add_actor(game.actors.ActorButtonReturn.ActorButtonReturn())
         self.map.add_actor(ActorButtonMusic())
         
         height = self.screen.get_height() / (len(self.map.actors) + 2 + 2)

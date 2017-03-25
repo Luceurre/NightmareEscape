@@ -135,12 +135,13 @@ class ActorPlayer(ActorAnimation):
         
     def push_game_over(self):# Envoie un event game over, pour avertir le stage qu'il doit se push en StageGameOver
         event = pygame.event.Event(pygame.USEREVENT, name=EVENT_GAME_OVER)
+        print("on poste l'event game over")
         pygame.event.post(event)
-        self.map.remove_actor(self)
         
     def dead(self): # appelle push_game_over après 2 secondes
         self.state = ActorPlayer.State.DEAD
-        self.add_timer(Timer(2000, self.push_game_over))
+        print("self.state = ActorPlayer.State.DEAD")
+        self.push_game_over()
 
     def load_sprite(self):
         sprites_sheet = load_image("assets/marinka.png", False)
@@ -181,7 +182,7 @@ class ActorPlayer(ActorAnimation):
                                                                                PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_SPRITE_HEIGHT),
                                                  PLAYER_DIE_TILES_NUMBER, PLAYER_DYING_TIME, True, callback_fun = self.dead)
-        self.animations[ActorPlayer.State.DEAD] = Animation(sprites_sheet, pygame.Rect(6 * PLAYER_SPRITE_WIDTH,
+        self.animations[ActorPlayer.State.DEAD] = Animation(sprites_sheet, pygame.Rect(5 * PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_DYING.y * \
                                                                                PLAYER_SPRITE_HEIGHT,
                                                                                PLAYER_SPRITE_WIDTH,
