@@ -1,3 +1,6 @@
+import math
+
+
 class Vector:
     def __init__(self, x, y):
         self.x = int(x)
@@ -17,6 +20,10 @@ class Vector:
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
+
+
+    def get_theta(self):
+        return math.atan2(self.y, self.x)
 
 VECTOR_NULL = Vector(0, 0)
 

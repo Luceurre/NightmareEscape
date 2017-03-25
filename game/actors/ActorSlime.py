@@ -7,6 +7,7 @@ from api.EnumTeam import EnumTeam
 from api.Timer import Timer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
+from game.actors.ActorPlayer import ActorPlayer
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import Vector
 
@@ -37,9 +38,10 @@ class ActorSlime(ActorAnimation):
         self.attack_shoot = True
         self.shoot_range = 500
         self.shoot_rate = 1000  # Période des tirs : en ms
+        self.detection_range = 1000 # Distance à laquelle il perçoit un ennemi
+        self.ammo_max = 3 # Le nombre de balles
+        self.ammo = self.ammo_max # Le nombre de balles max
         self.hp = 3
-
-        self.can_shoot = True
         
         self.collidable = True
         self.should_update = True
@@ -55,34 +57,38 @@ class ActorSlime(ActorAnimation):
 
     def update(self):
         super().update()
-        
-        self.now = pygame.time.get_ticks()
 
-        target = self.map.get_closest_ennemi(self.rect, range=self.shoot_range, ennemi_team=self.team.get_ennemi())
+        target = self.map.get_closest_ennemi(self.rect, range=self.detection_range, ennemi_team=self.team.get_ennemi())
         if self.can_attack() and target is not None:
-            self.attack(target)
+            if self.can_shoot(target):
+                self.shoot(target)
+
 
     def can_attack(self):
-        return self.state != ActorSlime.State.ATTACK
+        return self.state == ActorSlime.State.IDLE
 
-    def attack(self, target):
+    def get_distance(self, target):
+        return (self.rect.x - target.rect.x) ** 2 + (self.rect.y - target.rect.y) ** 2
+
+    def can_shoot(self, target):
+        return self.get_distance(target) <= self.shoot_range ** 2 and self.ammo > 0
+
+    def shoot(self, target):
         self.state = ActorSlime.State.ATTACK
-        if self.attack_shoot: # création d'une attaque lancé de boulles vertes vers la player
-            if self.can_shoot:
-                self.is_shooting = True
-                #self.can_shoot = False
-                self.add_timer(Timer(self.shoot_rate, self.turn_on_shoot))
-    
-                arrow = ActorArrowSlime(self.detect_target_position(target))
-                arrow.team = self.team
-                arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
-                arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
-                self.map.add_actor(arrow)
-                
-                
-                
-        else: # création d'une attaque saut vers le player
-            pass
+
+        arrow = ActorArrowSlime(self.detect_target_position(target))
+        arrow.team = self.team
+        arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
+        arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
+        self.map.add_actor(arrow)
+
+        self.ammo -= 1
+
+        if self.ammo == 0:
+            self.reload_ammo()
+
+    def reload_ammo(self):
+        pass
 
     def idle(self):
         if not self.is_dead:
@@ -102,16 +108,11 @@ class ActorSlime(ActorAnimation):
         self.can_shoot = True
         
     def detect_target_position(self, target):
-        x = target.rect.x - self.rect.x
-        y = target.rect.y - self.rect.y
-        d = (x*x + y*y)**0.5
-        x = int( 2*  x/d )  #si cos < 0.5 ( angle > 60°), on considère que x doit valoir 0 ( on utilise cos 45+15² = 0.5 ) -> obtient tirs à 45² entre 60 et 30 ² -> parfait!
-        y = int( 2 * y/d ) # same here
-        
-        
-        # Pourrait : faire un x,y *= 0.5 si x,y is not 0,0 , mais ne marche pas car vector int() x et y 
-        
-        return Vector(x, y)             # on renvoie bien une direction : le slime ne peut tirer que dans 8 directions
+        """Renvoie le vecteur (target.rect.center - self.rect.center) pour donner la direction où aller/tirer"""
+
+        pos = Vector(target.rect.center[0] - self.rect.center[0],  target.rect.center[1] - self.rect.center[1])
+
+        return pos
 
     def load_sprite(self):
         super().load_sprite()
