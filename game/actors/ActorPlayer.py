@@ -266,7 +266,7 @@ class ActorPlayer(ActorAnimation):
         if x == 0 and y == 0:
             return False
 
-        rect = copy.copy(pygame.Rect(self.rect))
+        rect = copy.copy(self.rect.pyrect)
         rect.x += x - 2
         rect.y += y - 2
 

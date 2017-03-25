@@ -4,6 +4,7 @@ import pygame
 
 from api.Actor import Actor
 from api.Logger import LOG_LEVEL
+from api.Rect import Rect
 from api.StageManager import StageManager
 from game.utils.Constants import WINDOW_WIDTH, WINDOW_HEIGHT
 from game.utils.SurfaceHelper import shadowizer
@@ -18,7 +19,7 @@ class ActorSprite(Actor):
         super().__init__()
 
         # Définition de nouveaux attributs
-        self._rect = pygame.Rect(0, 0, 0, 0)
+        self._rect = Rect(0, 0, 0, 0)
         self._sprite = None
         "self.sounds = None"
         self.draw_shadow = False
@@ -48,6 +49,10 @@ class ActorSprite(Actor):
         self.load_sprite()
         "self.load_sounds()"
 
+        if isinstance(self.rect, pygame.Rect):
+            rect = Rect(self.rect.x, self.rect.y, self.rect.w, self.rect.h)
+            self.rect = rect
+
     def unload(self):
         super().unload()
         self.unload_sprite()
@@ -71,6 +76,14 @@ class ActorSprite(Actor):
     def rect(self):
         return self._rect
 
+    @rect.setter
+    def rect(self, rect):
+        if isinstance(rect, pygame.Rect):
+            rect_t = Rect(rect.x, rect.y, rect.w, rect.h)
+            self._rect = rect
+        else:
+            self._rect = rect
+
     @property
     def sprite(self):
         return self._sprite
@@ -92,14 +105,14 @@ class ActorSprite(Actor):
         else:
             try:
                 if self.draw_shadow:
-                    rect = copy.copy(self.rect)
+                    rect = copy.deepcopy(self.rect)
                     rect.y += self.h
-                    screen.blit(shadowizer(self.sprite), rect)
-                screen.blit(self.sprite, self.rect)
+                    screen.blit(shadowizer(self.sprite), rect.pyrect)
+                screen.blit(self.sprite, self.rect.pyrect)
             except:
                 self.load_sprite()
                 self.info("Rechargement des images car Pickle.")
-                screen.blit(self.sprite, self._rect)
+                screen.blit(self.sprite, self._rect.pyrect)
 
     # Quelques methodes pour aider : (noms assez explicites)
 
@@ -119,11 +132,11 @@ class ActorSprite(Actor):
         if x == 0 and y == 0:
             return False
 
-        rect = copy.copy(pygame.Rect(self.rect))
-        rect.x += x
-        rect.y += y
+        rect_tmp = copy.copy(self.rect.pyrect)
+        rect_tmp.x += x
+        rect_tmp.y += y
 
-        actors = self.map.get_actors_collide(rect, [self])
+        actors = self.map.get_actors_collide(rect_tmp, [self])
 
         """
         remove_indexes = []

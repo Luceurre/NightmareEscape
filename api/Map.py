@@ -1,8 +1,11 @@
 import pickle
 
+import pygame
+
 from api.Actor import Actor
 from api.EnumTeam import EnumTeam
 from api.Logger import *
+from api.Rect import Rect
 
 
 class Map(Logger):
@@ -183,6 +186,7 @@ class Map(Logger):
         les sprites des Actors."""
 
         for actor in self.actors:
+            # Ajout pour corrigé les problèmes dues aux coordonnées réelles :
             actor.reload()
 
     def unload(self):
