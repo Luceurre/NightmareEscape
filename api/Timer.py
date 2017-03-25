@@ -20,7 +20,7 @@ class Timer:
 
     def update(self):
         if pygame.time.get_ticks() - self.now >= self.time and self.active:
-            self.callback_function(self.args, self.kwargs)
+            self.callback_function(*self.args, **self.kwargs)
             self.how_many -= 1
             if (self.how_many == 0 and not self.infinite) or self.repeat == False:
                 self.active = False
