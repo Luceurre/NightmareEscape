@@ -11,7 +11,7 @@ from api.EnumAuto import EnumAuto
 from api.Timer import Timer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
-from game.utils.Constants import *, PLAYER_DYING
+from game.utils.Constants import *
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import VECTOR_NULL
@@ -40,7 +40,7 @@ class ActorPlayer(ActorAnimation):
 
         self.should_update = True
         self.handle_event = True
-        self.state = State.ALIVE
+        self.state = ActorPlayer.State.ALIVE
 
         self.direction = DIRECTION.BAS
 
@@ -139,8 +139,8 @@ class ActorPlayer(ActorAnimation):
         self.map.remove_actor(self)
         
     def dead(self): # appelle push_game_over après 2 secondes
-        self.state = State.DEAD
-        self.add_timer(Timer(2000, self.push_game_over, *args, **kwargs))
+        self.state = ActorPlayer.State.DEAD
+        self.add_timer(Timer(2000, self.push_game_over))
 
     def load_sprite(self):
         sprites_sheet = load_image("assets/marinka.png", False)
@@ -175,33 +175,30 @@ class ActorPlayer(ActorAnimation):
                                                                                PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_SPRITE_HEIGHT), 1, 1000, True)
 
-        self.animations[State.DYING] = Animation(sprites_sheet, pygame.Rect(PLAYER_DYING.x * PLAYER_SPRITE_WIDTH,
+        self.animations[ActorPlayer.State.DYING] = Animation(sprites_sheet, pygame.Rect(PLAYER_DYING.x * PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_DYING.y * \
                                                                                PLAYER_SPRITE_HEIGHT,
                                                                                PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_SPRITE_HEIGHT),
                                                  PLAYER_DIE_TILES_NUMBER, PLAYER_DYING_TIME, True, callback_fun = self.dead)
-        self.animations[State.DEAD] = Animation(prites_sheet, pygame.Rect(6 * PLAYER_SPRITE_WIDTH,
+        self.animations[ActorPlayer.State.DEAD] = Animation(sprites_sheet, pygame.Rect(6 * PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_DYING.y * \
                                                                                PLAYER_SPRITE_HEIGHT,
                                                                                PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_SPRITE_HEIGHT), 1, 0, True)
-        
-        self.animation = self.animations[DIRECTION.NONE]
+
 
     def unload_sprite(self):
         super().unload_sprite()
 
-        del self.animation
         del self.animations
 
         self.info("Sprites unloaded successfully!")
 
     def update(self):
         super().update()
-        if self.state == State.ALIVE:
-            
 
+        if self.state == ActorPlayer.State.ALIVE:
             if self.keys_other[pygame.K_b][0]:
                 for actor in self.map.actors:
                     try:
@@ -255,10 +252,13 @@ class ActorPlayer(ActorAnimation):
                 arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
                 arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
                 self.map.add_actor(arrow)
-    
-            self.animation = self.animations[self.direction]
+
+    @property
+    def animation(self):
+        if self.state == ActorPlayer.State.ALIVE:
+            return self.animations[self.direction]
         else:
-            self.animation = self.animation[self.state]
+            return self.animations[self.state]
 
     def move(self, x=0, y=0):
         """Return True if the Player moved, False otherwise"""
@@ -298,8 +298,8 @@ class ActorPlayer(ActorAnimation):
             return False
         if isinstance(actor, ActorArrowSlime) and actor.team == self.team.get_ennemi():
             self.hp -= actor.damage
-            if self.hp <= 0 and self.state == Sate.ALIVE: # on enclenche la mort
-                self.state = State.DYING
+            if self.hp <= 0 and self.state == ActorPlayer.State.ALIVE: # on enclenche la mort
+                self.state = ActorPlayer.State.DYING
             return True
         else:
             return super().interact(actor)

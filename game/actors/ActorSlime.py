@@ -39,7 +39,7 @@ class ActorSlime(ActorAnimation):
         self.shoot_range = 500
         self.shoot_rate = 1000  # Période des tirs : en ms
         self.detection_range = 1000 # Distance à laquelle il perçoit un ennemi
-        self.ammo_max = 3 # Le nombre de balles
+        self.ammo_max = 3000 # Le nombre de balles
         self.ammo = self.ammo_max # Le nombre de balles max
         self.hp = 3
         
