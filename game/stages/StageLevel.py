@@ -6,15 +6,17 @@ from game.actors.ActorGUIBar import ActorGUIBar
 from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorSpawnpoint import ActorSpawnpoint
 from game.stages.StageHandleConsole import StageHandleConsole
+from game.stages.StageGameOver import StageGameOver
 from game.utils.Constants import EVENT_TP, EVENT_GAME_OVER
 from game.utils.Sounds import MUSIC_MAP
+from api.StageState import StageState
 
 
 class StageLevel(StageHandleConsole):
     
     """ Stage du jeu"""
     
-    def __init__(self, map="level_0"):
+    def __init__(self, map="level_3"):
         """la base : initialise les trucs classiques de StageHandleConsole, ajoute une map, cherche le spwanpoint et crée le player dessus"""
         super().__init__()
         
@@ -79,9 +81,10 @@ class StageLevel(StageHandleConsole):
 
             self.load_gui_and_player()  #soit on enlève celui-ci, soit celui du load_gui_and_player()
         
-        if event.name == EVENT_GAME_OVER:
-            StageManager.push("")
-            azfadsqf
+        elif event.name == EVENT_GAME_OVER:
+            print("EVENT_GAME_OVER reçu par Stage Level")
+            StageManager().push(StageGameOver())
+            self.state = StageState.QUIT
             
 
     def load_gui_and_player(self): # gui = graphical user interface

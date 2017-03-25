@@ -12,7 +12,7 @@ class ActorArrow(ActorSprite):
 
     def __init__(self, dir=DIRECTION.NONE, velocity=VECTOR_NULL):
         super().__init__()
-        self.damage = 5
+        self.damage = 20
         try:
             self.dir = dir.get_theta()
         except:
