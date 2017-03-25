@@ -1,3 +1,5 @@
+import pygame.mixer
+
 from api.ActorButton import ActorButton
 from api.StageManager import StageManager 
 import game.stages.StageMainMenu
@@ -13,6 +15,7 @@ class ActorButtonGOmenu(ActorButton):
     def execute(self):
         super().execute()
         
+        pygame.mixer.music.stop()
         StageManager().push(game.stages.StageMainMenu.StageMainMenu())
         
 class ActorButtonGOquit(ActorButton):

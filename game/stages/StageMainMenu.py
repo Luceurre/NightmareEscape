@@ -29,6 +29,7 @@ class StageMainMenu(StageMenu):
         self.map.add_actor(ActorButtonSetting())
         self.map.add_actor(ActorButtonQuit())
 
+        
         # répartis les bouttons au centre de l'écran
         
         height = self.screen.get_height() / (len(self.map.actors) + 3)      

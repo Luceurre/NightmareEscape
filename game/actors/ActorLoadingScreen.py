@@ -7,7 +7,7 @@ from game.utils.SurfaceHelper import load_image
 class ActorLoadingScreen(ActorSprite):
     def __init__(self):
         super().__init__()
-        self.sprite = load_image("assets/loading_screen.bmp")
+        self.sprite = load_image("assets/loading_screen.bmp").convert()
         self.sprite.set_alpha(0)
         self.should_update = True
         self.handle_event = True
