@@ -11,7 +11,7 @@ from api.EnumAuto import EnumAuto
 from api.Timer import Timer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
-from game.utils.Constants import *, PLAYER_DYING
+from game.utils.Constants import *
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import VECTOR_NULL
