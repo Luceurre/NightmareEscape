@@ -6,7 +6,7 @@ from game.actors.ActorGUIBar import ActorGUIBar
 from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorSpawnpoint import ActorSpawnpoint
 from game.stages.StageHandleConsole import StageHandleConsole
-from game.utils.Constants import EVENT_TP
+from game.utils.Constants import EVENT_TP, EVENT_GAME_OVER
 from game.utils.Sounds import MUSIC_MAP
 
 
@@ -78,6 +78,11 @@ class StageLevel(StageHandleConsole):
             
 
             self.load_gui_and_player()  #soit on enlève celui-ci, soit celui du load_gui_and_player()
+        
+        if event.name == EVENT_GAME_OVER:
+            StageManager.push("")
+            azfadsqf
+            
 
     def load_gui_and_player(self): # gui = graphical user interface
         """Lalala la fonction est dans le titre..."""
