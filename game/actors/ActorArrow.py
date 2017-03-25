@@ -1,3 +1,5 @@
+import math
+
 from api.ActorSprite import ActorSprite
 from game.utils.Direction import DIRECTION
 from game.utils.Vector import VECTOR_NULL, Vector
@@ -10,21 +12,16 @@ class ActorArrow(ActorSprite):
 
     def __init__(self, dir=DIRECTION.NONE, velocity=VECTOR_NULL):
         super().__init__()
-
-        self.map = None # ?
-        
         self.damage = 5
-        
         try:
-            self.dir = dir.value
+            self.dir = dir.get_theta()
         except:
-            self.dir = dir
-        
+            self.dir = dir.value.get_theta()
         self.speed = 8
         self.velocity = Vector(0, 0)
-        if self.dir.x * velocity.x >= 0:
+        if math.cos(self.dir) * velocity.x >= 0:
             self.velocity.x = velocity.x / 2
-        if self.dir.y * velocity.y >= 0:
+        if math.sin(self.dir) * velocity.y >= 0:
             self.velocity.y = velocity.y / 2
         self.should_update = True
 
@@ -45,5 +42,5 @@ class ActorArrow(ActorSprite):
 
         # On essaye de bouger, si False est retourné, le projectile a rencontré un monstre, un mur, etc... et dans ce cas
         # on le détruit.
-        if not self.move(self.speed * self.dir.x + self.velocity.x, self.speed * self.dir.y + self.velocity.y):
+        if not self.move(self.speed * math.cos(self.dir) + self.velocity.x, self.speed * math.sin(self.dir) + self.velocity.y):
             self.map.remove_actor(self)

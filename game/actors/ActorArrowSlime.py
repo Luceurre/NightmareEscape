@@ -14,7 +14,6 @@ class ActorArrowSlime(ActorArrow):
 
 
     def __init__(self, dir=DIRECTION.NONE, velocity=VECTOR_NULL):
-        
         super().__init__(dir, velocity)
         
         

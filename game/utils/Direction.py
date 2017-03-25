@@ -1,6 +1,8 @@
 # Barycentre RPZ
 from enum import Enum
 
+import math
+
 from game.utils.Vector import Vector
 
 
@@ -10,7 +12,6 @@ class DIRECTION(Enum):
     DROITE = Vector(1, 0)
     GAUCHE = Vector(-1, 0)
     NONE = Vector(0, 0)
-
 
     
     @classmethod
