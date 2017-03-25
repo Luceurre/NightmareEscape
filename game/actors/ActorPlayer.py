@@ -7,18 +7,26 @@ import platform
 from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
 from api.EnumTeam import EnumTeam
+from api.EnumAuto import EnumAuto
 from api.Timer import Timer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
-from game.utils.Constants import *
+from game.utils.Constants import *, PLAYER_DYING
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import VECTOR_NULL
+from ctypes.test.test_random_things import callback_func
 
 
 class ActorPlayer(ActorAnimation):
     ID = 3
     NAME = "PLAYER"
+    
+    class State(EnumAuto):
+        
+        ALIVE = ()
+        DYING = ()
+        DEAD = ()
 
     def __init__(self):
         super().__init__()
@@ -32,6 +40,7 @@ class ActorPlayer(ActorAnimation):
 
         self.should_update = True
         self.handle_event = True
+        self.state = State.ALIVE
 
         self.direction = DIRECTION.BAS
 
@@ -122,6 +131,15 @@ class ActorPlayer(ActorAnimation):
         del self.keys_other
         del self.keys
         del self.direction
+        
+    def push_game_over(self):# Envoie un event game over, pour avertir le stage qu'il doit se push en StageGameOver
+        event = pygame.event.Event(pygame.USEREVENT, name=EVENT_GAME_OVER)
+        pygame.event.post(event)
+        self.map.remove_actor(self)
+        
+    def dead(self): # appelle push_game_over après 2 secondes
+        self.state = State.DEAD
+        self.add_timer(Timer(2000, self.push_game_over, *args, **kwargs))
 
     def load_sprite(self):
         sprites_sheet = load_image("assets/marinka.png", False)
@@ -156,6 +174,18 @@ class ActorPlayer(ActorAnimation):
                                                                                PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_SPRITE_HEIGHT), 1, 1000, True)
 
+        self.animations[State.DYING] = Animation(sprites_sheet, pygame.Rect(PLAYER_DYING.x * PLAYER_SPRITE_WIDTH,
+                                                                               PLAYER_DYING.y * \
+                                                                               PLAYER_SPRITE_HEIGHT,
+                                                                               PLAYER_SPRITE_WIDTH,
+                                                                               PLAYER_SPRITE_HEIGHT),
+                                                 PLAYER_DIE_TILES_NUMBER, PLAYER_DYING_TIME, True, callback_fun = self.dead)
+        self.animations[State.DEAD] = Animation(prites_sheet, pygame.Rect(6 * PLAYER_SPRITE_WIDTH,
+                                                                               PLAYER_DYING.y * \
+                                                                               PLAYER_SPRITE_HEIGHT,
+                                                                               PLAYER_SPRITE_WIDTH,
+                                                                               PLAYER_SPRITE_HEIGHT), 1, 0, True)
+        
         self.animation = self.animations[DIRECTION.NONE]
 
     def unload_sprite(self):
@@ -168,62 +198,66 @@ class ActorPlayer(ActorAnimation):
 
     def update(self):
         super().update()
+        if self.state == State.ALIVE:
+            
 
-        if self.keys_other[pygame.K_b][0]:
-            for actor in self.map.actors:
-                try:
-                    actor.close()
-                except:
-                    pass
-
-        self.update_timers()
-
-        self.walk = False
-        self.direction = DIRECTION.NONE
-        self.direction_walk = []
-        for value in self.keys_move.values():
-            if value[0]:
-                self.direction = value[1]
-                self.direction_walk.append(value[1])
-                self.walk = True
-
-        self.shoot = False
-        for value in self.keys_shoot.values():
-            if value[0]:
-                self.direction = value[1]
-                self.shoot = True
-                break
-
-        if self.walk:
-            speed_x = 0
-            speed_y = 0
-            for direction in self.direction_walk:
-                speed_x += direction.value.x
-                speed_y += direction.value.y
-
-            self.velocity.x = self.velocity_max * speed_x
-            self.velocity.y = self.velocity_max * speed_y
-        else:
-            self.velocity.null()
-
-        if self.velocity != VECTOR_NULL:
-            self.has_moved = self.move(x=self.velocity.x, y=self.velocity.y)
-
-        if not self.has_moved:
-            self.velocity.null()
-
-        if self.shoot and self.can_shoot:
-            #self.is_shooting = True     #inutile: pas de projet de faire animation de tirs en cours
-            self.can_shoot = False
-            self.add_timer(Timer(self.shoot_rate, self.turn_on_shoot))
-
-            arrow = ActorArrowPlayer(self.direction, self.velocity)
-            arrow.team = self.team
-            arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
-            arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
-            self.map.add_actor(arrow)
-
-        self.animation = self.animations[self.direction]
+            if self.keys_other[pygame.K_b][0]:
+                for actor in self.map.actors:
+                    try:
+                        actor.close()
+                    except:
+                        pass
+    
+            self.update_timers()
+    
+            self.walk = False
+            self.direction = DIRECTION.NONE
+            self.direction_walk = []
+            for value in self.keys_move.values():
+                if value[0]:
+                    self.direction = value[1]
+                    self.direction_walk.append(value[1])
+                    self.walk = True
+    
+            self.shoot = False
+            for value in self.keys_shoot.values():
+                if value[0]:
+                    self.direction = value[1]
+                    self.shoot = True
+                    break
+    
+            if self.walk:
+                speed_x = 0
+                speed_y = 0
+                for direction in self.direction_walk:
+                    speed_x += direction.value.x
+                    speed_y += direction.value.y
+    
+                self.velocity.x = self.velocity_max * speed_x
+                self.velocity.y = self.velocity_max * speed_y
+            else:
+                self.velocity.null()
+    
+            if self.velocity != VECTOR_NULL:
+                self.has_moved = self.move(x=self.velocity.x, y=self.velocity.y)
+    
+            if not self.has_moved:
+                self.velocity.null()
+    
+            if self.shoot and self.can_shoot:
+                #self.is_shooting = True     #inutile: pas de projet de faire animation de tirs en cours
+                self.can_shoot = False
+                self.add_timer(Timer(self.shoot_rate, self.turn_on_shoot))
+    
+                arrow = ActorArrowPlayer(self.direction, self.velocity)
+                arrow.team = self.team
+                arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
+                arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
+                self.map.add_actor(arrow)
+    
+            self.animation = self.animations[self.direction]
+        elif self.state == State.DYING:
+            self.add_timer(Timer(self.))
 
     def move(self, x=0, y=0):
         """Return True if the Player moved, False otherwise"""
@@ -263,6 +297,8 @@ class ActorPlayer(ActorAnimation):
             return False
         if isinstance(actor, ActorArrowSlime) and actor.team == self.team.get_ennemi():
             self.hp -= actor.damage
+            if self.hp <= 0 and self.state == Sate.ALIVE: # on enclenche la mort
+                self.state = State.DYING
             return True
         else:
             return super().interact(actor)

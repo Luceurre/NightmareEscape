@@ -29,8 +29,7 @@ class ActorMovable(ActorSprite):                # A passer probablement sur Acto
                 test = self.move(actor.direction_walk[0].value.x * self.speed,
                                  actor.direction_walk[0].value.y * self.speed)
                 if test:
-                    actor.rect.x += actor.direction_walk[0].value.x * self.speed
-                    actor.rect.y += actor.direction_walk[0].value.y * self.speed
+                    actor.move( actor.direction_walk[0].value.x * self.speed, actor.direction_walk[0].value.y * self.speed)
             return True
         else:
             return actor.collidable and self.collidable
