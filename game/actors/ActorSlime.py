@@ -51,6 +51,7 @@ class ActorSlime(ActorAnimation):
 
         self.handle_event = True
         self.should_update = True
+        self.etre_vivant = True
 
     def update(self):
         super().update()
@@ -90,7 +91,6 @@ class ActorSlime(ActorAnimation):
     def die(self):
         self.collidable = False
         self.state = ActorSlime.State.DIE
-        self.map.remove_actor(self)
 
     def dead(self):
         self.map.remove_actor(self)

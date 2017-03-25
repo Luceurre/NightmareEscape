@@ -112,6 +112,7 @@ class ActorPlayer(ActorAnimation):
 
         self.draw_shadow = True
         self.collidable = True
+        self.etre_vivant = True
         self.team = EnumTeam.PLAYER_TEAM
 
     def unload(self):
