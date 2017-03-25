@@ -143,7 +143,7 @@ class Map(Logger):
 
         for actor in self.actors:
             distance = (x - actor.rect.centerx) ** 2 + (y - actor.rect.centery) ** 2
-            if distance < min_distance and actor.team == ennemi_team:
+            if distance < min_distance and actor.team == ennemi_team and actor.etre_vivant:
                 min_distance = distance
                 closest_ennemi = actor
 

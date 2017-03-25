@@ -47,6 +47,7 @@ class Actor(EventHandler, Logger):
         self.timers = []
         self.map = None  # C'est le lien entre les Actors et le Stage.
         self.team = EnumTeam.NEUTRAL_TEAM  # Permet de savoir si deux Actors sont ennemies
+        self.etre_vivant = False # Permet de différencier un caillou d'un monstre
 
     def draw(self, screen):
         """L'Actor doit être dessiné ici, si c'est un Actor avec une image, utilise ActorSprite"""
