@@ -257,8 +257,8 @@ class ActorPlayer(ActorAnimation):
                 self.map.add_actor(arrow)
     
             self.animation = self.animations[self.direction]
-        elif self.state == State.DYING:
-            self.add_timer(Timer(self.))
+        else:
+            self.animation = self.animation[self.state]
 
     def move(self, x=0, y=0):
         """Return True if the Player moved, False otherwise"""
