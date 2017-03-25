@@ -1,3 +1,4 @@
+import copy
 import pygame
 
 from api.ActorAnimation import ActorAnimation
@@ -39,7 +40,17 @@ class ActorSlime(ActorAnimation):
         self.shoot_range = 500
         self.shoot_rate = 1000  # Période des tirs : en ms
         self.detection_range = 1000 # Distance à laquelle il perçoit un ennemi
-        self.ammo_max = 3000 # Le nombre de balles
+        self.jump_range = 700
+        self.jump_cd = 0
+        self.jump_cd_max = 200
+        self.jump_vect_in = None
+        self.jump_in = True
+        self.jump_count = 0
+        self.jump_count_max = 30
+        self.jump_return_pos = None
+        self.jump_initial_pos = None
+        self.jump_velocity = 12
+        self.ammo_max = 3 # Le nombre de balles
         self.ammo = self.ammo_max # Le nombre de balles max
         self.hp = 3
         
@@ -58,11 +69,33 @@ class ActorSlime(ActorAnimation):
     def update(self):
         super().update()
 
+        self.update_timers()
+        if self.jump_cd > 0:
+            self.jump_cd -= 1
+
+        if self.state == ActorSlime.State.JUMP:
+            if self.jump_in:
+                self.rect.x += self.jump_vect_in.x * self.jump_velocity
+                self.rect.y += self.jump_vect_in.y * self.jump_velocity
+
+                if self.jump_vect_in.x * (self.jump_target_pos.center[0] - self.rect.center[0]) < 0 or self.jump_vect_in.y * (self.jump_target_pos.center[1] - self.rect.center[1]) < 0:
+                    self.state = ActorSlime.State.IDLE
+                    self.jump_cd = self.jump_cd_max
+            else:
+                self.rect.x += (self.jump_return_pos.center[0] - self.jump_pos.center[0]) / 40
+                self.rect.y += (self.jump_return_pos.center[1] - self.jump_pos.center[1]) / 40
+
+                if (self.jump_return_pos.center[0] - self.jump_pos.center[0]) * (self.jump_return_pos.center[0] - self.rect.center[0]) < 0:
+                    self.state = ActorSlime.State.IDLE
+
+
+
         target = self.map.get_closest_ennemi(self.rect, range=self.detection_range, ennemi_team=self.team.get_ennemi())
         if self.can_attack() and target is not None:
             if self.can_shoot(target):
                 self.shoot(target)
-
+            elif self.can_jump(target):
+                self.jump(target)
 
     def can_attack(self):
         return self.state == ActorSlime.State.IDLE
@@ -73,6 +106,20 @@ class ActorSlime(ActorAnimation):
     def can_shoot(self, target):
         return self.get_distance(target) <= self.shoot_range ** 2 and self.ammo > 0
 
+    def can_jump(self, target):
+        return  self.get_distance(target) <= self.jump_range ** 2 and self.jump_cd == 0
+
+    def jump(self, target):
+        self.state = ActorSlime.State.JUMP
+        self.jump_initial_pos = copy.copy(self.rect)
+        self.jump_return_pos = copy.copy(target.rect)
+        self.jump_target_pos = copy.copy(target.rect)
+        self.jump_return_pos.x += 300
+        self.jump_count = 0
+
+        self.jump_vect_in = Vector(target.rect.center[0] - self.rect.center[0],
+                                   target.rect.center[1] - self.rect.center[1])
+        self.jump_vect_in.normalize()
     def shoot(self, target):
         self.state = ActorSlime.State.ATTACK
 
@@ -88,7 +135,10 @@ class ActorSlime(ActorAnimation):
             self.reload_ammo()
 
     def reload_ammo(self):
-        pass
+        self.add_timer(Timer(2500, self.reload_ammo_callback))
+
+    def reload_ammo_callback(self):
+        self.ammo = self.ammo_max
 
     def idle(self):
         if not self.is_dead:
@@ -121,7 +171,7 @@ class ActorSlime(ActorAnimation):
         self.animations[ActorSlime.State.IDLE] = Animation(load_image("assets/slime.png"), pygame.Rect(0, 0, 128, 128),
                                                            9, 50 , True)
         self.animations[ActorSlime.State.MOVE] = Animation(load_image("assets/slime.png"),
-                                                           pygame.Rect(0, 128, 128, 128), 9, 50, True)
+                                                           pygame.Rect(0, 128, 128, 128), 9, 100, True)
         self.animations[ActorSlime.State.JUMP] = Animation(load_image("assets/slime.png"),
                                                            pygame.Rect(0, 256, 128, 128), 9, 50, True)
         self.animations[ActorSlime.State.ATTACK] = Animation(load_image("assets/slime.png"),
