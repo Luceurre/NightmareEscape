@@ -1,6 +1,6 @@
 from api.ActorSprite import ActorSprite
 from game.utils import Vector
-from game.utils.SurfaceHelper import load_image
+from game.utils.SurfaceHelper import load_image, get_real_rect
 
 
 class ActorTile(ActorSprite):
@@ -17,4 +17,7 @@ class ActorTile(ActorSprite):
     def load_sprite(self):
         super().load_sprite()
 
-        self.sprite = load_image(self.path, False).subsurface((self.pos.x, self.pos.y), (self.width, self.height))
+        sprite = load_image(self.path, False).subsurface((self.pos.x, self.pos.y), (self.width, self.height))
+        rect = get_real_rect(sprite)
+        sprite = sprite.subsurface(rect)
+        self.sprite = sprite

@@ -3,9 +3,7 @@ import copy
 
 import pygame
 
-
 from game.utils.Direction import DIRECTION
-
 
 
 def get_real_rect(surface):
@@ -33,24 +31,22 @@ def get_real_rect(surface):
     return pygame.Rect(x_min, y_min, x_max - x_min + 1, y_max - y_min + 1)
 
 
-def get_side_colliderect(rect1, rect2, actor_speed = 4):
+def get_side_colliderect(rect1, rect2, actor_speed=4):
     """ cherche côté de la collision du rect2 dans le rect1Attention!!! le rect 1 doit faire plus de 8*8 pixels!!!!
     Renvoie un vecteur indiquant le coté du rect1 qui a été en collision avec rect2
     actor speed : car sinon rect2 correspond à la position AVANT le déplacement, donc en fait sans collision avec rect 1
     """
-    
-    
-    
-    rect_haut = (rect1[0] + 4 ,rect1[1] - actor_speed, rect1[2]-8 ,5 + actor_speed)
-    rect_gauche = (rect1[0] - actor_speed ,rect1[1] + 4, 5 + actor_speed, rect1[3] - 8)             #Calcul de rect correspondant à des bandes de 5 px en haut, gauche,bas et droite du rect1
+
+    rect_haut = (rect1[0] + 4, rect1[1] - actor_speed, rect1[2] - 8, 5 + actor_speed)
+    rect_gauche = (rect1[0] - actor_speed, rect1[1] + 4, 5 + actor_speed, rect1[
+        3] - 8)  # Calcul de rect correspondant à des bandes de 5 px en haut, gauche,bas et droite du rect1
     rect_bas = (rect1[0] + 4, rect1[1] + rect1[3] - 5, rect1[2] - 8, 5 + actor_speed)
     rect_droite = (rect1[0] + rect1[2] - 5, rect1[1] + 4, 5 + actor_speed, rect1[3] - 8)
-    
-    li =[rect_haut, rect_bas, rect_droite, rect_gauche]
-    
+
+    li = [rect_haut, rect_bas, rect_droite, rect_gauche]
+
     i = rect2.collidelist(li)
-    
-    
+
     if i == 0:
         return DIRECTION.HAUT
     elif i == 1:
@@ -64,7 +60,6 @@ def get_side_colliderect(rect1, rect2, actor_speed = 4):
     else:
         print("Erreur dans la recherche de direction de collision de rect1 et rect2")
         return DIRECTION.NONE
-
 
 
 image_list = {}
