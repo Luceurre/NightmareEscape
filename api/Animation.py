@@ -33,7 +33,7 @@ class Animation:
                 self.tile[index] = tile.subsurface(rect.pyrect)
                 self.rects.append(rect)
         else:
-            for i in range(tile_number):
+            for i in range(tile_number * multiple_line):
                 self.rects.append(Rect(0, 0, self.tile[0].get_width(), self.tile[0].get_height()))
 
         self.now = pygame.time.get_ticks()
@@ -73,5 +73,8 @@ class Animation:
         return self.tile[self.at]
 
     def get_rect(self, rect):
-        rect.size = self.rects[self.at].size
-        return rect
+        try:
+            rect.size = self.rects[self.at].size
+            return rect
+        except Exception as e:
+            print(e)
