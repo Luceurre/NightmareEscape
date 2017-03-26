@@ -7,9 +7,10 @@ from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorSpawnpoint import ActorSpawnpoint
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.stages.StageGameOver import StageGameOver
-from game.utils.Constants import EVENT_TP, EVENT_GAME_OVER
+from game.utils.Constants import EVENT_TP, EVENT_GAME_OVER, EVENT_WIN
 from game.utils.Sounds import MUSIC_MAP
 from api.StageState import StageState
+from game.stages.StageWin import StageWin
 
 
 class StageLevel(StageHandleConsole):
@@ -82,9 +83,13 @@ class StageLevel(StageHandleConsole):
             self.load_gui_and_player()  #soit on enlève celui-ci, soit celui du load_gui_and_player()
         
         elif event.name == EVENT_GAME_OVER:
-            print("EVENT_GAME_OVER reçu par Stage Level")
             StageManager().push(StageGameOver())
             self.state = StageState.QUIT
+            
+        elif event.name == EVENT_WIN:
+            StageManager().push(StageWin())
+            self.state = StageState.QUIT
+            
             
 
     def load_gui_and_player(self): # gui = graphical user interface

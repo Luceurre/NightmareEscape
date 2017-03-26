@@ -44,7 +44,7 @@ class ActorBackgroundGameOver(ActorSprite):
         self.sprite = pygame.image.load("assets/backgrounds/GameOverBlood.png").convert()
 
 
-class ActorBackgroundPlay(ActorSprite):
+class ActorBackgroundWin(ActorSprite):
     def __init__(self):
         super().__init__()
     
@@ -52,4 +52,15 @@ class ActorBackgroundPlay(ActorSprite):
     def load_sprite(self):
         super().load_sprite()
         
-        self.sprite = pygame.image.load("assets/backgrounds/PlayScreen.png")
+        self.sprite = pygame.image.load("assets/backgrounds/PlayScreen.png").convert()
+        
+class ActorCredits(ActorSprite):
+    def __init__(self):
+        super().__init__()
+    
+    
+    def load_sprite(self):
+        super().load_sprite()
+        
+        self.sprite = pygame.image.load("assets/backgrounds/Credits.png").convert()
+        

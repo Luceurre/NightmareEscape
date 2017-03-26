@@ -107,3 +107,36 @@ class ActorDoor(ActorSprite):
     def handle_userevent(self, event): # gère l'ouverture de porte via event EVENT_PLAYER_INTERACT ( à utiliser avec une plaque de pression, ou la suppression de tout les monstre, etc)
         if event.name == EVENT_PLAYER_INTERACT:
             self.open()
+
+
+
+class ActorDoorWin(ActorDoor):
+    """ ActorDoor, sauf que la prendre fait gagner le jeu"""
+    
+    NAME = "WIN"
+    ID = 73
+    
+    def __init__(self):
+        super().__init__()
+        
+        
+    def interact(self, actor):
+        
+        if isinstance(actor, ActorPlayer) and self.is_open:
+
+            event = pygame.event.Event(pygame.USEREVENT, name=EVENT_WIN)
+            pygame.event.post(event)
+
+            return True
+        elif actor.collidable and self.collidable:
+            return True
+        else:
+            return False
+        
+        
+        
+        
+        
+        
+        
+    
