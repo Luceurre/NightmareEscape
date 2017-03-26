@@ -29,9 +29,9 @@ class ActorSlime(ActorAnimation):
         MOVE = ()
         DIE = ()
 
-    WIDTH = 32
-    HEIGHT = 32
-    FILE = "assets/slime.png"
+    WIDTH = 128
+    HEIGHT = 128
+    FILE = "assets/slime_green_128.png"
 
     def __init__(self):
         super().__init__()
@@ -224,17 +224,19 @@ class ActorSlime(ActorAnimation):
     def load_sprite(self):
         super().load_sprite()
 
+        sprite_sheet = load_image(ActorSlime.FILE, False)
+
         self.animations = {}
-        self.animations[ActorSlime.State.IDLE] = Animation(load_image("assets/slime.png"), pygame.Rect(0, 0, 128, 128),
+        self.animations[ActorSlime.State.IDLE] = Animation(sprite_sheet, pygame.Rect(0, 0, ActorSlime.WIDTH, ActorSlime.HEIGHT),
                                                            9, 50 , True)
-        self.animations[ActorSlime.State.MOVE] = Animation(load_image("assets/slime.png"),
-                                                           pygame.Rect(0, 128, 128, 128), 9, 100, True)
-        self.animations[ActorSlime.State.JUMP] = Animation(load_image("assets/slime.png"),
-                                                           pygame.Rect(0, 256, 128, 128), 9, 50, True)
-        self.animations[ActorSlime.State.ATTACK] = Animation(load_image("assets/slime.png"),
-                                                             pygame.Rect(0, 384, 128, 128), 9, 50, True,
+        self.animations[ActorSlime.State.MOVE] = Animation(sprite_sheet,
+                                                           pygame.Rect(0, 128, ActorSlime.WIDTH, ActorSlime.HEIGHT), 9, 100, True)
+        self.animations[ActorSlime.State.JUMP] = Animation(sprite_sheet,
+                                                           pygame.Rect(0, 256, ActorSlime.WIDTH, ActorSlime.HEIGHT), 9, 50, True)
+        self.animations[ActorSlime.State.ATTACK] = Animation(sprite_sheet,
+                                                             pygame.Rect(0, 384, ActorSlime.WIDTH, ActorSlime.HEIGHT), 9, 50, True,
                                                              callback_fun=self.idle)
-        self.animations[ActorSlime.State.DIE] = Animation(load_image("assets/slime.png"), pygame.Rect(0, 512, 128, 128),
+        self.animations[ActorSlime.State.DIE] = Animation(sprite_sheet, pygame.Rect(0, 512, ActorSlime.WIDTH, ActorSlime.HEIGHT),
                                                           9, 50, True, callback_fun=self.dead)
 
     @property
