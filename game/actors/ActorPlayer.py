@@ -62,7 +62,7 @@ class ActorPlayer(ActorAnimation):
 
         # Quelques caractèristiques :
         self.hp_max = 100
-        self.hp = 100
+        self._hp = 100
 
         # 3D ?
         self.depth = PLAYER_DEPTH
@@ -300,19 +300,27 @@ class ActorPlayer(ActorAnimation):
             return False
         if isinstance(actor, ActorArrowSlime) and actor.team == self.team.get_ennemi():
             self.hp -= actor.damage
-            if self.hp <= 0 and self.state == ActorPlayer.State.ALIVE: # on enclenche la mort
-                self.state = ActorPlayer.State.DYING
             return self.collidable and actor.collidable
         if isinstance(actor, game.actors.ActorSlime.ActorSlime) and actor.team == self.team.get_ennemi():
             self.hp -= 1
-            if self.hp <= 0 and self.state == ActorPlayer.State.ALIVE: # on enclenche la mort, oui bon le copié collé c'est pas très propre, mais bon...
-                self.state = ActorPlayer.State.DYING
             return self.collidable and actor.collidable
         else:
             return super().interact(actor)
 
     def turn_on_shoot(self, *args, **kwargs):
         self.can_shoot = True
+
+    @property
+    def hp(self):
+        return self._hp
+
+    @hp.setter
+    def hp(self, heal_point):
+        if self.invicible:
+            return
+        self._hp = heal_point
+        if self._hp <= 0 and ActorPlayer.State.ALIVE:
+            self.state = ActorPlayer.State.DYING
 
     # Override methods
 
