@@ -41,9 +41,14 @@ class ActorArrow(ActorSprite):
         super().update()
 
         # On essaye de bouger, si False est retourné, le projectile a rencontré un monstre, un mur, etc... et dans ce cas
-        # on le détruit.
+        # on appelle self.destroy.
         x = self.speed * math.cos(self.dir) + self.velocity.x
         y = self.speed * math.sin(self.dir) + self.velocity.y
 
         if not self.move(self.speed * math.cos(self.dir) + self.velocity.x, self.speed * math.sin(self.dir) + self.velocity.y):
-            self.map.remove_actor(self)
+            self.destroy()
+
+    def destroy(self):
+        """Est appellé quand le projectile est détruit"""
+        self.map.remove_actor(self) # Ici on détruit le projectile
+        del self
