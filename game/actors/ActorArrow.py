@@ -20,7 +20,7 @@ class ActorArrow(ActorSprite):
         self.speed = 8
         self.velocity = Vector(0, 0)
         if math.cos(self.dir) * velocity.x >= 0:
-            self.velocity.x = velocity.x / 2
+            self.velocity.x = velocity.x / 2   # Hé oui, les vitesses ne sont pas relativistes à cet ordre de grandeur, 2 + 2 = 4
         if math.sin(self.dir) * velocity.y >= 0:
             self.velocity.y = velocity.y / 2
         self.should_update = True
