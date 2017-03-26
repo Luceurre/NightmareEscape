@@ -28,7 +28,7 @@ class ActorBomb(ActorAnimation):
         self.animations = {}
 
         self.animations[ActorBomb.State.DETONATE] = Animation(load_image("assets/bomb.png", False), pygame.Rect(0, 0, 48, 48), 1, 2500, callback_fun=self.explode)
-        self.animations[ActorBomb.State.EXPLODE] = Animation(load_image("assets/explosion.jpg", False), pygame.Rect(0, 0, 192, 192), 5, 75, False, False, 5, self.destroyed)
+        self.animations[ActorBomb.State.EXPLODE] = Animation(load_image("assets/explosion.png", False), pygame.Rect(0, 0, 192, 192), 5, 75, False, False, 5, self.destroyed)
 
     def explode(self):
         rect_tmp = self.rect
