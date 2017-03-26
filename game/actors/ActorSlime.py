@@ -19,7 +19,7 @@ from game.actors.ActorDoor import ActorDoor, ActorDoorWin
 
 class ActorSlime(ActorAnimation):
     """ Un ennemi (slime en l'occurence) qui a plusieurs animations selon qu'il soit imobile, attaquant , mourant ou en déplacement"""
-    
+
     ID = 32
     NAME = "SLIME"
 
@@ -55,7 +55,7 @@ class ActorSlime(ActorAnimation):
         self.jump_velocity = 12
         self.ammo_max = 3 # Le nombre de balles
         self.ammo = self.ammo_max # Le nombre de balles max
-        self.hp = 3
+        self.hp = 50 # vie du slime
 
         self.collidable = True
         self.should_update = True
@@ -85,7 +85,7 @@ class ActorSlime(ActorAnimation):
         self.theta = 0
         self.ammo_max = 3  # Le nombre de balles
         self.ammo = self.ammo_max  # Le nombre de balles max
-        self.hp = 3     #nombre de tirs nécéssaires pout mourir
+        self.hp = 50     # vie su slime
 
         self.move_cd = 0
         self.move_cd_max = 125
@@ -208,16 +208,16 @@ class ActorSlime(ActorAnimation):
 
     def dead(self):
         nb_slime = 0
-
+        
         for actor in self.map.actors:
             if isinstance(actor, ActorSlime):
                 nb_slime += 1
-
+        
         if nb_slime == 1:
             for actor in self.map.actors:
                 if isinstance(actor, ActorDoor) or isinstance(actor, ActorDoorWin):
                     actor.open()
-
+        
         self.map.remove_actor(self)
         del self
 
@@ -252,6 +252,7 @@ class ActorSlime(ActorAnimation):
                                                              callback_fun=self.idle)
         self.animations[ActorSlime.State.DIE] = Animation(sprite_sheet, pygame.Rect(0, height * 4, width, height),
                                                           9, 50, True, callback_fun=self.dead)
+        pass
 
     @property
     def animation(self):
@@ -265,8 +266,8 @@ class ActorSlime(ActorAnimation):
         if not self.collidable:
             return False
         if isinstance(actor, ActorArrowPlayer) and actor.team == self.team.get_ennemi():
-            self.hp -= 1
-            if self.hp == 0:
+            self.hp -= actor.damage
+            if self.hp <= 0:
                 self.die()
             return True
         else:

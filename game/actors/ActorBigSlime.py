@@ -11,3 +11,11 @@ class ActorBigSlime(ActorSlime):
     FILE = "assets/slime_red_384.png"
 
     REGISTERED = False
+    
+    def __init__(self):
+        super().__init__()
+        self.hp = 200
+        
+    def reload(self):
+        super().reload()
+        self.hp = 200

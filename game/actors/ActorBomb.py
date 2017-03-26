@@ -18,6 +18,8 @@ class ActorBomb(ActorAnimation):
 
         self.state = ActorBomb.State.DETONATE
         self.should_update = True
+        
+        self.damage = 1 / tick #Ca fait quand même beaucoup!!!
 
     def reload(self):
         super().reload()
@@ -42,3 +44,9 @@ class ActorBomb(ActorAnimation):
     @property
     def animation(self):
         return self.animations[self.state]
+    
+    def interact(self, actor):
+        if actor.etre_vivant:
+            actor.hp -= self.damage
+            
+        return False
