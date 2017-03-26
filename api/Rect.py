@@ -11,8 +11,16 @@ class Rect:
         self.pyrect = pygame.Rect(int(x), int(y), int(w), int(h))
 
     @property
+    def x_real(self):
+        return self._x
+
+    @property
+    def y_real(self):
+        return self._y
+
+    @property
     def x(self):
-        return self.pyrect.x
+        return self._x
 
     @x.setter
     def x(self, x):
@@ -21,7 +29,7 @@ class Rect:
 
     @property
     def y(self):
-        return self.pyrect.y
+        return self._y
 
     @y.setter
     def y(self, y):
@@ -104,6 +112,10 @@ class Rect:
     @centery.setter
     def centery(self, y):
         self.y = y - self.h / 2
+
+    @property
+    def center_real(self):
+        return (self._x + self._w / 2, self._y + self._h / 2)
 
     def collidepoint(self, x, y):
         return self.pyrect.collidepoint(x, y)

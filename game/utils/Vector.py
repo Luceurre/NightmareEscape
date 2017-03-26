@@ -23,8 +23,9 @@ class Vector:
 
     def normalize(self):
         try:
-            self.x /= (self.x ** 2 + self.y ** 2) ** 0.5
-            self.y /= (self.x ** 2 + self.y ** 2) ** 0.5
+            norm = (self.x ** 2 + self.y ** 2) ** 0.5
+            self.x /= norm
+            self.y /= norm
         except:
             self.x = 0
             self.y = 0

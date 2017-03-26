@@ -1,10 +1,14 @@
 import copy
+import random
+import math
+
 import pygame
 
 from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
 from api.EnumAuto import EnumAuto
 from api.EnumTeam import EnumTeam
+from api.Rect import Rect
 from api.Timer import Timer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
@@ -43,20 +47,19 @@ class ActorSlime(ActorAnimation):
         self.jump_range = 700
         self.jump_cd = 0
         self.jump_cd_max = 200
-        self.jump_vect_in = None
+        self.jump_theta = 0
         self.jump_in = True
         self.jump_count = 0
         self.jump_count_max = 30
-        self.jump_return_pos = None
         self.jump_initial_pos = None
         self.jump_velocity = 12
         self.ammo_max = 3 # Le nombre de balles
         self.ammo = self.ammo_max # Le nombre de balles max
         self.hp = 3
-        
+
         self.collidable = True
         self.should_update = True
-        
+
         self.velocity = Vector(0,0)
 
     def reload(self):
@@ -66,29 +69,69 @@ class ActorSlime(ActorAnimation):
         self.should_update = True
         self.etre_vivant = True
 
+        self.attack_shoot = True
+        self.shoot_range = 500
+        self.shoot_rate = 1000  # Période des tirs : en ms
+        self.detection_range = 1000  # Distance à laquelle il perçoit un ennemi
+        self.jump_range = 700
+        self.jump_cd = 0
+        self.jump_cd_max = 400
+        self.jump_theta = 0
+        self.jump_in = True
+        self.jump_count = 0
+        self.jump_count_max = 30
+        self.jump_initial_pos = None
+        self.jump_velocity = 12
+        self.theta = 0
+        self.ammo_max = 3  # Le nombre de balles
+        self.ammo = self.ammo_max  # Le nombre de balles max
+        self.hp = 3
+
+        self.move_cd = 0
+        self.move_cd_max = 125
+        self.move_vect = None
+        self.move_count = 0
+        self.move_count_max = 75
+        self.move_velocity = 2
+
+        self.collidable = True
+        self.should_update = True
+
+        self.velocity = Vector(0, 0)
+
     def update(self):
         super().update()
 
         self.update_timers()
         if self.jump_cd > 0:
             self.jump_cd -= 1
+        if self.move_cd > 0:
+            self.move_cd -= 1
 
         if self.state == ActorSlime.State.JUMP:
             if self.jump_in:
-                self.rect.x += self.jump_vect_in.x * self.jump_velocity
-                self.rect.y += self.jump_vect_in.y * self.jump_velocity
+                can_move = self.move(self.jump_vect_in.x * self.jump_velocity, self.jump_vect_in.y * self.jump_velocity)
 
-                if self.jump_vect_in.x * (self.jump_target_pos.center[0] - self.rect.center[0]) < 0 or self.jump_vect_in.y * (self.jump_target_pos.center[1] - self.rect.center[1]) < 0:
+                if not can_move:
                     self.state = ActorSlime.State.IDLE
                     self.jump_cd = self.jump_cd_max
+
+                if self.jump_vect_in.x * (self.jump_target_pos.center_real[0] - self.rect.center_real[0]) < 0 and self.jump_vect_in.y * (self.jump_target_pos.center_real[1] - self.rect.center_real[1]) < 0:
+                    self.jump_in = False
+                    theta = random.random() * 2 * math.pi
+                    self.jump_vect_out = Vector(self.rect.x + 100 * math.cos(theta) - self.rect.center_real[0],
+                                   self.rect.y + 300 * math.sin(theta) - self.rect.center_real[1])
+                    self.jump_vect_out.normalize()
+                    self.jump_return_pos = Rect(self.rect.x + 100 * math.cos(theta), self.rect.y + 300 * math.sin(theta), 0, 0)
             else:
-                self.rect.x += (self.jump_return_pos.center[0] - self.jump_pos.center[0]) / 40
-                self.rect.y += (self.jump_return_pos.center[1] - self.jump_pos.center[1]) / 40
-
-                if (self.jump_return_pos.center[0] - self.jump_pos.center[0]) * (self.jump_return_pos.center[0] - self.rect.center[0]) < 0:
-                    self.state = ActorSlime.State.IDLE
-
-
+                self.jump_cd = self.jump_cd_max
+                self.state = ActorSlime.State.IDLE
+        elif self.state == ActorSlime.State.MOVE:
+            can_move = self.move(self.move_vect.x * self.move_velocity, self.move_vect.y * self.move_velocity)
+            self.move_count += 1
+            if not can_move or self.move_count >= self.move_count_max:
+                self.state = ActorSlime.State.IDLE
+                self.move_cd = self.move_cd_max
 
         target = self.map.get_closest_ennemi(self.rect, range=self.detection_range, ennemi_team=self.team.get_ennemi())
         if self.can_attack() and target is not None:
@@ -96,6 +139,20 @@ class ActorSlime(ActorAnimation):
                 self.shoot(target)
             elif self.can_jump(target):
                 self.jump(target)
+            elif self.can_move():
+                self.move_it()
+        elif self.can_move():
+            self.move_it()
+
+    def can_move(self):
+        return self.state == ActorSlime.State.IDLE and self.move_cd == 0
+
+    def move_it(self):
+        theta = random.random() * 2 * math.pi
+        self.move_vect = Vector(150 * math.cos(theta), 150 * math.sin(theta))
+        self.move_vect.normalize()
+        self.state = ActorSlime.State.MOVE
+        self.move_count = 0
 
     def can_attack(self):
         return self.state == ActorSlime.State.IDLE
@@ -107,18 +164,19 @@ class ActorSlime(ActorAnimation):
         return self.get_distance(target) <= self.shoot_range ** 2 and self.ammo > 0
 
     def can_jump(self, target):
-        return  self.get_distance(target) <= self.jump_range ** 2 and self.jump_cd == 0
+        return self.get_distance(target) <= self.jump_range ** 2 and self.jump_cd == 0
 
     def jump(self, target):
         self.state = ActorSlime.State.JUMP
-        self.jump_initial_pos = copy.copy(self.rect)
-        self.jump_return_pos = copy.copy(target.rect)
-        self.jump_target_pos = copy.copy(target.rect)
+        self.jump_initial_pos = copy.deepcopy(self.rect)
+        self.jump_return_pos = copy.deepcopy(target.rect)
+        self.jump_target_pos = copy.deepcopy(target.rect)
         self.jump_return_pos.x += 300
         self.jump_count = 0
+        self.jump_in = True
 
-        self.jump_vect_in = Vector(target.rect.center[0] - self.rect.center[0],
-                                   target.rect.center[1] - self.rect.center[1])
+        self.jump_vect_in = Vector(target.rect.center_real[0] - self.rect.center_real[0],
+                                   target.rect.center_real[1] - self.rect.center_real[1])
         self.jump_vect_in.normalize()
     def shoot(self, target):
         self.state = ActorSlime.State.ATTACK

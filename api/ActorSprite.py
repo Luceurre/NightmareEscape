@@ -50,8 +50,8 @@ class ActorSprite(Actor):
         "self.load_sounds()"
 
         if isinstance(self.rect, pygame.Rect):
-            rect = Rect(self.rect.x, self.rect.y, self.rect.w, self.rect.h)
-            self.rect = rect
+            rect_t = Rect(self.rect.x, self.rect.y, self.rect.w, self.rect.h)
+            self._rect = rect_t
 
     def unload(self):
         super().unload()
@@ -132,11 +132,11 @@ class ActorSprite(Actor):
         if x == 0 and y == 0:
             return False
 
-        rect_tmp = copy.copy(self.rect.pyrect)
+        rect_tmp = copy.deepcopy(self.rect)
         rect_tmp.x += x
         rect_tmp.y += y
 
-        actors = self.map.get_actors_collide(rect_tmp, [self])
+        actors = self.map.get_actors_collide(rect_tmp.pyrect, [self])
 
         """
         remove_indexes = []
