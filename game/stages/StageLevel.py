@@ -79,7 +79,7 @@ class StageLevel(StageHandleConsole):
             actor = event.actor
             actor.rect.x = int(event.spawn_pos.x)
             actor.rect.y = int(event.spawn_pos.y)
-            actor.heal(5)
+            actor.heal(20)
 
             self.unload_gui_and_player()
             self.map.save_in_game()

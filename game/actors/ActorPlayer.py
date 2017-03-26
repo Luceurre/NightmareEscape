@@ -57,7 +57,7 @@ class ActorPlayer(ActorAnimation):
 
         # Tirs
         self.shoot_rate = 200.0  # Période des tirs : en ms
-        self.ammo_max = 8 # Le nombre de balles
+        self.ammo_max = 10 # Le nombre de balles
         self.ammo = self.ammo_max # Le nombre de balles max
         self.can_shoot = True
         #self.is_shooting = False  # Pour l'animation ? #inutile: pas de projet de faire animation de tirs en cours
