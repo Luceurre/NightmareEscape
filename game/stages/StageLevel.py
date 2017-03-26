@@ -17,7 +17,7 @@ class StageLevel(StageHandleConsole):
     
     """ Stage du jeu"""
     
-    def __init__(self, map="level_0"):
+    def __init__(self, map="level_3"):
         """la base : initialise les trucs classiques de StageHandleConsole, ajoute une map, cherche le spwanpoint et crée le player dessus"""
         super().__init__()
         

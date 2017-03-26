@@ -11,6 +11,7 @@ from api.EnumAuto import EnumAuto
 from api.Timer import Timer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
+import game.actors.ActorSlime
 from game.utils.Constants import *
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image
@@ -302,7 +303,7 @@ class ActorPlayer(ActorAnimation):
             if self.hp <= 0 and self.state == ActorPlayer.State.ALIVE: # on enclenche la mort
                 self.state = ActorPlayer.State.DYING
             return self.collidable and actor.collidable
-        if isinstance(actor, ActorSlime) and actor.team == self.team.get_ennemi():
+        if isinstance(actor, game.actors.ActorSlime.ActorSlime) and actor.team == self.team.get_ennemi():
             self.hp -= 1
             if self.hp <= 0 and self.state == ActorPlayer.State.ALIVE: # on enclenche la mort, oui bon le copié collé c'est pas très propre, mais bon...
                 self.state = ActorPlayer.State.DYING

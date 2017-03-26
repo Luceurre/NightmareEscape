@@ -12,7 +12,6 @@ from api.Rect import Rect
 from api.Timer import Timer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
-from game.actors.ActorPlayer import ActorPlayer
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import Vector
 
