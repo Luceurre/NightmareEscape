@@ -36,7 +36,7 @@ class StageHandleConsole(StageAutoManage):
             event = pygame.event.Event(pygame.USEREVENT, name=EVENT_TP, map_name=commands[1],
                                        spawn_pos=Vector(700, 700), actor=self.map.get_actor(ActorPlayer))
             pygame.event.post(event)
-        elif commands[0] == "invincible":
+        elif commands[0] == "invicible":
             self.map.get_actor(ActorPlayer).invicible = not self.map.get_actor(ActorPlayer).invicible
 
     def pause(self):        #continuer d'être affiché même en pause

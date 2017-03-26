@@ -76,16 +76,16 @@ class ActorSlime(ActorAnimation):
         self.jump_range = 700
         self.jump_cd = 0
         self.jump_cd_max = 400
-        self.jump_theta = 0 #angle définissant le jump
+        self.jump_theta = 0
         self.jump_in = True
         self.jump_count = 0
         self.jump_count_max = 30
         self.jump_initial_pos = None
-        self.jump_velocity = 12     #vitesse du saut
+        self.jump_velocity = 12
         self.theta = 0
         self.ammo_max = 3  # Le nombre de balles
         self.ammo = self.ammo_max  # Le nombre de balles max
-        self.hp = 3     #nombre de tirs nécéssaires pout mourir 
+        self.hp = 3
 
         self.move_cd = 0
         self.move_cd_max = 125
@@ -208,7 +208,6 @@ class ActorSlime(ActorAnimation):
 
     def dead(self):
         nb_slime = 0
-        
         for actor in self.map.actors:
             if isinstance(actor, ActorSlime):
                 nb_slime += 1
@@ -217,7 +216,6 @@ class ActorSlime(ActorAnimation):
             for actor in self.map.actors:
                 if isinstance(actor, ActorDoor) or isinstance(actor, ActorDoorWin):
                     actor.open()
-        
         self.map.remove_actor(self)
         del self
 
