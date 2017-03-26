@@ -40,7 +40,7 @@ class ActorSlime(ActorAnimation):
         self.state = ActorSlime.State.IDLE
         self.team = EnumTeam.MONSTER_TEAM
 
-        self.attack_shoot = True
+        self.attack_shoot = False
         self.shoot_range = 500
         self.shoot_rate = 1000  # Période des tirs : en ms
         self.detection_range = 1000 # Distance à laquelle il perçoit un ennemi
@@ -69,7 +69,7 @@ class ActorSlime(ActorAnimation):
         self.should_update = True
         self.etre_vivant = True
 
-        self.attack_shoot = True
+        self.attack_shoot = False  # Permet de ne pas tirer dès le début
         self.shoot_range = 500
         self.shoot_rate = 1000  # Période des tirs : en ms
         self.detection_range = 1000  # Distance à laquelle il perçoit un ennemi
@@ -98,7 +98,12 @@ class ActorSlime(ActorAnimation):
         self.should_update = True
 
         self.velocity = Vector(0, 0)
+        
+        self.add_timer(Timer(2000, self.allow_attack))
 
+    def allow_attack(self, *arks, **kwargs):
+        self.attack_shoot = True
+        
     def update(self):
         super().update()
 
@@ -134,7 +139,8 @@ class ActorSlime(ActorAnimation):
                 self.move_cd = self.move_cd_max
 
         target = self.map.get_closest_ennemi(self.rect, range=self.detection_range, ennemi_team=self.team.get_ennemi())
-        if self.can_attack() and target is not None:
+        
+        if self.can_attack() and target is not None and self.attack_shoot:
             if self.can_shoot(target):
                 self.shoot(target)
             elif self.can_jump(target):
