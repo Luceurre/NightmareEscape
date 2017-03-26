@@ -110,15 +110,86 @@ class ActorDoor(ActorSprite):
 
 
 
-class ActorDoorWin(ActorDoor):
-    """ ActorDoor, sauf que la prendre fait gagner le jeu"""
+class ActorDoorWin(ActorSprite):
+
+    """Et oui, une porte, tout simplement, qui peut s'ouvrir, téléporter le player sur une autre map via l'event EVENT_TP """
     
-    NAME = "WIN"
-    ID = 73
-    
+    NAME = "DOORWIN"
+    ID = 70
+
     def __init__(self):
-        super().__init__()
-        
+        super().__init__(False)
+
+        self.is_open = False
+
+        self.sprites = {}
+        self.animation = None
+        self.reload()
+
+    def reload(self):
+        """ lorsqu'on recharge l'image """
+        super().reload()
+
+        self.should_update = True
+        self.collidable = True
+        self.handle_event = True
+
+    def update(self):
+        super().update()
+
+        self.update_timers()
+
+    def load_sprite(self): # Chargement des images de la porte
+        super().load_sprite()
+
+        self.sprites = {}
+
+        self.sprites[False] = pygame.transform.flip(
+            load_image_tile("assets/gates.png", pygame.Rect(0, 0, 96, 64), True), False, False)
+        self.sprites[True] = pygame.transform.flip(
+            load_image_tile("assets/gates.png", pygame.Rect(0, 192, 96, 64), True), False, False)
+        self.sprite = self.sprites[self.is_open]
+
+        self.animation = Animation(load_image("assets/gates.png"), pygame.Rect(0, 64, 96, 64), 2, auto_rect=True,
+                                   vertical=True)
+
+    def open(self):
+        if not self.is_open and self.timers == []:
+            timer = Timer(200, self.open_animation, True, 2)
+
+            self.add_timer(timer)
+
+    def close(self):
+        if self.is_open and self.timers == []:
+            timer = Timer(200, self.close_animation, True, 2)
+
+            self.add_timer(timer)
+
+
+    def open_animation(self, *args, **kwargs):
+        sprite = self.animation.next_sprite()
+        if sprite is None:
+            self.sprite = self.sprites[True]
+            self.is_open = True
+        else:
+            self.sprite = sprite
+
+    def close_animation(self, *args, **kwargs):
+        sprite = self.animation.previous_sprite()
+        if sprite is None:
+            self.sprite = self.sprites[False]
+            self.is_open = False
+        else:
+            self.sprite = sprite
+
+
+    def unload_sprite(self):
+        super().unload_sprite()
+
+
+    def handle_userevent(self, event): # gère l'ouverture de porte via event EVENT_PLAYER_INTERACT ( à utiliser avec une plaque de pression, ou la suppression de tout les monstre, etc)
+        if event.name == EVENT_PLAYER_INTERACT:
+            self.open()
         
     def interact(self, actor):
         
@@ -133,10 +204,32 @@ class ActorDoorWin(ActorDoor):
         else:
             return False
         
+    """    
+    def update(self):
+        super().update()    
         
+    def reload(self):
+        super().reload()
         
+    def load_sprite(self):
+        super().load_sprite()
         
+    def open(self):
+        super().open()
+    def close(self):
+        super.close()
         
+    def open_animation(self, *args, **kwargs):
+        super().open_animation(*args, **kwargs)
         
+    def close_animation(self, *args, **kwargs):
+        super().close_animation(*args, **kwargs)  
+    
+    def unload_sprite(self):
+        super().unload_sprite()  
         
+    def handle_userevent(self, event):
+        super().handle_userevent(event)
+        
+    """    
     
