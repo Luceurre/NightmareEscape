@@ -73,7 +73,7 @@ def load_image(path, auto_rect=True):
         image = pygame.image.load(path).convert_alpha()
         if auto_rect:
             rect = get_real_rect(image)
-            image = image.subsurface(rect)
+            image = image.subsurface(rect.pyrect)
 
         image_list[path] = image
         return image

@@ -19,7 +19,7 @@ from game.actors.ActorDoor import ActorDoor, ActorDoorWin
 
 class ActorSlime(ActorAnimation):
     """ Un ennemi (slime en l'occurence) qui a plusieurs animations selon qu'il soit imobile, attaquant , mourant ou en déplacement"""
-
+    
     ID = 32
     NAME = "SLIME"
 
@@ -32,7 +32,7 @@ class ActorSlime(ActorAnimation):
 
     WIDTH = 128
     HEIGHT = 128
-    FILE = "assets/slime_green_128.png"
+    FILE = "assets/slime_blue_128.png"
 
     def __init__(self):
         super().__init__()
@@ -85,7 +85,7 @@ class ActorSlime(ActorAnimation):
         self.theta = 0
         self.ammo_max = 3  # Le nombre de balles
         self.ammo = self.ammo_max  # Le nombre de balles max
-        self.hp = 3     #nombre de tirs nécéssaires pout mourir 
+        self.hp = 3     #nombre de tirs nécéssaires pout mourir
 
         self.move_cd = 0
         self.move_cd_max = 125
@@ -208,16 +208,16 @@ class ActorSlime(ActorAnimation):
 
     def dead(self):
         nb_slime = 0
-        
+
         for actor in self.map.actors:
             if isinstance(actor, ActorSlime):
                 nb_slime += 1
-        
+
         if nb_slime == 1:
             for actor in self.map.actors:
                 if isinstance(actor, ActorDoor) or isinstance(actor, ActorDoorWin):
                     actor.open()
-        
+
         self.map.remove_actor(self)
         del self
 
@@ -252,7 +252,6 @@ class ActorSlime(ActorAnimation):
                                                              callback_fun=self.idle)
         self.animations[ActorSlime.State.DIE] = Animation(sprite_sheet, pygame.Rect(0, height * 4, width, height),
                                                           9, 50, True, callback_fun=self.dead)
-        pass
 
     @property
     def animation(self):
