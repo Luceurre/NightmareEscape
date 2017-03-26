@@ -2,6 +2,7 @@ import math
 
 
 class Vector:
+    """ Très étrange, de base un int, mais peut être normalisé, donc devenir un float.... WTF"""
     def __init__(self, x, y):
         self.x = int(x)
         self.y = int(y)

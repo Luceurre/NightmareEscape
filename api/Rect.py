@@ -1,7 +1,14 @@
 import pygame
 
+""" Are you REALLY serious man ?"""
+
+""" L'hybris, ou hubris, cf dictionnaire, particulièrement à propos: une fin inéluctable, un destin en marche, une figure de la démesure, de l'ironie tragique,
+... etc"""
+
 
 class Rect:
+    """ Le rect classique de pygame, mais avec des coordonnées réelles et un milieu"""
+    
     def __init__(self, x, y, w, h):
         self._x = x
         self._y = y

@@ -24,6 +24,7 @@ class StageLoadingScreen(StageAutoManage):
     def quit(self):
         StageManager().push(StageMainMenu())
 
+    
     def handle_keydown(self, unicode, key, mod):
         self.loading_screen.finish = True
         return True

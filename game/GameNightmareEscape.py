@@ -9,4 +9,4 @@ class GameNightmareEscape(Game):
     def __init__(self):
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, framerate=60) # Appel de l'initialisation de Game -> du jeu
 
-        StageManager().push(StageLoadingScreen())                   # on lance la scène de chargement - > première scène, sinon le jeu se fermerait (tout simplement ))
+        StageManager().push(StageLoadingScreen())                   # on lance la scène de chargement - > première scène, sinon le jeu se fermerait (tout simplement )

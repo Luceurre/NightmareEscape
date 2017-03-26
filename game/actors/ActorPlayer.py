@@ -301,7 +301,12 @@ class ActorPlayer(ActorAnimation):
             self.hp -= actor.damage
             if self.hp <= 0 and self.state == ActorPlayer.State.ALIVE: # on enclenche la mort
                 self.state = ActorPlayer.State.DYING
-            return True
+            return self.collidable and actor.collidable
+        if isinstance(actor, ActorSlime) and actor.team == self.team.get_ennemi():
+            self.hp -= 1
+            if self.hp <= 0 and self.state == ActorPlayer.State.ALIVE: # on enclenche la mort, oui bon le copié collé c'est pas très propre, mais bon...
+                self.state = ActorPlayer.State.DYING
+            return self.collidable and actor.collidable
         else:
             return super().interact(actor)
 
