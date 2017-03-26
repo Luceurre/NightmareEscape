@@ -19,7 +19,7 @@ from game.actors.ActorDoor import ActorDoor, ActorDoorWin
 
 class ActorSlime(ActorAnimation):
     """ Un ennemi (slime en l'occurence) qui a plusieurs animations selon qu'il soit imobile, attaquant , mourant ou en déplacement"""
-    
+
     ID = 32
     NAME = "SLIME"
 
@@ -234,19 +234,21 @@ class ActorSlime(ActorAnimation):
     def load_sprite(self):
         super().load_sprite()
 
-        sprite_sheet = load_image(ActorSlime.FILE, False)
+        sprite_sheet = load_image(type(self).FILE, False)
+        width = type(self).WIDTH
+        height = type(self).HEIGHT
 
         self.animations = {}
-        self.animations[ActorSlime.State.IDLE] = Animation(sprite_sheet, pygame.Rect(0, 0, ActorSlime.WIDTH, ActorSlime.HEIGHT),
+        self.animations[ActorSlime.State.IDLE] = Animation(sprite_sheet, pygame.Rect(0, 0, width, height),
                                                            9, 50 , True)
         self.animations[ActorSlime.State.MOVE] = Animation(sprite_sheet,
-                                                           pygame.Rect(0, 128, ActorSlime.WIDTH, ActorSlime.HEIGHT), 9, 100, True)
+                                                           pygame.Rect(0, height, width, height), 9, 100, True)
         self.animations[ActorSlime.State.JUMP] = Animation(sprite_sheet,
-                                                           pygame.Rect(0, 256, ActorSlime.WIDTH, ActorSlime.HEIGHT), 9, 50, True)
+                                                           pygame.Rect(0, height * 2, width, height), 9, 50, True)
         self.animations[ActorSlime.State.ATTACK] = Animation(sprite_sheet,
-                                                             pygame.Rect(0, 384, ActorSlime.WIDTH, ActorSlime.HEIGHT), 9, 50, True,
+                                                             pygame.Rect(0, height * 3, width, height), 9, 50, True,
                                                              callback_fun=self.idle)
-        self.animations[ActorSlime.State.DIE] = Animation(sprite_sheet, pygame.Rect(0, 512, ActorSlime.WIDTH, ActorSlime.HEIGHT),
+        self.animations[ActorSlime.State.DIE] = Animation(sprite_sheet, pygame.Rect(0, height * 4, width, height),
                                                           9, 50, True, callback_fun=self.dead)
 
     @property

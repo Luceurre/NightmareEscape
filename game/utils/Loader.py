@@ -2,6 +2,7 @@ from threading import Thread
 
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
+from game.actors.ActorBigSlime import ActorBigSlime
 from game.actors.ActorBlock import ActorBlock
 from game.actors.ActorDoor import ActorDoor, ActorDoorWin
 from game.actors.ActorPlayer import ActorPlayer
@@ -34,6 +35,8 @@ class Loader(Thread):
         ActorBlock.register()
         ActorSlime.register()
         ActorDoorWin.register()
+        c = ActorBigSlime()
+        type(c).register()
 
         self.finish = True
 
