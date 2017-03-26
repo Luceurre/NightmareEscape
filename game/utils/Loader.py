@@ -3,7 +3,7 @@ from threading import Thread
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
 from game.actors.ActorBlock import ActorBlock
-from game.actors.ActorDoor import ActorDoor
+from game.actors.ActorDoor import ActorDoor, ActorDoorWin
 from game.actors.ActorPlayer import ActorPlayer
 from game.actors.ActorPuzzleSolution import ActorPuzzleSolution
 from game.actors.ActorRock import ActorRock
@@ -33,6 +33,7 @@ class Loader(Thread):
         ActorPuzzleSolution.register()
         ActorBlock.register()
         ActorSlime.register()
+        ActorDoorWin.register()
 
         self.finish = True
 
