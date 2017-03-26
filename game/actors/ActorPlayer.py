@@ -57,6 +57,8 @@ class ActorPlayer(ActorAnimation):
 
         # Tirs
         self.shoot_rate = 200.0  # Période des tirs : en ms
+        self.ammo_max = 8 # Le nombre de balles
+        self.ammo = self.ammo_max # Le nombre de balles max
         self.can_shoot = True
         #self.is_shooting = False  # Pour l'animation ? #inutile: pas de projet de faire animation de tirs en cours
         self.shoot = False
@@ -203,7 +205,7 @@ class ActorPlayer(ActorAnimation):
     def update(self):
         super().update()
 
-        if self.state == ActorPlayer.State.ALIVE:
+        if self.state == ActorPlayer.State.ALIVE:  # Le player peut jouer
             self.update_timers()
     
             self.walk = False
@@ -240,16 +242,28 @@ class ActorPlayer(ActorAnimation):
             if not self.has_moved:
                 self.velocity.null()
     
-            if self.shoot and self.can_shoot:
-                #self.is_shooting = True     #inutile: pas de projet de faire animation de tirs en cours
-                self.can_shoot = False
-                self.add_timer(Timer(self.shoot_rate, self.turn_on_shoot))
-    
-                arrow = ActorArrowPlayer(self.direction, self.velocity)
-                arrow.team = self.team
-                arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
-                arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
-                self.map.add_actor(arrow)
+            if self.shoot and self.can_shoot:  # Fait tirer le player
+                
+                if  self.ammo > 0: # Si il reste des munitions
+                    
+                    #self.is_shooting = True     #inutile: pas de projet de faire animation de tirs en cours
+                    self.can_shoot = False
+                    self.add_timer(Timer(self.shoot_rate, self.turn_on_shoot))
+        
+                    # On lance la flèche
+                    arrow = ActorArrowPlayer(self.direction, self.velocity)  
+                    arrow.team = self.team
+                    arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
+                    arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
+                    self.map.add_actor(arrow)
+                    
+                    #réduit les munitions
+                    self.ammo -= 1
+                
+                
+                else:
+                    self.add_timer(Timer(1200, self.reload_ammo))
+                    self.can_shoot = False
 
             # Pour BOMBER !
             if self.keys_other[pygame.K_b][0]:
@@ -257,6 +271,10 @@ class ActorPlayer(ActorAnimation):
                     self.bomb()
             else:
                 self.bomb_pressed_and_released = False
+
+    def reload_ammo(self, *args, **kwargs):
+        self.ammo = self.ammo_max
+        self.can_shoot = True
 
     def bomb(self):
         self.bomb_pressed_and_released = True
@@ -325,6 +343,10 @@ class ActorPlayer(ActorAnimation):
     def hp(self):
         return self._hp
 
+    def heal(self, healing):
+        if self.hp + healing <= self.hp_max:
+            self.hp += healing
+        
     @hp.setter
     def hp(self, heal_point):
         if self.invicible:
