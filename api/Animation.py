@@ -65,7 +65,7 @@ class Animation:
             if self.tile_number == 1:
                 self.callback_fun()
             else:
-                self.at = (self.at + 1) % (self.tile_number - 1)
+                self.at = (self.at + 1) % self.tile_number
                 self.now = pygame.time.get_ticks()
                 if self.at == 0 and self.callback_fun is not None:
                     self.callback_fun()
