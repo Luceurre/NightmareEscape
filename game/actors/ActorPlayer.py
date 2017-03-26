@@ -12,6 +12,7 @@ from api.Timer import Timer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
 import game.actors.ActorSlime
+from game.actors.ActorBomb import ActorBomb
 from game.utils.Constants import *
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image
@@ -63,6 +64,10 @@ class ActorPlayer(ActorAnimation):
         # Quelques caractèristiques :
         self.hp_max = 100
         self._hp = 100
+
+        #BOMBING
+        self.bomb_ammo = 10
+        self.bomb_pressed_and_released = False
 
         # 3D ?
         self.depth = PLAYER_DEPTH
@@ -199,13 +204,6 @@ class ActorPlayer(ActorAnimation):
         super().update()
 
         if self.state == ActorPlayer.State.ALIVE:
-            if self.keys_other[pygame.K_b][0]:
-                for actor in self.map.actors:
-                    try:
-                        actor.close()
-                    except:
-                        pass
-    
             self.update_timers()
     
             self.walk = False
@@ -252,6 +250,21 @@ class ActorPlayer(ActorAnimation):
                 arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
                 arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
                 self.map.add_actor(arrow)
+
+            # Pour BOMBER !
+            if self.keys_other[pygame.K_b][0]:
+                if not self.bomb_pressed_and_released and self.bomb_ammo > 0:
+                    self.bomb()
+            else:
+                self.bomb_pressed_and_released = False
+
+    def bomb(self):
+        self.bomb_pressed_and_released = True
+        bomb = ActorBomb()
+        bomb.team = self.team
+        bomb.rect.x = self.rect.x + (self.rect.w - bomb.rect.w) / 2
+        bomb.rect.y = self.rect.y + (self.rect.h - bomb.rect.w) / 2
+        self.map.add_actor(bomb)
 
     @property
     def animation(self):
