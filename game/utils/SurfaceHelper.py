@@ -87,7 +87,7 @@ def load_image_tile(path, rect, auto_rect=True):
 
     if auto_rect:
         rect = get_real_rect(image)
-        image = image.subsurface(rect)
+        image = image.subsurface(rect.pyrect)
 
     return image
 

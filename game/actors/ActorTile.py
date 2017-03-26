@@ -19,5 +19,5 @@ class ActorTile(ActorSprite):
 
         sprite = load_image(self.path, False).subsurface((self.pos.x, self.pos.y), (self.width, self.height))
         rect = get_real_rect(sprite)
-        sprite = sprite.subsurface(rect)
+        sprite = sprite.subsurface(rect.pyrect)
         self.sprite = sprite
