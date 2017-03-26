@@ -293,7 +293,7 @@ class ActorPlayer(ActorAnimation):
         elif self.state == ActorPlayer.State.CHARGED:
             for value in self.keys_shoot.values():
                 if value[0]:
-                    arrow = ActorArrowChargedPlayer(self.direction, self.velocity)
+                    arrow = ActorArrowChargedPlayer(value[1], VECTOR_NULL)
                     arrow.team = self.team
                     arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
                     arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
