@@ -8,6 +8,7 @@ from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
 from api.EnumTeam import EnumTeam
 from api.EnumAuto import EnumAuto
+from api.Rect import Rect
 from api.Timer import Timer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
@@ -15,6 +16,7 @@ import game.actors.ActorSlime
 from game.actors.ActorBomb import ActorBomb
 from game.utils.Constants import *
 from game.utils.Direction import DIRECTION
+from game.actors.ActorArrowChargedPlayer import ActorArrowChargedPlayer
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import VECTOR_NULL
 from ctypes.test.test_random_things import callback_func
@@ -29,6 +31,8 @@ class ActorPlayer(ActorAnimation):
         ALIVE = ()
         DYING = ()
         DEAD = ()
+        CHARGE = ()
+        CHARGED = ()
 
     def __init__(self):
         super().__init__()
@@ -74,6 +78,11 @@ class ActorPlayer(ActorAnimation):
         # 3D ?
         self.depth = PLAYER_DEPTH
 
+
+        # SUPER ANIMATION ULTRA BADASS
+        self.charged = False
+
+
         self.reload()
 
     def reload(self):
@@ -100,7 +109,8 @@ class ActorPlayer(ActorAnimation):
             }
     
             self.keys_other = {
-                pygame.locals.K_b: [False]
+                pygame.locals.K_b: [False],
+                pygame.K_f: [False]
             }
         else:
             
@@ -119,10 +129,9 @@ class ActorPlayer(ActorAnimation):
             }
     
             self.keys_other = {
-                pygame.locals.K_b: [False]
+                pygame.locals.K_b: [False],
+                pygame.K_f: [False]
             }
-            
-            
 
         self.keys = [self.keys_shoot, self.keys_move, self.keys_other]
         self.direction = DIRECTION.BAS
@@ -193,6 +202,12 @@ class ActorPlayer(ActorAnimation):
                                                                                PLAYER_SPRITE_HEIGHT,
                                                                                PLAYER_SPRITE_WIDTH,
                                                                                PLAYER_SPRITE_HEIGHT), 1, 0, True)
+        self.animations[ActorPlayer.State.CHARGE] = Animation(sprites_sheet, Rect(0, 19 * PLAYER_SPRITE_HEIGHT,
+                                                                                  PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT),
+                                                              9, 75, auto_rect=True, callback_fun=self.charge)
+        self.animations[ActorPlayer.State.CHARGED] = Animation(sprites_sheet, Rect(8 * PLAYER_SPRITE_WIDTH, 19 * PLAYER_SPRITE_HEIGHT,
+                                                                                  PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT),
+                                                              1, -50, True)
 
 
     def unload_sprite(self):
@@ -271,6 +286,30 @@ class ActorPlayer(ActorAnimation):
                     self.bomb()
             else:
                 self.bomb_pressed_and_released = False
+
+            if self.keys_other[pygame.K_f][0]:
+                if not self.charged:
+                    self.state = ActorPlayer.State.CHARGE
+        elif self.state == ActorPlayer.State.CHARGED:
+            for value in self.keys_shoot.values():
+                if value[0]:
+                    arrow = ActorArrowChargedPlayer(self.direction, self.velocity)
+                    arrow.team = self.team
+                    arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
+                    arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
+                    self.map.add_actor(arrow)
+
+                    self.state = ActorPlayer.State.ALIVE
+
+                    self.can_shoot = False
+                    self.charged = False
+                    self.add_timer(Timer(self.shoot_rate, self.turn_on_shoot))
+                    break
+
+
+    def charge(self):
+        self.charged = True
+        self.state = ActorPlayer.State.CHARGED
 
     def reload_ammo(self, *args, **kwargs):
         self.ammo = self.ammo_max
