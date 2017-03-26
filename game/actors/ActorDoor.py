@@ -112,7 +112,7 @@ class ActorDoor(ActorSprite):
 
 class ActorDoorWin(ActorSprite):
 
-    """Et oui, une porte, tout simplement, qui peut s'ouvrir, téléporter le player sur une autre map via l'event EVENT_TP """
+    """La porte vers la victoire ( sensiblement identique à la porte normale, sauf dans interact() ) """
     
     NAME = "DOORWIN"
     ID = 70
@@ -204,32 +204,5 @@ class ActorDoorWin(ActorSprite):
         else:
             return False
         
-    """    
-    def update(self):
-        super().update()    
-        
-    def reload(self):
-        super().reload()
-        
-    def load_sprite(self):
-        super().load_sprite()
-        
-    def open(self):
-        super().open()
-    def close(self):
-        super.close()
-        
-    def open_animation(self, *args, **kwargs):
-        super().open_animation(*args, **kwargs)
-        
-    def close_animation(self, *args, **kwargs):
-        super().close_animation(*args, **kwargs)  
     
-    def unload_sprite(self):
-        super().unload_sprite()  
-        
-    def handle_userevent(self, event):
-        super().handle_userevent(event)
-        
-    """    
     

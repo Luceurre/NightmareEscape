@@ -53,7 +53,7 @@ class StageGameOver(StageMenu):
         
         self.alpha = 0
         self.map.actors[0].sprite.set_alpha(self.alpha)
-        self.add_timer(Timer(28, self.fade_in_image, True, 126 ))
+        self.add_timer(Timer(28, self.fade_in_image, True, 127 ))
             
         
     def fade_in_image(self, *args, **kwargs):
