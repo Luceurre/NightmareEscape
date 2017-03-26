@@ -14,6 +14,7 @@ from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import Vector
+from game.actors.ActorDoor import ActorDoor, ActorDoorWin
 
 
 class ActorSlime(ActorAnimation):
@@ -206,6 +207,15 @@ class ActorSlime(ActorAnimation):
         self.state = ActorSlime.State.DIE
 
     def dead(self):
+        nb_slime = 0
+        for actor in self.map.actors:
+            if isinstance(actor, ActorSlime):
+                nb_slime += 1
+        
+        if nb_slime == 1:
+            for actor in self.map.actors:
+                if isinstance(actor, ActorDoor) or isinstance(actor, ActorDoorWin):
+                    actor.open()
         self.map.remove_actor(self)
         del self
 
