@@ -11,6 +11,8 @@ from game.actors.ActorArrowSlime import ActorArrowSlime
 from game.actors.ActorPlayer import ActorPlayer
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import Vector
+from game.utils.Constants import EVENT_TP
+from game.actors.ActorDoor import ActorDoor
 
 
 class ActorSlime(ActorAnimation):
@@ -71,7 +73,8 @@ class ActorSlime(ActorAnimation):
     def update(self):
         super().update()
 
-        # c'est bizzard ça pierre, ça va changer en fonction de si l'ordi ramme ou pas
+        
+        # c'est bizzare ça pierre, ça va changer en fonction de si l'ordi ramme ou pas
         self.update_timers()
         if self.jump_cd > 0:
             self.jump_cd -= 1
@@ -81,7 +84,9 @@ class ActorSlime(ActorAnimation):
                 self.rect.x += self.jump_vect_in.x * self.jump_velocity
                 self.rect.y += self.jump_vect_in.y * self.jump_velocity
 
-                if self.jump_vect_in.x * (self.jump_target_pos.center[0] - self.rect.center[0]) < 0 or self.jump_vect_in.y * (self.jump_target_pos.center[1] - self.rect.center[1]) < 0:
+                if self.jump_vect_in.x * (self.jump_target_pos.center[0] - self.rect.center[0]) < 0 or \
+                                 self.jump_vect_in.y * (self.jump_target_pos.center[1] - self.rect.center[1]) < 0:
+                    
                     self.state = ActorSlime.State.IDLE
                     self.jump_cd = self.jump_cd_max
             else:
@@ -92,7 +97,8 @@ class ActorSlime(ActorAnimation):
                     self.state = ActorSlime.State.IDLE
 
 
-
+        
+        
         target = self.map.get_closest_ennemi(self.rect, range=self.detection_range, ennemi_team=self.team.get_ennemi())
         
         # Attaque
@@ -102,24 +108,24 @@ class ActorSlime(ActorAnimation):
             elif self.can_jump(target):
                 self.jump(target)
 
-    def can_attack(self):
+    def can_attack(self): #renvoie si le slime peut attaquer ( si il ne fait rien )
         return self.state == ActorSlime.State.IDLE
 
-    def get_distance(self, target):
-        return (self.rect.x - target.rect.x) ** 2 + (self.rect.y - target.rect.y) ** 2
+    def get_distance(self, target): # renvoie la distance entre le player et le slime ( coin sup gauche)
+        return ((self.rect.x - target.rect.x) ** 2 + (self.rect.y - target.rect.y) ** 2)** 0.5
 
-    def can_shoot(self, target):
-        return self.get_distance(target) <= self.shoot_range ** 2 and self.ammo > 0
+    def can_shoot(self, target): # renvoie True si slime a des munitions, et si le player est à distance de tir
+        return self.get_distance(target) <= self.shoot_range and self.ammo > 0
 
     def can_jump(self, target):
-        return  self.get_distance(target) <= self.jump_range ** 2 and self.jump_cd == 0
+        return  self.get_distance(target) <= self.jump_range and self.jump_cd == 0
 
-    def jump(self, target): # Saute, se déplace, dans une position wtf ( cf le brain de pierro )
+    def jump(self, target): 
         
         self.state = ActorSlime.State.JUMP
-        self.jump_initial_pos = copy.copy(self.rect)
-        self.jump_return_pos = copy.copy(target.rect)
-        self.jump_target_pos = copy.copy(target.rect)
+        self.jump_initial_pos = copy.deepcopy(self.rect)
+        self.jump_return_pos = copy.deepcopy(target.rect)
+        self.jump_target_pos = copy.deepcopy(target.rect)
         self.jump_return_pos.x += 300
         self.jump_count = 0
 
@@ -135,6 +141,7 @@ class ActorSlime(ActorAnimation):
         arrow.team = self.team
         arrow.rect.x = self.rect.x + (self.rect.w - arrow.rect.w) / 2
         arrow.rect.y = self.rect.y + (self.rect.h - arrow.rect.w) / 2
+
         self.map.add_actor(arrow)
 
         self.ammo -= 1
@@ -157,6 +164,15 @@ class ActorSlime(ActorAnimation):
         self.state = ActorSlime.State.DIE
 
     def dead(self): # appelé lorsque le slime est DEAD
+        nb_slime = 0
+        for actor in self.map.actors:
+            if isinstance(actor, ActorSlime):
+                nb_slime += 1
+        if nb_slime == 1:
+            for actor in self.map.actors:
+                if isinstance(actor, ActorDoor):
+                    actor.open()
+        
         self.map.remove_actor(self)
         del self
 
@@ -165,7 +181,7 @@ class ActorSlime(ActorAnimation):
         print("turn on shoot appellé")
         self.can_shoot = True
         
-    def detect_target_position(self, target): # on renvoie un vecteur correspondant à position relative du player par rapport au slime, avec x et y en int
+    def detect_target_position(self, target): # on renvoie un vecteur correspondant à position relative du player par rapport au slime
         """Renvoie le vecteur (target.rect.center - self.rect.center) pour donner la direction où aller/tirer"""
 
         pos = Vector(target.rect.center[0] - self.rect.center[0],  target.rect.center[1] - self.rect.center[1])
@@ -181,7 +197,7 @@ class ActorSlime(ActorAnimation):
         self.animations[ActorSlime.State.MOVE] = Animation(load_image("assets/slime.png"),
                                                            pygame.Rect(0, 128, 128, 128), 9, 100, True)
         self.animations[ActorSlime.State.JUMP] = Animation(load_image("assets/slime.png"),
-                                                           pygame.Rect(0, 256, 128, 128), 9, 50, True)
+                                                           pygame.Rect(0, 256, 128, 128), 9, 100, True)
         self.animations[ActorSlime.State.ATTACK] = Animation(load_image("assets/slime.png"),
                                                              pygame.Rect(0, 384, 128, 128), 9, 50, True,
                                                              callback_fun=self.idle)
@@ -204,5 +220,4 @@ class ActorSlime(ActorAnimation):
             if self.hp == 0:
                 self.die()
             return True
-        else:
             return False
