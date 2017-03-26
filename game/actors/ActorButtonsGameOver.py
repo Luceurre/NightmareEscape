@@ -6,7 +6,7 @@ import game.stages.StageMainMenu
 
 
 
-class ActorButtonGOmenu(ActorButton):
+class ActorButtonsGOmenu(ActorButton):
     def __init__(self):
         super().__init__(files_prefix="button_GOmenu", hov=False)
 

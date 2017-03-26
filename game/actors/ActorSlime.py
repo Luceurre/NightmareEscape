@@ -36,6 +36,8 @@ class ActorSlime(ActorAnimation):
         self.state = ActorSlime.State.IDLE
         self.team = EnumTeam.MONSTER_TEAM
 
+        # Attributs pour l'attaque, la détection du player, les sauts, la vie, etc
+        
         self.attack_shoot = True
         self.shoot_range = 500
         self.shoot_rate = 1000  # Période des tirs : en ms
@@ -43,13 +45,13 @@ class ActorSlime(ActorAnimation):
         self.jump_range = 700       # Distance de saut
         self.jump_cd = 0
         self.jump_cd_max = 200
-        self.jump_vect_in = None
-        self.jump_in = True
+        self.jump_vect_in = None        # vecteur slime -> target ( normalisé )
+        self.jump_in = True             # définit si le slime peut/doit sauter
         self.jump_count = 0
         self.jump_count_max = 30
         self.jump_return_pos = None
         self.jump_initial_pos = None
-        self.jump_velocity = 12
+        self.jump_velocity = 12         # définit la longueur des sauts
         self.ammo_max = 3 # Le nombre de balles
         self.ammo = self.ammo_max # Le nombre de balles max
         self.hp = 3
@@ -75,7 +77,7 @@ class ActorSlime(ActorAnimation):
             self.jump_cd -= 1
 
         if self.state == ActorSlime.State.JUMP:
-            if self.jump_in:
+            if self.jump_in:        #fait sauter slime dans direction définie par jump_vect_in.x
                 self.rect.x += self.jump_vect_in.x * self.jump_velocity
                 self.rect.y += self.jump_vect_in.y * self.jump_velocity
 
@@ -163,7 +165,7 @@ class ActorSlime(ActorAnimation):
         print("turn on shoot appellé")
         self.can_shoot = True
         
-    def detect_target_position(self, target): # on renvoie un vecteur correspondant à position relative du player par rapport au slime
+    def detect_target_position(self, target): # on renvoie un vecteur correspondant à position relative du player par rapport au slime, avec x et y en int
         """Renvoie le vecteur (target.rect.center - self.rect.center) pour donner la direction où aller/tirer"""
 
         pos = Vector(target.rect.center[0] - self.rect.center[0],  target.rect.center[1] - self.rect.center[1])

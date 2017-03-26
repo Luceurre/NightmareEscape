@@ -7,7 +7,7 @@ from api.Timer import Timer
 from game.actors.ActorBackground import ActorBackgroundGameOver
 from game.utils.Sounds import MUSIC_GAME_OVER
 from api.ActorButton import ActorButton
-from game.actors.ActorButtonGameOver import ActorButtonGOmenu, ActorButtonGOquit
+from game.actors.ActorButtonsGameOver import ActorButtonGOmenu, ActorButtonGOquit
 
 
 class StageGameOver(StageMenu):
@@ -49,9 +49,17 @@ class StageGameOver(StageMenu):
             if isinstance(actor, ActorButton):
                 actor.should_draw = False
 
-        self.add_timer(Timer(8000, self.reset_drawing ))
+        self.add_timer(Timer(8800, self.reset_drawing ))
+        
+        self.alpha = 0
+        self.map.actors[0].sprite.set_alpha(self.alpha)
+        self.add_timer(Timer(28, self.fade_in_image, True, 126 ))
             
         
+    def fade_in_image(self, *args, **kwargs):
+        self.alpha += 2
+        self.map.actors[0].sprite.set_alpha(self.alpha)
+
 
     def reset_drawing(self, *args, **kwargs):
         for actor in self.map.actors:
