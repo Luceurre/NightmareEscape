@@ -26,6 +26,7 @@ class ActorSprite(Actor):
         self.collidable = False
         self.h = 0 # Hauteur pour les ombres
         self.depth = 0  # Profondeur de l'Actor ?
+        self.invicible = False # Pour tricher
 
         if load_sprite:
             self.load_sprite() # Chargement des images ici !!
