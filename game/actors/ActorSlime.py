@@ -250,6 +250,7 @@ class ActorSlime(ActorAnimation):
                                                              callback_fun=self.idle)
         self.animations[ActorSlime.State.DIE] = Animation(sprite_sheet, pygame.Rect(0, height * 4, width, height),
                                                           9, 50, True, callback_fun=self.dead)
+        pass
 
     @property
     def animation(self):

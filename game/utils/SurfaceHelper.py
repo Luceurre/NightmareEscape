@@ -3,6 +3,7 @@ import copy
 
 import pygame
 
+from api.Rect import Rect
 from game.utils.Direction import DIRECTION
 
 
@@ -28,7 +29,7 @@ def get_real_rect(surface):
                 elif y > y_max:
                     y_max = y
 
-    return pygame.Rect(x_min, y_min, x_max - x_min + 1, y_max - y_min + 1)
+    return Rect(x_min, y_min, x_max - x_min + 1, y_max - y_min + 1)
 
 
 def get_side_colliderect(rect1, rect2, actor_speed=4):

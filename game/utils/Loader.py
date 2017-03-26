@@ -35,8 +35,7 @@ class Loader(Thread):
         ActorBlock.register()
         ActorSlime.register()
         ActorDoorWin.register()
-        c = ActorBigSlime()
-        type(c).register()
+        ActorBigSlime.register()
 
         self.finish = True
 

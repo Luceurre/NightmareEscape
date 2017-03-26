@@ -30,7 +30,7 @@ class Animation:
             rect = get_real_rect(self.tile[0])
             for index, tile in enumerate(self.tile):
                 # On en profite pour redimensionner les images :
-                self.tile[index] = tile.subsurface(rect)
+                self.tile[index] = tile.subsurface(rect.pyrect)
                 self.rects.append(rect)
         else:
             for i in range(tile_number):
@@ -73,8 +73,5 @@ class Animation:
         return self.tile[self.at]
 
     def get_rect(self, rect):
-        try:
-            rect.size = self.rects[self.at].size
-        except:
-            pass
+        rect.size = self.rects[self.at].size
         return rect
