@@ -136,12 +136,10 @@ class ActorPlayer(ActorAnimation):
         
     def push_game_over(self):# Envoie un event game over, pour avertir le stage qu'il doit se push en StageGameOver
         event = pygame.event.Event(pygame.USEREVENT, name=EVENT_GAME_OVER)
-        print("on poste l'event game over")
         pygame.event.post(event)
         
     def dead(self): # appelle push_game_over après 2 secondes
         self.state = ActorPlayer.State.DEAD
-        print("self.state = ActorPlayer.State.DEAD")
         self.push_game_over()
 
     def load_sprite(self):
