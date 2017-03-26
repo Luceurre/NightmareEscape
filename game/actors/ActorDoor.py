@@ -3,8 +3,8 @@ import pygame
 from api.ActorSprite import ActorSprite
 from api.Animation import Animation
 from api.Timer import Timer
-from game.actors.ActorPlayer import ActorPlayer
-from game.utils.Constants import EVENT_TP, EVENT_PLAYER_INTERACT
+import game.actors.ActorPlayer
+from game.utils.Constants import EVENT_TP, EVENT_PLAYER_INTERACT, EVENT_WIN
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image, load_image_tile
 from game.utils.Vector import Vector
@@ -92,7 +92,7 @@ class ActorDoor(ActorSprite):
     def interact(self, actor):
         # gère la collision d'un Acteur avec la porte: si c'est le player, et qu'elle est ouverte : poste un event du type EVENT_TP avec pour attribut le nom de la map, la position
         #du spawn et l'acteur en question ( même si est en théorie tjrs le player )
-        if isinstance(actor, ActorPlayer) and self.is_open:
+        if isinstance(actor, game.actors.ActorPlayer.ActorPlayer) and self.is_open:
 
             event = pygame.event.Event(pygame.USEREVENT, name=EVENT_TP, map_name=self.map_name,
                                        spawn_pos=self.spawn_pos, actor=actor)
@@ -193,7 +193,7 @@ class ActorDoorWin(ActorSprite):
         
     def interact(self, actor):
         
-        if isinstance(actor, ActorPlayer) and self.is_open:
+        if isinstance(actor, game.actors.ActorPlayer.ActorPlayer) and self.is_open:
 
             event = pygame.event.Event(pygame.USEREVENT, name=EVENT_WIN)
             pygame.event.post(event)

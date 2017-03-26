@@ -1,4 +1,5 @@
 import pygame.mixer
+import os
 
 from api.StageAutoManage import StageAutoManage
 from api.StageMenu import StageMenu
@@ -18,7 +19,8 @@ class StageWin(StageAutoManage):
     '''
 
 
-    def __init__(self, params):
+    def __init__(self):
+        super().__init__()
         
         self.map.add_actor(ActorBackgroundWin())
         
@@ -27,7 +29,7 @@ class StageWin(StageAutoManage):
             pygame.mixer.music.play()
         
     
-        self.map.add_actor(ActorCredits)
+        self.map.add_actor(ActorCredits())
         self.alpha = 0
         self.map.actors[1].sprite.set_alpha(self.alpha)
         self.add_timer(Timer(56, self.fade_in_image, True, 63))
@@ -38,5 +40,7 @@ class StageWin(StageAutoManage):
         self.map.actors[1].sprite.set_alpha(self.alpha)
         
     def handle_keydown(self, unicode, key, mod):
-        StageManager().push(StageMainMenu)
+        pygame.mixer.music.stop()
+        StageManager().push(StageMainMenu())
         self.state = StageState.QUIT
+        

@@ -1,4 +1,5 @@
 import pygame.mixer
+import os
 
 from api.Map import Map
 from api.StageManager import StageManager
@@ -17,9 +18,18 @@ class StageLevel(StageHandleConsole):
     
     """ Stage du jeu"""
     
-    def __init__(self, map="level_3"):
+    def __init__(self, map="level_0"):
         """la base : initialise les trucs classiques de StageHandleConsole, ajoute une map, cherche le spwanpoint et crée le player dessus"""
         super().__init__()
+        
+        try:
+            os.remove("saves/level_0.map")
+            os.remove("saves/level_1.map")
+            os.remove("saves/level_2.map")
+            os.remove("saves/level_3.map")
+            os.remove("saves/level_4.map")
+        except:
+            pass
         
         if StageManager().music_state:
             
