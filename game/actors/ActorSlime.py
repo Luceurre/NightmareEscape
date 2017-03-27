@@ -10,6 +10,7 @@ from api.EnumAuto import EnumAuto
 from api.EnumTeam import EnumTeam
 from api.Rect import Rect
 from api.Timer import Timer
+from game.actors.ActorAlive import ActorAlive
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
 from game.utils.SurfaceHelper import load_image
@@ -17,7 +18,7 @@ from game.utils.Vector import Vector
 from game.actors.ActorDoor import ActorDoor, ActorDoorWin
 
 
-class ActorSlime(ActorAnimation):
+class ActorSlime(ActorAlive, ActorAnimation):
     """ Un ennemi (slime en l'occurence) qui a plusieurs animations selon qu'il soit imobile, attaquant , mourant ou en déplacement"""
 
     ID = 32
@@ -268,12 +269,4 @@ class ActorSlime(ActorAnimation):
         return self.hp <= 0
 
     def interact(self, actor):
-        if not self.collidable:
-            return False
-        if isinstance(actor, ActorArrowPlayer) and actor.team == self.team.get_ennemi():
-            self.hp -= actor.damage
-            if self.hp <= 0:
-                self.die()
-            return True
-        else:
-            return False
+        return super().interact(actor)

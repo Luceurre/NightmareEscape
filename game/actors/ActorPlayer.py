@@ -10,6 +10,7 @@ from api.EnumTeam import EnumTeam
 from api.EnumAuto import EnumAuto
 from api.Rect import Rect
 from api.Timer import Timer
+from game.actors.ActorAlive import ActorAlive
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
 import game.actors.ActorSlime
@@ -22,7 +23,7 @@ from game.utils.Vector import VECTOR_NULL
 from ctypes.test.test_random_things import callback_func
 
 
-class ActorPlayer(ActorAnimation):
+class ActorPlayer(ActorAlive, ActorAnimation):
     ID = 3
     NAME = "PLAYER"
     
@@ -46,7 +47,7 @@ class ActorPlayer(ActorAnimation):
 
         self.should_update = True
         self.handle_event = True
-        self.state = ActorPlayer.State.ALIVE
+        self._state = ActorPlayer.State.ALIVE
 
         self.direction = DIRECTION.BAS
 
@@ -378,21 +379,14 @@ class ActorPlayer(ActorAnimation):
     def turn_on_shoot(self, *args, **kwargs):
         self.can_shoot = True
 
-    @property
-    def hp(self):
-        return self._hp
+    def die(self):
+        self.state = ActorPlayer.State.DYING
 
     def heal(self, healing):
         if self.hp + healing <= self.hp_max:
             self.hp += healing
-        
-    @hp.setter
-    def hp(self, heal_point):
-        if self.invicible:
-            return
-        self._hp = heal_point
-        if self._hp <= 0 and ActorPlayer.State.ALIVE:
-            self.state = ActorPlayer.State.DYING
+        else:
+            self.hp = self.hp_max
 
     # Override methods
 
@@ -410,3 +404,14 @@ class ActorPlayer(ActorAnimation):
             if key in keys.keys():
                 self.keys[index][key][0] = False
                 return True
+
+    @property
+    def state(self):
+        return self._state
+
+    @state.setter
+    def state(self, new_state):
+        if new_state != self.state:
+            rect = self.rect
+            self._state = new_state
+            self.rect.center = rect.center

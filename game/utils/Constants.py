@@ -36,3 +36,10 @@ EVENT_GAME_OVER = "EVENT_GAME_OVER"
 # rien 
 
 EVENT_WIN = "EVENT_GAME_WIN"
+
+EVENT_EXPLOSION = "EVENT_EXPLOSION"
+# Evenement défini par :
+# pos: Un Vector représentant le centre de l'explosion
+# radius: le rayon de la détonation
+# team: l'équipe qui à posé le truc qui explose
+# damage: les dégats causés
