@@ -40,7 +40,7 @@ class ActorSlime(ActorAnimation):
         self.state = ActorSlime.State.IDLE
         self.team = EnumTeam.MONSTER_TEAM
 
-        self.attack_shoot = False
+        self.allowed_attack = False
         self.shoot_range = 500
         self.detection_range = 1000 # Distance à laquelle il perçoit un ennemi
         self.jump_range = 700
@@ -54,7 +54,7 @@ class ActorSlime(ActorAnimation):
         self.jump_velocity = 12
         self.ammo_max = 3 # Le nombre de balles
         self.ammo = self.ammo_max # Le nombre de balles max
-        self.hp = 50 # vie du slime
+        self.f = 50 # vie du slime
 
         self.collidable = True
         self.should_update = True
@@ -68,7 +68,7 @@ class ActorSlime(ActorAnimation):
         self.should_update = True
         self.etre_vivant = True
 
-        self.attack_shoot = False  # Permet de ne pas tirer dès le début
+        self.allowed_attack = False  # Permet de ne pas tirer dès le début
         self.shoot_range = 500
         self.shoot_rate = 1000  # Période des tirs : en ms
         self.detection_range = 1000  # Distance à laquelle il perçoit un ennemi
@@ -101,7 +101,7 @@ class ActorSlime(ActorAnimation):
         self.add_timer(Timer(2000, self.allow_attack))
 
     def allow_attack(self, *arks, **kwargs):
-        self.attack_shoot = True
+        self.allowed_attack = True
         
     def update(self):
         super().update()
