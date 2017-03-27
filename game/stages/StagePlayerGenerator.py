@@ -4,6 +4,7 @@ import pygame
 
 from game.actors.ActorButtonSimple import ActorButtonSimple
 from game.actors.ActorSimpleLife import ActorSimpleLife
+from game.actors.ActorText import ActorText
 from game.utils.Constants import *
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.utils.SurfaceHelper import load_image
@@ -90,46 +91,62 @@ class StagePlayerGenerator(StageHandleConsole):
         self.generate()
 
         buttons = [ActorButtonSimple("previous", self.sexe_previous),
+                   ActorText("SEXE"),
                    ActorButtonSimple("next", self.sexe_next),
                    ActorButtonSimple("previous", self.body_previous),
+                   ActorText("BODY"),
                    ActorButtonSimple("next", self.body_next),
                    ActorButtonSimple("previous", self.ears_previous),
+                   ActorText("EARS"),
                    ActorButtonSimple("next", self.ears_next),
                    ActorButtonSimple("previous", self.eyes_previous),
+                   ActorText("EYES"),
                    ActorButtonSimple("next", self.eyes_next),
                    ActorButtonSimple("previous", self.nose_previous),
+                   ActorText("NOSE"),
                    ActorButtonSimple("next", self.nose_next),
                    ActorButtonSimple("previous", self.hair_type_previous),
+                   ActorText("HAIR TYPE"),
                    ActorButtonSimple("next", self.hair_type_next),
                    ActorButtonSimple("previous", self.hair_color_previous),
+                   ActorText("HAIR COLOR"),
                    ActorButtonSimple("next", self.hair_color_next), # à inverser
                    ActorButtonSimple("previous", self.legs_type_previous),
+                   ActorText("LEGS TYPE"),
                    ActorButtonSimple("next", self.legs_type_next),
                    ActorButtonSimple("previous", self.legs_color_previous),
+                   ActorText("LEGS COLOR"),
                    ActorButtonSimple("next", self.legs_color_next),
                    ActorButtonSimple("previous", self.head_type_previous),
+                   ActorText("HEAD TYPE"),
                    ActorButtonSimple("next", self.head_type_next),
                    ActorButtonSimple("previous", self.head_color_previous),
+                   ActorText("HEAD COLOR"),
                    ActorButtonSimple("next", self.head_color_next),
                    ActorButtonSimple("previous", self.torso_type_previous),
+                   ActorText("TORSO TYPE"),
                    ActorButtonSimple("next", self.torso_type_next),
                    ActorButtonSimple("previous", self.torso_color_previous),
+                   ActorText("TORSO COLOR"),
                    ActorButtonSimple("next", self.torso_color_next),
                    ActorButtonSimple("previous", self.hands_type_previous),
+                   ActorText("HANDS TYPE"),
                    ActorButtonSimple("next", self.hands_type_next),
                    ActorButtonSimple("previous", self.hands_color_previous),
+                   ActorText("HANDS COLOR"),
                    ActorButtonSimple("next", self.hands_color_next),
                    ActorButtonSimple("previous", self.feet_type_previous),
+                   ActorText("FEET TYPE"),
                    ActorButtonSimple("next", self.feet_type_next),
                    ActorButtonSimple("previous", self.feet_color_previous),
+                   ActorText("FEET COLOR"),
                    ActorButtonSimple("next", self.feet_color_next)
                    ]
         # self.map.add_actor(ActorSimpleLife("character_gen_background.jpg")) Fond d'écran ?
 
         for index, button in enumerate(buttons):
             self.map.add_actor(button)
-            button.rect.x = 50 * (index % 2)
-            button.rect.y = (self.screen.get_height() / len(buttons)) * index - (self.screen.get_height() / len(buttons)) * (index % 2)
+            button.rect.center = (100 * (index % 3) + 25, (self.screen.get_height() / (len(buttons) + 2)) * index - (self.screen.get_height() / (len(buttons) + 2)) * (index % 3) + 2 * (self.screen.get_height() / (len(buttons) + 2)))
 
 
     def sexe_next(self):
