@@ -42,7 +42,6 @@ class ActorSlime(ActorAnimation):
 
         self.attack_shoot = False
         self.shoot_range = 500
-        self.shoot_rate = 1000  # Période des tirs : en ms
         self.detection_range = 1000 # Distance à laquelle il perçoit un ennemi
         self.jump_range = 700
         self.jump_cd = 0
@@ -140,7 +139,7 @@ class ActorSlime(ActorAnimation):
 
         target = self.map.get_closest_ennemi(self.rect, range=self.detection_range, ennemi_team=self.team.get_ennemi())
         
-        if self.can_attack() and target is not None and self.attack_shoot:
+        if self.can_attack() and target is not None and self.allowed_attack:
             if self.can_shoot(target):
                 self.shoot(target)
             elif self.can_jump(target):
