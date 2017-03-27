@@ -21,15 +21,11 @@ class StageLevel(StageHandleConsole):
     def __init__(self, map="level_0"):
         """la base : initialise les trucs classiques de StageHandleConsole, ajoute une map, cherche le spwanpoint et crée le player dessus"""
         super().__init__()
-        
-        try:
-            os.remove("saves/level_0.map")
-            os.remove("saves/level_1.map")
-            os.remove("saves/level_2.map")
-            os.remove("saves/level_3.map")
-            os.remove("saves/level_4.map")
-        except:
-            pass
+        for loop in range(5):
+            try:
+                os.remove("saves/level_{0}.map".format(str(loop)))
+            except:
+                pass
         
         if StageManager().music_state:
             
@@ -83,6 +79,7 @@ class StageLevel(StageHandleConsole):
 
             self.unload_gui_and_player()
             self.map.save_in_game()
+            self.map.destroy()
 
             self.map = Map.load_save(event.map_name)
             

@@ -68,7 +68,13 @@ class Map(Logger):
         # Puis on les recharges parce que le jeu ne peut pas fonctionner sans eux!
         self.reload()
         
+    def destroy(self):
+        #supprime tout les acteurs de la map, puis la map
         
+        for actor in self.actors:
+            del actor
+            
+        del self
         
         
     def unload_sprites(self):
