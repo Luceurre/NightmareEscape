@@ -14,11 +14,12 @@ class ActorAlive(ActorSprite):
         self.hp = 1
         self.collidable = True
         self.invicible = False
+        self.handle_event = True
 
     def interact(self, actor):
         # Pour éviter que le Joueur prenne des dégâts de ses propres projectiles :)
 
-        if not super().interact():
+        if not super().interact(actor):
             if self.team.get_ennemi() == actor.team:
                 self.hp -= actor.damage
 
@@ -42,6 +43,8 @@ class ActorAlive(ActorSprite):
         pass
 
     def handle_userevent(self, event):
-        if event == EVENT_EXPLOSION:
-            if self.team.get_ennemi() == event.team and (event.pos.x - self.rect.x) ** 2 + (event.pos.y - self.rect.y) ** 2 <= event.radius:
+        if event.name == EVENT_EXPLOSION:
+            if self.team.get_ennemi() == event.team and (event.pos.x - self.rect.x) ** 2 + (event.pos.y - self.rect.y) ** 2 <= event.radius ** 2:
                 self.hp -= event.damage
+            elif self.team == event.team and (event.pos.x - self.rect.x) ** 2 + (event.pos.y - self.rect.y) ** 2 <= event.radius ** 2:
+                self.hp -= event.damage / 4

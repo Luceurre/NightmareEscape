@@ -57,6 +57,7 @@ class ActorBomb(ActorAnimation):
         self.rect.center = rect_tmp.center
 
         event = pygame.event.Event(pygame.USEREVENT, name=EVENT_EXPLOSION, pos=Vector(self.rect.centerx, self.rect.centery), radius=self.radius, team=self.team, damage=50)
+        pygame.event.post(event)
 
     def destroyed(self):
         self.map.remove_actor(self)
