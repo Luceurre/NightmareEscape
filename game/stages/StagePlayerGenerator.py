@@ -1,4 +1,5 @@
 import os
+import random
 
 import pygame
 
@@ -148,6 +149,50 @@ class StagePlayerGenerator(StageHandleConsole):
             self.map.add_actor(button)
             button.rect.center = (100 * (index % 3) + 25, (self.screen.get_height() / (len(buttons) + 2)) * index - (self.screen.get_height() / (len(buttons) + 2)) * (index % 3) + 2 * (self.screen.get_height() / (len(buttons) + 2)))
 
+        # Ajout d'un bouton randomize
+        # button_randomize = ActorButtonSimple(files_prefix="randomize", callback_fun=self.randomize)
+
+    def reset(self):
+        self._body_index = 0
+        self._ears_index = 0
+        self._eyes_index = 0
+        self._nose_index = 0
+        self._hair_type_index = 0
+        self._hair_color_index = 0
+        self._legs_type_index = 0
+        self._legs_color_index = 0
+        self._hands_type_index = 0
+        self._hands_color_index = 0
+        self._feet_type_index = 0
+        self._feet_color_index = 0
+        self._head_type_index = 0
+        self._head_color_index = 0
+        self._torso_type_index = 0
+        self._torso_color_index = 0
+
+        self.generate()
+
+    def randomize(self):
+        self.sexe = random.randint(0, 1)
+
+        self._body_index = random.randint(0, len(self.body_list) - 1)
+        self._ears_index = random.randint(0, len(self.ears_list) - 1)
+        self._eyes_index = random.randint(0, len(self.eyes_list) - 1)
+        self._nose_index = random.randint(0, len(self.nose_list) - 1)
+        self._hair_type_index = random.randint(0, len(self.hair_type_list) - 1)
+        self._hair_color_index = random.randint(0, len(self.hair_color_list[self.hair_type_list[self.hair_type_index]]) - 1)
+        self._legs_type_index = random.randint(0, len(self.legs_type_list) - 1)
+        self._legs_color_index = random.randint(0, len(self.legs_color_list[self.legs_type_list[self.legs_type_index]]) - 1)
+        self._head_type_index = random.randint(0, len(self.head_type_list) - 1)
+        self._head_color_index = random.randint(0, len(self.head_color_list[self.head_type_list[self.head_type_index]]) - 1)
+        self._torso_type_index = random.randint(0, len(self.torso_type_list) - 1)
+        self._torso_color_index = random.randint(0, len(self.torso_color_list[self.torso_type_list[self.torso_type_index]]) - 1)
+        self._hands_type_index = random.randint(0, len(self.hands_type_list) - 1)
+        self._hands_color_index = random.randint(0, len(self.hands_color_list[self.hands_type_list[self.hands_type_index]]) - 1)
+        self._feet_type_index = random.randint(0, len(self.feet_type_list) - 1)
+        self._feet_color_index = random.randint(0, len(self.feet_color_list[self.feet_type_list[self.feet_type_index]]) - 1)
+
+        self.generate()
 
     def sexe_next(self):
         self.sexe += 1
@@ -514,6 +559,10 @@ class StagePlayerGenerator(StageHandleConsole):
             self.sexe = int(commands[1])
         elif commands[0] == "save":
             self.save(commands[1])
+        elif commands[0] == "rand":
+            self.randomize()
+        elif commands[0] == "reset":
+            self.reset()
         else:
             print(command, ": commande non reconnue")
 
@@ -720,4 +769,7 @@ class StagePlayerGenerator(StageHandleConsole):
         if new_sexe != self.sexe:
             self._sexe = new_sexe % 2
             self.load_files()
-            self.generate()
+            try:
+                self.generate()
+            except:
+                self.reset()
