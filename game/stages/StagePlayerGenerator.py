@@ -3,9 +3,12 @@ import random
 
 import pygame
 
+from api.StageManager import StageManager
+from api.StageState import StageState
 from game.actors.ActorButtonSimple import ActorButtonSimple
 from game.actors.ActorSimpleLife import ActorSimpleLife
 from game.actors.ActorText import ActorText
+import game.stages.StageLevel
 from game.utils.Constants import *
 from game.stages.StageHandleConsole import StageHandleConsole
 from game.utils.SurfaceHelper import load_image
@@ -150,7 +153,17 @@ class StagePlayerGenerator(StageHandleConsole):
             button.rect.center = (100 * (index % 3) + 25, (self.screen.get_height() / (len(buttons) + 2)) * index - (self.screen.get_height() / (len(buttons) + 2)) * (index % 3) + 2 * (self.screen.get_height() / (len(buttons) + 2)))
 
         # Ajout d'un bouton randomize
-        # button_randomize = ActorButtonSimple(files_prefix="randomize", callback_fun=self.randomize)
+        button_randomize = ActorButtonSimple(files_prefix="random", callback_fun=self.randomize)
+        button_save = ActorButtonSimple(files_prefix="save", callback_fun=self.save_and_go, filename="marinka")
+        button_reset = ActorButtonSimple(files_prefix="reset", callback_fun=self.reset)
+
+        button_randomize.rect.center = (1000, WINDOW_HEIGHT / 2 + 200)
+        button_save.rect.center = (1000, WINDOW_HEIGHT / 2)
+        button_reset.rect.center = (1000, WINDOW_HEIGHT / 2 - 200)
+
+        self.map.add_actor(button_randomize)
+        self.map.add_actor(button_reset)
+        self.map.add_actor(button_save)
 
     def reset(self):
         self._body_index = 0
@@ -296,8 +309,17 @@ class StagePlayerGenerator(StageHandleConsole):
     def feet_color_previous(self):
         self.feet_color_index -= 1
 
+    def save_and_go(self, filename):
+        self.save(filename)
+        self.state = StageState.QUIT
+        StageManager().push(game.stages.StageLevel.StageLevel())
+
     def save(self, filename):
-        pygame.image.save(self.generated_sprite, "assets/" + filename + ".png")
+        try:
+            pygame.image.save(self.generated_sprite, "assets/" + filename + ".png")
+        except:
+            os.remove("assets/" + filename + ".png")
+            pygame.image.save(self.generated_sprite, "assets/" + filename + ".png")
 
     def load_files(self):
         path = GENERATOR_PATH + BODY_PATH + SEXE_PATH[self.sexe]

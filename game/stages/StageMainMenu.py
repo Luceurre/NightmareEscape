@@ -22,8 +22,7 @@ class StageMainMenu(StageMenu):
         if StageManager().music_state and not pygame.mixer.music.get_busy():
             pygame.mixer.music.load("music/Beginning.ogg")
             pygame.mixer.music.play()
-        
-        
+
         self.map.add_actor(ActorButtonStart())
         self.map.add_actor(ActorButtonEdit())
         self.map.add_actor(ActorButtonSetting())

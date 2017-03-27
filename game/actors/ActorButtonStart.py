@@ -2,7 +2,7 @@ import pygame
 
 from api.ActorButton import ActorButton, BUTTON_STATE
 from api.StageManager import StageManager
-import game.stages.StageLevel
+import game.stages.StagePlayerGenerator
 
 
 class ActorButtonStart(ActorButton):
@@ -10,4 +10,4 @@ class ActorButtonStart(ActorButton):
         super().__init__(files_prefix="button_start", label="start")
 
     def execute(self):
-        StageManager().push(game.stages.StageLevel.StageLevel())
+        StageManager().push(game.stages.StagePlayerGenerator.StagePlayerGenerator())
