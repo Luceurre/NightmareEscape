@@ -15,6 +15,8 @@ class ActorBigSlime(ActorSlime):
     def __init__(self):
         super().__init__()
         self.hp = 200
+        self.jump_velocity = 14
+        self.ammo_max = 5
         
     def reload(self):
         super().reload()
