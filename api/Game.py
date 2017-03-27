@@ -15,7 +15,7 @@ class Game(Logger):
         pygame.mixer.init()
 
         self.stage_manager = StageManager()
-        self.screen = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((width, height))
         self.framerate = framerate
         self.clock = pygame.time.Clock()                                    #Création d'un système temporel -> pour géré certains trucs selon temps ( ex : vitesse )
         Logger.set_log_level(log_level)

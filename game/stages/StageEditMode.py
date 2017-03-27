@@ -6,6 +6,7 @@ from api.StageManager import StageManager
 from api.StageState import StageState
 from game.actors.ActorSimpleLife import ActorSimpleLife
 from game.stages.StageHandleConsole import StageHandleConsole
+from game.stages.StagePlayerGenerator import StagePlayerGenerator
 from game.stages.StageTileSelector import StageTileSelector
 from game.utils.Constants import EVENT_TP
 from game.utils.Grid2 import Grid2
@@ -160,7 +161,9 @@ class StageEditMode(StageHandleConsole):
         elif commands[0] == "tilesets":                                 #lance le stage tilesets, pour avoir une image/acteur
             self.state = StageState.PAUSE
             StageManager().push(StageTileSelector())
-
+        elif commands[0] == "generator":
+            self.state = StageState.QUIT
+            StageManager().push(StagePlayerGenerator())
         else:
             bug = True
 
