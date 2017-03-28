@@ -1,4 +1,3 @@
-from api.Actor import Actor
 from api.ActorSprite import ActorSprite
 from game.utils.Constants import EVENT_EXPLOSION
 
@@ -16,6 +15,11 @@ class ActorAlive(ActorSprite):
         self.invicible = False
         self.handle_event = True
 
+    def reload(self):
+        super().reload()
+
+        self.invicible = False  # Pour régler le bug sur le slime
+
     def interact(self, actor):
         # Pour éviter que le Joueur prenne des dégâts de ses propres projectiles :)
 
@@ -24,8 +28,10 @@ class ActorAlive(ActorSprite):
                 self.hp -= actor.damage
 
                 return self.collidable and actor.collidable
-
-        return False
+            else:
+                return False
+        else:
+            return True
 
     @property
     def hp(self):
