@@ -95,7 +95,7 @@ class StageTileSelector(StageHandleConsole):
         commands = command.split(sep=" ")
         try:
             if commands[0] == "grid":
-                if commands[1] == "size":
+                if commands[1] == "set":
                     if commands[3] == "":
                         self.grid.set_size(int(commands[2]),int(commands[2]))
                     else:
