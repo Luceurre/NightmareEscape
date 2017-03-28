@@ -23,7 +23,7 @@ class ActorSprite(Actor):
         self._sprite = None
         "self.sounds = None"
         self.draw_shadow = False
-        self.collidable = False
+        self.collidable = False  # Permet de savoir si un objet est "dur" ou "mou"
         self.h = 0 # Hauteur pour les ombres
         self.depth = 0  # Profondeur de l'Actor ?
         self.invicible = False # Pour tricher
@@ -136,6 +136,8 @@ class ActorSprite(Actor):
         rect_tmp = copy.deepcopy(self.rect)
         rect_tmp.x += x
         rect_tmp.y += y
+        rect_tmp.y += self.rect.h - self.depth
+        rect_tmp.h = self.depth
 
         actors = self.map.get_actors_collide(rect_tmp.pyrect, [self])
 
@@ -163,3 +165,12 @@ class ActorSprite(Actor):
             return True
         else:
             return False
+
+    def interact(self, actor):
+        if not super().interact(actor):
+            if actor.collidable and self.collidable and self.team != actor.team:
+                return True
+            else:
+                return False
+        else:
+            return True

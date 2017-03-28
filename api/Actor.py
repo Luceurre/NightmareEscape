@@ -89,5 +89,3 @@ class Actor(EventHandler, Logger):
         déplacement.
 
         Prend une instance d'Actor en paramètre, renvoie True quand il y a une intéraction quelqueconque, False sinon."""
-
-        return False
