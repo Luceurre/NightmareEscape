@@ -1,3 +1,4 @@
+import copy
 import platform
 
 import pygame
@@ -81,7 +82,6 @@ class ActorPlayer(ActorAlive, ActorAnimation):
         # SUPER ANIMATION ULTRA BADASS
         self.charged = False
 
-
         self.reload()
 
     def reload(self):
@@ -108,8 +108,8 @@ class ActorPlayer(ActorAlive, ActorAnimation):
             }
     
             self.keys_other = {
-                pygame.locals.K_b: [False],
-                pygame.K_f: [False]
+                pygame.locals.K_f: [False],
+                pygame.K_SPACE: [False]
             }
         else:
             
@@ -128,8 +128,8 @@ class ActorPlayer(ActorAlive, ActorAnimation):
             }
     
             self.keys_other = {
-                pygame.locals.K_b: [False],
-                pygame.K_f: [False]
+                pygame.locals.K_f: [False],
+                pygame.K_SPACE: [False]
             }
 
         self.keys = [self.keys_shoot, self.keys_move, self.keys_other]
@@ -282,13 +282,13 @@ class ActorPlayer(ActorAlive, ActorAnimation):
                     self.can_shoot = False
 
             # Pour BOMBER !
-            if self.keys_other[pygame.K_b][0]:
+            if self.keys_other[pygame.K_f][0]:
                 if not self.bomb_pressed_and_released and self.bomb_ammo > 0:
                     self.bomb()
             else:
                 self.bomb_pressed_and_released = False
 
-            if self.keys_other[pygame.K_f][0]:
+            if self.keys_other[pygame.K_SPACE][0]:
                 if not self.charged:
                     self.state = ActorPlayer.State.CHARGE
         elif self.state == ActorPlayer.State.CHARGED:
@@ -403,3 +403,11 @@ class ActorPlayer(ActorAlive, ActorAnimation):
     @rect.setter
     def rect(self, new_rect):
         self._rect = new_rect
+
+    def get_move_rect(self):
+        """Comme le player a deux hitboxs diffèrents..."""
+        rect_tmp = copy.deepcopy(self.rect)
+        rect_tmp.y += self.rect.h - self.depth
+        rect_tmp.h = self.depth
+
+        return rect_tmp

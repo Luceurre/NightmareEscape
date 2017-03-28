@@ -2,6 +2,7 @@ import pygame
 
 from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
+from api.EnumAuto import EnumAuto
 from api.EnumTeam import EnumTeam
 from api.Rect import Rect
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
@@ -9,7 +10,6 @@ from game.utils.Constants import EVENT_EXPLOSION
 from game.utils.Direction import DIRECTION
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import Vector, VECTOR_NULL
-from api.EnumAuto import EnumAuto
 
 
 class ActorArrowChargedPlayer(ActorArrowPlayer, ActorAnimation):
@@ -21,7 +21,7 @@ class ActorArrowChargedPlayer(ActorArrowPlayer, ActorAnimation):
         super().__init__(dir, velocity)
 
         self.radius = 128
-        self.damage = 20
+        self.damage = 25
 
     def load_sprite(self):
         self.animations = {}

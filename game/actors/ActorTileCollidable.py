@@ -2,6 +2,10 @@ from game.actors.ActorTile import ActorTile
 
 
 class ActorTileCollidable(ActorTile):
+    def __init__(self, path, pos, width, height):
+        super().__init__(path, pos, width, height)
+        self.collidable = True
+
     def reload(self):
         super().reload()
 
