@@ -1,6 +1,6 @@
 import copy
-import random
 import math
+import random
 
 import pygame
 
@@ -11,11 +11,10 @@ from api.EnumTeam import EnumTeam
 from api.Rect import Rect
 from api.Timer import Timer
 from game.actors.ActorAlive import ActorAlive
-from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
+from game.actors.ActorDoor import ActorDoor, ActorDoorWin
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import Vector
-from game.actors.ActorDoor import ActorDoor, ActorDoorWin
 
 
 class ActorSlime(ActorAlive, ActorAnimation):
@@ -258,7 +257,6 @@ class ActorSlime(ActorAlive, ActorAnimation):
                                                              callback_fun=self.idle)
         self.animations[ActorSlime.State.DIE] = Animation(sprite_sheet, pygame.Rect(0, height * 4, width, height),
                                                           9, 50, True, callback_fun=self.dead)
-        pass
 
     @property
     def animation(self):

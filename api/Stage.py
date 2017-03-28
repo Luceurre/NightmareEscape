@@ -3,11 +3,11 @@ from operator import attrgetter
 import pygame
 import pygame.locals
 
+import api.StageManager
 from api.EventHandler import EventHandler
 from api.Logger import Logger
 from api.Map import Map
 from api.StageState import StageState
-import api.StageManager
 
 
 class Stage(EventHandler, Logger):
@@ -37,7 +37,7 @@ class Stage(EventHandler, Logger):
 
         if self.draw_hit_box:
             for actor in self.map.actors:
-                pygame.gfxdraw.rectangle(self.screen, actor.rect, (0, 255, 0))
+                pygame.gfxdraw.rectangle(self.screen, actor.rect.pyrect, (0, 255, 0))
 
     # Callbacks functions (StateManager)
 

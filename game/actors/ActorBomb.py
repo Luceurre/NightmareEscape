@@ -1,5 +1,6 @@
-import pygame
 import math
+
+import pygame
 
 from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
@@ -32,6 +33,7 @@ class ActorBomb(ActorAnimation):
 
         self.fuse_timer = Timer(20, self.fuse, True, infinite=True)
         self.add_timer(self.fuse_timer)
+        self.collidable = True
 
     def reload(self):
         super().reload()

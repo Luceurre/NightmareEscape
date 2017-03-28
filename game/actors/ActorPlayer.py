@@ -1,26 +1,24 @@
-import copy
+import platform
 
 import pygame
 import pygame.locals
-import platform
 
+import game.actors.ActorSlime
 from api.ActorAnimation import ActorAnimation
 from api.Animation import Animation
-from api.EnumTeam import EnumTeam
 from api.EnumAuto import EnumAuto
+from api.EnumTeam import EnumTeam
 from api.Rect import Rect
 from api.Timer import Timer
 from game.actors.ActorAlive import ActorAlive
+from game.actors.ActorArrowChargedPlayer import ActorArrowChargedPlayer
 from game.actors.ActorArrowPlayer import ActorArrowPlayer
 from game.actors.ActorArrowSlime import ActorArrowSlime
-import game.actors.ActorSlime
 from game.actors.ActorBomb import ActorBomb
 from game.utils.Constants import *
 from game.utils.Direction import DIRECTION
-from game.actors.ActorArrowChargedPlayer import ActorArrowChargedPlayer
 from game.utils.SurfaceHelper import load_image
 from game.utils.Vector import VECTOR_NULL
-from ctypes.test.test_random_things import callback_func
 
 
 class ActorPlayer(ActorAlive, ActorAnimation):
@@ -210,6 +208,8 @@ class ActorPlayer(ActorAlive, ActorAnimation):
                                                                                   PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT),
                                                               1, -50, True)
 
+        self.rect = self.animations[DIRECTION.NONE].get_rect(self.rect)
+
 
     def unload_sprite(self):
         super().unload_sprite()
@@ -334,34 +334,16 @@ class ActorPlayer(ActorAlive, ActorAnimation):
     def move(self, x=0, y=0):
         """Return True if the Player moved, False otherwise"""
 
-        if x == 0 and y == 0:
-            return False
-
-        rect = copy.copy(self.rect.pyrect)
-        rect.x += x - 2
-        rect.y += y - 2
-
-        rect.y += rect.h - self.depth
-        rect.h = self.depth
-
-        rect.w += 1
-        rect.h += 1
-
-        actors = self.map.get_actors_collide(rect, [self])
-
-        a_interagi = False
-        for actor in actors:
-            b = actor.interact(self)
-            if not a_interagi and b:
-                a_interagi = True
-
-        if not a_interagi:
-            self.rect.x += x
-            self.rect.y += y
-
-            return True
+        if not super().move(x, y):
+            if x != 0 and y != 0:
+                if not self.move(x, 0):
+                    return self.move(0, y)
+                else:
+                    return True
+            else:
+                return False
         else:
-            return False
+            return True
 
     def interact(self, actor):
         # Pour éviter que le Joueur prenne des dégâts de ses propres projectiles :)
@@ -412,6 +394,12 @@ class ActorPlayer(ActorAlive, ActorAnimation):
     @state.setter
     def state(self, new_state):
         if new_state != self.state:
-            rect = self.rect
             self._state = new_state
-            self.rect.center = rect.center
+
+    @property
+    def rect(self):
+        return self._rect
+
+    @rect.setter
+    def rect(self, new_rect):
+        self._rect = new_rect

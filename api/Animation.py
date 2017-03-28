@@ -26,11 +26,11 @@ class Animation:
                         image.subsurface(load_rect.x + load_rect.width * j, load_rect.y + load_rect.height * i, load_rect.width,
                                          load_rect.height))
         if auto_rect:
-            # Obtention des hitboxs réels des images -> utils.Image.get_real_rect :
+            # Obtention des hitboxs réels des images -> utils.SurfaceHelper.get_real_rect :
             rect = get_real_rect(self.tile[0])
             for index, tile in enumerate(self.tile):
                 # On en profite pour redimensionner les images :
-                self.tile[index] = tile.subsurface(rect.pyrect)
+                self.tile[index] = tile.subsurface(get_real_rect(tile).pyrect)
                 self.rects.append(rect)
         else:
             for i in range(tile_number * multiple_line):
@@ -73,8 +73,6 @@ class Animation:
         return self.tile[self.at]
 
     def get_rect(self, rect):
-        try:
-            rect.size = self.rects[self.at].size
-            return rect
-        except Exception as e:
-            print(e)
+        rect.size = self.rects[self.at].size
+
+        return rect

@@ -67,6 +67,11 @@ class Actor(EventHandler, Logger):
 
     def reload(self):
         """Quand la map se charge, ou l'acteur -> permet d'éviter la sauvegarde d'élèments inutile et les bugs pickle"""
+        try:
+            self.team.get_ennemi()
+        except:
+            self.team = EnumTeam.NEUTRAL_TEAM
+
         pass
 
     def unload(self):
