@@ -23,15 +23,15 @@ class ActorAlive(ActorSprite):
     def interact(self, actor):
         # Pour éviter que le Joueur prenne des dégâts de ses propres projectiles :)
 
-        if not super().interact(actor):
-            if self.team.get_ennemi() == actor.team:
-                self.hp -= actor.damage
+        to_return = False
+        to_return = super().interact(actor)
+        if self.team.get_ennemi() == actor.team:
+            self.hp -= actor.damage
 
-                return self.collidable and actor.collidable
-            else:
-                return False
+            return (self.collidable and actor.collidable) or to_return
         else:
-            return True
+            return to_return
+
 
     @property
     def hp(self):
