@@ -3,6 +3,7 @@ import copy
 import pygame
 
 from api.Actor import Actor
+from api.EnumTeam import EnumTeam
 from api.Logger import LOG_LEVEL
 from api.Rect import Rect
 from api.StageManager import StageManager
@@ -136,8 +137,9 @@ class ActorSprite(Actor):
         rect_tmp = copy.deepcopy(self.rect)
         rect_tmp.x += x
         rect_tmp.y += y
-        rect_tmp.y += self.rect.h - self.depth
-        rect_tmp.h = self.depth
+        if self.depth != 0:
+            rect_tmp.y += self.rect.h - self.depth
+            rect_tmp.h = self.depth
 
         actors = self.map.get_actors_collide(rect_tmp.pyrect, [self])
 
@@ -168,9 +170,12 @@ class ActorSprite(Actor):
 
     def interact(self, actor):
         if not super().interact(actor):
-            if actor.collidable and self.collidable and self.team != actor.team:
+            if actor.collidable and self.collidable and (self.team != actor.team or self.team == EnumTeam.NEUTRAL_TEAM):
                 return True
             else:
                 return False
         else:
             return True
+
+    def get_move_rect(self):
+        return self.rect

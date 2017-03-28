@@ -1,8 +1,8 @@
 import pygame
-from api.StageManager import StageManager
-from api.StageState import StageState
 
 from api.Logger import Logger, LOG_LEVEL
+from api.StageManager import StageManager
+from api.StageState import StageState
 
 
 class Game(Logger):
@@ -10,12 +10,20 @@ class Game(Logger):
 
     CURRENT_STAGE = None
 
-    def __init__(self, width=640, height=480, log_level=LOG_LEVEL.INFO, framerate=120):     #Initialisation du jeu, On initialise pygame, on crée l'écran
+    def __init__(self, width=640, height=480, log_level=LOG_LEVEL.INFO, framerate=120,
+                 fullscreen=False):  # Initialisation du jeu, On initialise pygame, on crée l'écran
         pygame.init()
         pygame.mixer.init()
 
+        if fullscreen:
+            flags = pygame.FULLSCREEN
+        else:
+            flags = pygame.NOFRAME
+
         self.stage_manager = StageManager()
-        self.screen = pygame.display.set_mode((width, height))
+        # assert not pygame.display.mode_ok((width, height), flags)
+        self.screen = pygame.display.set_mode((width, height), flags)
+
         self.framerate = framerate
         self.clock = pygame.time.Clock()                                    #Création d'un système temporel -> pour géré certains trucs selon temps ( ex : vitesse )
         Logger.set_log_level(log_level)

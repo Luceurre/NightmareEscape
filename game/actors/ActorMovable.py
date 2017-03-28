@@ -1,5 +1,6 @@
-from api.ActorSprite import ActorSprite
+import copy
 
+from api.ActorSprite import ActorSprite
 from game.actors.ActorPlayer import ActorPlayer
 #from game.actors.ActorPuzzleSolution import ActorPuzzleSolution
 #from game.actors.ActorDoor import ActorDoor
@@ -26,10 +27,14 @@ class ActorMovable(ActorSprite):                # A passer probablement sur Acto
     def interact(self, actor):
         if isinstance(actor, ActorPlayer):
             if len(actor.direction_walk) == 1:
+                rect_tmp = copy.deepcopy(actor.rect)
+                actor.rect = actor.get_move_rect()
                 test = self.move(actor.direction_walk[0].value.x * self.speed,
                                  actor.direction_walk[0].value.y * self.speed)
                 if test:
+                    actor.rect = rect_tmp
                     actor.move( actor.direction_walk[0].value.x * self.speed, actor.direction_walk[0].value.y * self.speed)
+                actor.rect = rect_tmp
             return True
         else:
             return actor.collidable and self.collidable
