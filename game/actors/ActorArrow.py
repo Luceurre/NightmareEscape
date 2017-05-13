@@ -36,6 +36,11 @@ class ActorArrow(ActorSprite):
         self.h = 64
         self.collidable = True
 
+    def interact(self, actor):
+        if isinstance(actor, ActorArrow):
+            return False
+        else:
+            return super().interact(actor)
 
     def update(self):
         super().update()
